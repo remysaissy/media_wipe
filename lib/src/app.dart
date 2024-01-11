@@ -1,5 +1,7 @@
-import 'package:app/src/navigation/navigation_controller.dart';
-import 'package:app/src/onboarding/onboarding_view.dart';
+import 'package:cuisine/src/auth/auth_page.dart';
+import 'package:cuisine/src/home/home_page.dart';
+import 'package:cuisine/src/navigation/navigation_controller.dart';
+import 'package:cuisine/src/onboarding/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,11 +20,15 @@ class MyApp extends StatelessWidget {
   }) {
     // GoRouter configuration
     _router = GoRouter(
-      initialLocation: settingsController.isOnboarded ? '/' : '/onboarding',
+      initialLocation: '/auth',
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const SampleItemListView(),
+          builder: (context, state) => HomePage(),
+        ),
+        GoRoute(
+          path: '/auth',
+          builder: (context, state) => const AuthPage(),
         ),
         GoRoute(
           path: '/details',

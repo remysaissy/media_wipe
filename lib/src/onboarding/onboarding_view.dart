@@ -1,5 +1,5 @@
-import 'package:app/src/onboarding/onboard_page.dart';
-import 'package:app/src/settings/settings_controller.dart';
+import 'package:cuisine/src/onboarding/onboarding_page.dart';
+import 'package:cuisine/src/settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

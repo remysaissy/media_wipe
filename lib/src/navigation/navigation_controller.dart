@@ -1,4 +1,4 @@
-import 'package:app/src/settings/settings_controller.dart';
+import 'package:cuisine/src/settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../sample_feature/sample_item_list_view.dart';
