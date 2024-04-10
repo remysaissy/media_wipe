@@ -1,54 +1,51 @@
-import 'package:cuisine/src/auth/auth_page.dart';
-import 'package:cuisine/src/home/home_page.dart';
-import 'package:cuisine/src/navigation/navigation_controller.dart';
-import 'package:cuisine/src/onboarding/onboarding_view.dart';
+import 'package:sortmaster_photos/src/home/home_view.dart';
+import 'package:sortmaster_photos/src/ioc.dart';
+import 'package:sortmaster_photos/src/onboarding/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sortmaster_photos/src/plans/plans_view.dart';
+import 'package:sortmaster_photos/src/settings/settings_controller.dart';
+import 'package:sortmaster_photos/src/settings/settings_view.dart';
+import 'package:sortmaster_photos/src/theme.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+class MyApp extends StatefulWidget{
+  late final GoRouter router;
 
-/// The Widget that configures your application.
-class MyApp extends StatelessWidget {
   MyApp({
-    super.key,
-    required this.settingsController,
+    super.key
   }) {
     // GoRouter configuration
-    _router = GoRouter(
-      initialLocation: '/auth',
+    router = GoRouter(
+      initialLocation: getIt<SettingsController>().isOnboarded ? '/plans' : '/onboarding',
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => HomePage(),
+          builder: (context, state) => HomeView(),
         ),
         GoRoute(
-          path: '/auth',
-          builder: (context, state) => const AuthPage(),
-        ),
-        GoRoute(
-          path: '/details',
-          builder: (context, state) => const SampleItemDetailsView(),
+          path: '/plans',
+          builder: (context, state) => PlansView(),
         ),
         GoRoute(
           path: '/onboarding',
-          builder: (context, state) => OnboardingView(settingsController: settingsController),
+          builder: (context, state) => OnboardingView(),
         ),
         GoRoute(
           path: '/settings',
-          builder: (context, state) => SettingsView(controller: settingsController),
+          builder: (context, state) => SettingsView(),
         ),
       ],
     );
   }
 
-  final SettingsController settingsController;
-  // GoRouter configuration
-  late GoRouter _router;
+  @override
+  State <StatefulWidget> createState () => _MyAppState();
+}
+
+/// The Widget that configures your application.
+class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +54,7 @@ class MyApp extends StatelessWidget {
     // The AnimatedBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return AnimatedBuilder(
-      animation: settingsController,
+      animation: getIt<SettingsController>(),
       builder: (BuildContext context, Widget? child) {
         return MaterialApp.router(
           // Providing a restorationScopeId allows the Navigator built by the
@@ -90,30 +87,12 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
-          themeMode: settingsController.themeMode,
+          theme: MyTheme.light(),
+          darkTheme: MyTheme.dark(),
+          themeMode: getIt<SettingsController>().themeMode,
 
           // Define routes available in the application.
-          routerConfig: _router,
-          // // Define a function to handle named routes in order to support
-          // // Flutter web url navigation and deep linking.
-          // onGenerateRoute: (RouteSettings routeSettings) {
-          //   return MaterialPageRoute<void>(
-          //     settings: routeSettings,
-          //     builder: (BuildContext context) {
-          //       switch (routeSettings.name) {
-          //         case SettingsView.routeName:
-          //           return SettingsView(controller: settingsController);
-          //         case SampleItemDetailsView.routeName:
-          //           return const SampleItemDetailsView();
-          //         case SampleItemListView.routeName:
-          //         default:
-          //           return const SampleItemListView();
-          //       }
-          //     },
-          //   );
-          // },
+          routerConfig: widget.router,
         );
       },
     );
