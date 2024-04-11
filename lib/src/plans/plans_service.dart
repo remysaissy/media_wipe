@@ -1,45 +1,62 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+class Plan {
+  String productID;
+  DateTime subscribedAt;
+
+  Plan({required this.productID, required this.subscribedAt});
+  Plan.subscribe({required this.productID}): subscribedAt = DateTime.now();
+
+  Plan.fromJson(Map<String, dynamic> json):
+        productID = json['productID'] as String,
+        subscribedAt = DateTime.fromMillisecondsSinceEpoch(json['subscribedAt'] as int);
+
+  Map<String, dynamic> toJson() => {
+    'productID': productID,
+    'subscribedAt': subscribedAt.millisecondsSinceEpoch
+  };
+}
 
 /// A service that handles In App Purchases.
 class PlansService {
 
-  Future<String?> getPurchasedProductID() async {
+  Future<Plan?> plan() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('productID');
+    String? planString = prefs.getString('plan');
+    if (planString != null) {
+      return Plan.fromJson(jsonDecode(planString) as Map<String, dynamic>);
+    } else {
+      return null;
+    }
   }
 
-  Future<void> cancelPurchasedProductID() async {
+  Future<void> updatePlan(Plan plan) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('productID');
-  }
-
-  Future<void> _ensureAvailability() async {
-    // final bool available = await InAppPurchase.instance.isAvailable();
-    // if (!available) {
-      print("ERROR: IAP not available.");
-    // }
+    String planString = jsonEncode(plan.toJson());
+    await prefs.setString('plan', planString);
   }
 
   /// Restore previous purchases.
-  Future<void> restorePurchase() async {
-    await _ensureAvailability();
-    // await InAppPurchase.instance.restorePurchases();
-    print("Restoring purchases of product");
+  Future<Plan> restorePurchase() async {
+    //Flow:
+    // - check for restore against the store
+    // - persist the restored plan information locally
+    // - return the restored plan
+    final plan = Plan.subscribe(productID: "free");
+    updatePlan(plan);
+    return plan;
   }
 
-  Future<void> purchase(String productID) async {
-    await _ensureAvailability();
-    // PurchaseDetails purchase = PurchaseDetails(productID: planName, verificationData: null, transactionDate: DateTime(), status: PurchaseStatus.pending);
-    // await InAppPurchase.instance.completePurchase(purchase);
-    // final ProductDetails productDetails = ... // Saved earlier from queryProductDetails().
-    // final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
-    // if (_isConsumable(productDetails)) {
-    //   InAppPurchase.instance.buyConsumable(purchaseParam: purchaseParam);
-    // } else {
-    //   InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-    // }
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('productID', productID);
-    print('Purchase of product ${productID}');
+  Future<Plan> purchase(String productID) async {
+    //Flow:
+    // - buy the plan against the store
+    // - create the plan object
+    // - persist the plan information locally
+    // - return the purchased plan
+    final plan = Plan.subscribe(productID: productID);
+    await updatePlan(plan);
+    return plan;
   }
 }

@@ -4,48 +4,44 @@ import 'package:sortmaster_photos/src/components/my_cta_button.dart';
 import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_toggle_button.dart';
-import 'package:sortmaster_photos/src/ioc.dart';
 import 'package:sortmaster_photos/src/plans/plans_controller.dart';
+import 'package:watch_it/watch_it.dart';
 
-class PlansView extends StatelessWidget {
+class PlansView extends StatelessWidget with WatchItMixin {
 
   PlansView({super.key});
 
-  final PlansController _controller = getIt<PlansController>();
-
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: _controller,
-        builder: (BuildContext context, Widget? child)
-    {
-      List<Widget> children = _buildHeader();
-      children.addAll(_buildPlans(context));
-      children.add(const Spacer());
-      children.addAll(_buildCTA(context));
-      return MyScaffold(
-          appBar: AppBar(
-            actions: [
-              MyCTATextButton(onPressed: () async {
-                await _controller.restorePurchase();
-                context.go('/');
-              },
-                  text: 'Already purchased?')
-            ],
-          ),
-          child: Column(
-            children: children
-          )
-      );
-    });
+    final controller = di<PlansController>();
+    List<Widget> children = _buildHeader();
+    children.addAll(_buildPlans(context, controller));
+    children.add(const Spacer());
+    children.addAll(_buildCTA(context, controller));
+    return MyScaffold(
+        appBar: AppBar(
+          actions: [
+            MyCTATextButton(onPressed: () async {
+              await controller.restorePurchase();
+              if (!context.mounted) return;
+              context.go('/home');
+            },
+                text: 'Already purchased?')
+          ],
+        ),
+        child: Column(
+          children: children
+        )
+    );
   }
 
-  List<Widget> _buildCTA(BuildContext context) {
+  List<Widget> _buildCTA(BuildContext context, PlansController controller) {
     return [
           MyCTAButton(
             onPressed: () async {
-              await _controller.purchasePlan();
-              context.go('/');
+              await controller.purchasePlan();
+              if (!context.mounted) return;
+              context.go('/home');
             },
             child: const Text('Continue',
             textAlign: TextAlign.center),
@@ -57,15 +53,15 @@ class PlansView extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildPlans(BuildContext context) {
-    double w = MediaQuery.of(context).size.width / (_controller.planLabels.length + 1);
+  List<Widget> _buildPlans(BuildContext context, PlansController controller) {
+    final selectedPlanDescription = watchPropertyValue((PlansController x) => x.selectedPlanDescription);
     return [
             MyToggleButton(
-                onPressed: _controller.updateSelectedPlan,
-                options: _controller.planLabels,
-                defaultOption: _controller.selectedPlanLabel),
-            ListTile(title: Text('${_controller.plans[_controller.selectedPlan]['title']}'),
-                trailing: Text('${_controller.plans[_controller.selectedPlan]['price']}'),),
+                onPressed: controller.updateSelectedPlan,
+                options: controller.planNames,
+                defaultOption: controller.selectedPlan),
+            ListTile(title: Text('${selectedPlanDescription['title']}'),
+                trailing: Text('${selectedPlanDescription['price']}'),),
         ];
   }
 

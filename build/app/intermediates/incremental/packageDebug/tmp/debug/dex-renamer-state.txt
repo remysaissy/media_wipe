@@ -1,4 +1,4 @@
-#Wed Apr 10 17:32:25 CEST 2024
+#Thu Apr 11 17:55:01 CEST 2024
 base.0=/Users/remy.saissy/Projects/perso/querciapps/sortmaster_photos/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class MyToggleButton extends StatefulWidget {
 
   MyToggleButton({super.key, this.onPressed, required this.defaultOption, required this.options}) {
-    selectedOptions = options.map((e) => (e == defaultOption) ? true : false).toList();
+    selectedOptions = options.map((_) => false).toList();
+    selectedOptions[defaultOption] = true;
     widgetOptions = options.map((e) => Text(e)).toList();
   }
 
   final void Function(int index)? onPressed;
   final List<String> options;
-  final String defaultOption;
+  final int defaultOption;
   late final List<bool> selectedOptions;
   late final List<Widget> widgetOptions;
 

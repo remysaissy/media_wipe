@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/ioc.dart';
+import 'package:watch_it/watch_it.dart';
 
 import 'settings_controller.dart';
 
-/// Displays the various settings that can be customized by the user.
-///
-/// When a user changes a setting, the SettingsController is updated and
-/// Widgets that listen to the SettingsController are rebuilt.
-class SettingsView extends StatelessWidget {
-  SettingsView({super.key});
-
-  final SettingsController _controller = getIt<SettingsController>();
+class SettingsView extends StatelessWidget with WatchItMixin {
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = di<SettingsController>();
+    final themeMode = watchPropertyValue((SettingsController x) => x.themeMode);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -26,9 +22,9 @@ class SettingsView extends StatelessWidget {
         // SettingsController is updated, which rebuilds the MaterialApp.
         child: DropdownButton<ThemeMode>(
           // Read the selected themeMode from the controller
-          value: _controller.themeMode,
+          value: themeMode,
           // Call the updateThemeMode method any time the user selects a theme.
-          onChanged: _controller.updateThemeMode,
+          onChanged: controller.updateThemeMode,
           items: const [
             DropdownMenuItem(
               value: ThemeMode.system,
