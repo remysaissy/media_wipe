@@ -1,13 +1,20 @@
 
-class Permissions {
-  bool   cameraRoll;
+import 'package:permission_handler/permission_handler.dart';
 
-  Permissions({required this.cameraRoll});
+class Permissions {
+  bool   photos;
+
+  Permissions({required this.photos});
 }
 
 class PermissionsService {
 
+  Future<void> authorizeCameraRoll() async {
+    await Permission.photos.request();
+  }
+
   Future<Permissions> permissions() async {
-    return Permissions(cameraRoll: false);
+    final photosStatus = await Permission.photos.status;
+    return Permissions(photos: photosStatus.isGranted);
   }
 }

@@ -1,16 +1,14 @@
 import 'package:go_router/go_router.dart';
-import 'package:sortmaster_photos/src/di.dart';
 import 'package:sortmaster_photos/src/home/home_view.dart';
 import 'package:sortmaster_photos/src/loader/loading_view.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_view.dart';
 import 'package:sortmaster_photos/src/permissions/permissions_view.dart';
 import 'package:sortmaster_photos/src/plans/plans_view.dart';
-import 'package:sortmaster_photos/src/settings/settings_controller.dart';
 import 'package:sortmaster_photos/src/settings/settings_view.dart';
 
 GoRouter setupRoutes()  {
   // SettingsController controller = di<SettingsController>();
-  String initialLocation = '/onboarding';
+  String initialLocation = '/permissions';
   // controller.selector == LoaderSelector.Loading ? '/loading'
   //     : controller.selector == LoaderSelector.Onboarding ? '/onboarding'
   //     : controller.selector == LoaderSelector.Subscription ? '/plans'

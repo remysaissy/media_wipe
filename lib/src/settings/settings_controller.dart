@@ -7,7 +7,7 @@ class SettingsController with ChangeNotifier {
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService = di<SettingsService>();
 
-  late ThemeMode _themeMode;
+  late ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;
 
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
