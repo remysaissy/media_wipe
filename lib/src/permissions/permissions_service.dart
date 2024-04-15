@@ -1,4 +1,3 @@
-
 import 'package:permission_handler/permission_handler.dart';
 
 class Permissions {
@@ -9,7 +8,7 @@ class Permissions {
 
 class PermissionsService {
 
-  Future<void> authorizeCameraRoll() async {
+  Future<void> authorizePhotos() async {
     await Permission.photos.request();
   }
 

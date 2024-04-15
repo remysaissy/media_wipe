@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sortmaster_photos/src/components/my_cta_button.dart';
 import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
+import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_toggle_button.dart';
 import 'package:sortmaster_photos/src/plans/plans_controller.dart';
@@ -46,9 +47,10 @@ class PlansView extends StatelessWidget with WatchItMixin {
             child: const Text('Continue',
             textAlign: TextAlign.center),
           ),
-          MyCTATextButton(onPressed: () {
-            print("Terms of use");
-          },
+          MyCTATextButton(onPressed: () async {
+            const targetURL = 'https://www.app-privacy-policy.com/';
+            await myLaunchURL(context, targetURL);
+            },
           text: 'Terms of use'),
     ];
   }

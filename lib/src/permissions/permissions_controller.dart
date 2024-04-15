@@ -7,7 +7,7 @@ class PermissionsController with ChangeNotifier {
   final _permissionsService = di<PermissionsService>();
 
   Future<void> authorizeCameraRoll() async {
-    await _permissionsService.authorizeCameraRoll();
+    await _permissionsService.authorizePhotos();
     notifyListeners();
   }
 

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Plan {
-  String productID;
-  DateTime subscribedAt;
+  final String productID;
+  final DateTime subscribedAt;
 
   Plan({required this.productID, required this.subscribedAt});
   Plan.subscribe({required this.productID}): subscribedAt = DateTime.now();

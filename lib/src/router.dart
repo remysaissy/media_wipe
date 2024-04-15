@@ -8,7 +8,7 @@ import 'package:sortmaster_photos/src/settings/settings_view.dart';
 
 GoRouter setupRoutes()  {
   // SettingsController controller = di<SettingsController>();
-  String initialLocation = '/permissions';
+  String initialLocation = '/home';
   // controller.selector == LoaderSelector.Loading ? '/loading'
   //     : controller.selector == LoaderSelector.Onboarding ? '/onboarding'
   //     : controller.selector == LoaderSelector.Subscription ? '/plans'
@@ -33,7 +33,7 @@ GoRouter setupRoutes()  {
       ),
       GoRoute(
         path: '/permissions',
-        builder: (context, state) => PermissionsView(),
+        builder: (context, state) => const PermissionsView(),
       ),
       GoRoute(
         path: '/home',

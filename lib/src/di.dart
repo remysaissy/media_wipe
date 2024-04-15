@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:sortmaster_photos/src/home/home_controller.dart';
+import 'package:sortmaster_photos/src/home/assets_service.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_controller.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_service.dart';
 import 'package:sortmaster_photos/src/permissions/permissions_controller.dart';
@@ -17,6 +18,7 @@ Future<void> setupDI() async {
   di.registerSingleton(OnboardingService());
   di.registerSingleton(PlansService());
   di.registerSingleton(PermissionsService());
+  di.registerSingleton(AssetsService());
 
   // Controllers
   di.registerSingleton(SettingsController());
@@ -26,5 +28,6 @@ Future<void> setupDI() async {
   di.registerSingleton(HomeController());
 
   // Load time methods required for some services or controllers
-  di<SettingsController>().load();
+  await di<SettingsController>().load();
+  await di<AssetsService>().load();
 }
