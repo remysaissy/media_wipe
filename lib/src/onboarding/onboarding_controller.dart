@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:sortmaster_photos/src/di.dart';
+import 'package:sortmaster_photos/src/onboarding/onboarding_model.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_service.dart';
 
 class OnboardingController with ChangeNotifier {
@@ -39,7 +40,7 @@ class OnboardingController with ChangeNotifier {
   Future<void> validateOnboarding() async {
     final packageInfo = await PackageInfo.fromPlatform();
     final version = packageInfo.version;
-    await _onboardingService.updateOnboarding(Onboarding.onboarded(version: version));
+    await _onboardingService.updateOnboarding(OnboardingModel.onboarded(version: version));
     notifyListeners();
   }
 }

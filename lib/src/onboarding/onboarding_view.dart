@@ -9,41 +9,42 @@ import 'package:watch_it/watch_it.dart';
 
 class OnboardingView extends StatelessWidget with WatchItMixin {
 
+  final _onboardingController = di<OnboardingController>();
+
   OnboardingView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = di<OnboardingController>();
     final isLastPage = watchPropertyValue((OnboardingController x) => x.isLastPage);
     return MyScaffold(
       child: Column(children: [
-            _buildPageRows(controller),
-        isLastPage ? _buildValidateOnboardingRow(context, controller) : _buildDotsRow(controller),
+            _buildPageRows(),
+        isLastPage ? _buildValidateOnboardingRow(context) : _buildDotsRow(),
         ]
       ));
   }
 
-  Widget _buildPageRows(OnboardingController controller) {
+  Widget _buildPageRows() {
     return Expanded(
       child: PageView.builder(
-          controller: controller.pagesController,
-          onPageChanged: controller.updateSelectedPage,
-          itemCount: controller.pages.length,
+          controller: _onboardingController.pagesController,
+          onPageChanged: _onboardingController.updateSelectedPage,
+          itemCount: _onboardingController.pages.length,
           itemBuilder: (BuildContext context, int index) {
             return OnboardingPage(
-              urlImage: controller.pages[index]['urlImage'],
-              title: controller.pages[index]['title'],
-              description: controller.pages[index]['description'],
+              urlImage: _onboardingController.pages[index]['urlImage'],
+              title: _onboardingController.pages[index]['title'],
+              description: _onboardingController.pages[index]['description'],
             );
           }),
     );
   }
 
-  Widget _buildDotsRow(OnboardingController controller) {
+  Widget _buildDotsRow() {
       return Center(
         child: SmoothPageIndicator(
-          controller: controller.pagesController,
-          count: controller.pages.length,
+          controller: _onboardingController.pagesController,
+          count: _onboardingController.pages.length,
           effect: const WormEffect(
             spacing: 20,
             dotColor: Colors.black26,
@@ -51,7 +52,7 @@ class OnboardingView extends StatelessWidget with WatchItMixin {
           ),
           //to click on dots and move
           onDotClicked: (index) =>
-              controller.pagesController.animateToPage(
+              _onboardingController.pagesController.animateToPage(
                 index,
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.ease,
@@ -60,10 +61,10 @@ class OnboardingView extends StatelessWidget with WatchItMixin {
       );
   }
 
-  Widget _buildValidateOnboardingRow(BuildContext context, OnboardingController controller) {
+  Widget _buildValidateOnboardingRow(BuildContext context) {
     return MyCTAButton(
         onPressed: () async {
-            await controller.validateOnboarding();
+            await _onboardingController.validateOnboarding();
             if (!context.mounted) return;
             context.go('/plans');
         },

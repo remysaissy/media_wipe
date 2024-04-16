@@ -1,30 +1,19 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-
-class Plan {
-  final String productID;
-  final DateTime subscribedAt;
-
-  Plan({required this.productID, required this.subscribedAt});
-  Plan.subscribe({required this.productID}): subscribedAt = DateTime.now();
-
-  Plan.fromJson(Map<String, dynamic> json):
-        productID = json['productID'] as String,
-        subscribedAt = DateTime.fromMillisecondsSinceEpoch(json['subscribedAt'] as int);
-
-  Map<String, dynamic> toJson() => {
-    'productID': productID,
-    'subscribedAt': subscribedAt.millisecondsSinceEpoch
-  };
-}
+import 'package:sortmaster_photos/src/plans/plans_model.dart';
 
 /// A service that handles In App Purchases.
 class PlansService {
 
+  late SharedPreferences _sharedPreferences;
+
+  Future<void> init() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+  }
+
   Future<Plan?> plan() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? planString = prefs.getString('plan');
+    String? planString = _sharedPreferences.getString('plan');
     if (planString != null) {
       return Plan.fromJson(jsonDecode(planString) as Map<String, dynamic>);
     } else {
@@ -33,9 +22,8 @@ class PlansService {
   }
 
   Future<void> updatePlan(Plan plan) async {
-    final prefs = await SharedPreferences.getInstance();
     String planString = jsonEncode(plan.toJson());
-    await prefs.setString('plan', planString);
+    await _sharedPreferences.setString('plan', planString);
   }
 
   /// Restore previous purchases.

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:sortmaster_photos/src/assets/assets_controller.dart';
 import 'package:sortmaster_photos/src/home/home_controller.dart';
-import 'package:sortmaster_photos/src/home/assets_service.dart';
+import 'package:sortmaster_photos/src/assets/assets_service.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_controller.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_service.dart';
 import 'package:sortmaster_photos/src/permissions/permissions_controller.dart';
@@ -12,22 +13,56 @@ import 'package:sortmaster_photos/src/settings/settings_service.dart';
 
 final di = GetIt.instance;
 
-Future<void> setupDI() async {
-  // Services
-  di.registerSingleton(SettingsService());
-  di.registerSingleton(OnboardingService());
-  di.registerSingleton(PlansService());
-  di.registerSingleton(PermissionsService());
-  di.registerSingleton(AssetsService());
+void _setupServices() {
+  di.registerSingletonAsync<SettingsService>(() async {
+    final service = SettingsService();
+    await service.init();
+    return service;
+  });
+  di.registerSingletonAsync<OnboardingService>(() async {
+    final service = OnboardingService();
+    await service.init();
+    return service;
+  });
+  di.registerSingletonAsync<PlansService>(() async {
+    final service = PlansService();
+    await service.init();
+    return service;
+  });
+  di.registerSingletonAsync<PermissionsService>(() async {
+    return PermissionsService();
+  });
+  di.registerSingletonAsync<AssetsService>(() async {
+    final service = AssetsService();
+    await service.init();
+    return service;
+  });
+}
 
-  // Controllers
-  di.registerSingleton(SettingsController());
-  di.registerSingleton(OnboardingController());
-  di.registerSingleton(PlansController());
-  di.registerSingleton(PermissionsController());
-  di.registerSingleton(HomeController());
+void _setupControllers() {
+  di.registerSingletonAsync<SettingsController>(() async {
+    final service = SettingsController();
+    await service.init();
+    return service;
+  }, dependsOn: [SettingsService]);
+  di.registerSingletonWithDependencies<OnboardingController>(() {
+    return OnboardingController();
+  }, dependsOn: [OnboardingService]);
+  di.registerSingletonWithDependencies<PlansController>(() {
+    return PlansController();
+  }, dependsOn: [PlansService]);
+  di.registerSingletonWithDependencies<PermissionsController>(() {
+    return PermissionsController();
+  }, dependsOn: [PermissionsService]);
+  di.registerSingletonWithDependencies<HomeController>(() {
+    return HomeController();
+  }, dependsOn: [AssetsService]);
+  di.registerSingletonWithDependencies<AssetsController>(() {
+    return AssetsController();
+  }, dependsOn: [AssetsService]);
+}
 
-  // Load time methods required for some services or controllers
-  await di<SettingsController>().load();
-  await di<AssetsService>().load();
+void setupDI() {
+  _setupServices();
+  _setupControllers();
 }

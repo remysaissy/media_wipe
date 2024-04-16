@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:sortmaster_photos/src/assets/assets_view.dart';
 import 'package:sortmaster_photos/src/home/home_view.dart';
 import 'package:sortmaster_photos/src/loader/loading_view.dart';
 import 'package:sortmaster_photos/src/onboarding/onboarding_view.dart';
@@ -21,7 +22,7 @@ GoRouter setupRoutes()  {
     routes: [
       GoRoute(
         path: '/loading',
-        builder: (context, state) => LoadingView(),
+        builder: (context, state) => const LoadingView(),
       ),
       GoRoute(
         path: '/onboarding',
@@ -33,11 +34,20 @@ GoRouter setupRoutes()  {
       ),
       GoRoute(
         path: '/permissions',
-        builder: (context, state) => const PermissionsView(),
+        builder: (context, state) => PermissionsView(),
       ),
       GoRoute(
         path: '/home',
         builder: (context, state) => HomeView(),
+      ),
+      GoRoute(
+        path: '/assets/yearmonth/:year/:month',
+        name: 'assetsByYearMonth',
+        builder: (context, state) => AssetsView(
+          assetsViewMode: AssetsViewMode.YearMonth,
+          year: int.parse(state.pathParameters['year']!),
+          month: int.parse(state.pathParameters['month']!),
+        ),
       ),
       GoRoute(
         path: '/settings',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sortmaster_photos/src/di.dart';
 import 'package:sortmaster_photos/src/permissions/permissions_service.dart';
+import 'package:sortmaster_photos/src/permissions/permissions_model.dart';
 import 'package:sortmaster_photos/src/settings/settings_service.dart';
 
 class SettingsController with ChangeNotifier {
@@ -20,7 +21,7 @@ class SettingsController with ChangeNotifier {
     }
   }
 
-  late Permissions _currentPermissions;
+  late PermissionsModel _currentPermissions;
   bool get isPhotosAuthorized => _currentPermissions.photos;
 
   Future<void> authorizePhotos() async {
@@ -29,7 +30,7 @@ class SettingsController with ChangeNotifier {
       notifyListeners();
   }
 
-  Future<void> load() async {
+  Future<void> init() async {
     _themeMode = await _settingsService.themeMode();
     _currentPermissions = await _permissionsService.permissions();
     notifyListeners();

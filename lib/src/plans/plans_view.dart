@@ -10,20 +10,21 @@ import 'package:watch_it/watch_it.dart';
 
 class PlansView extends StatelessWidget with WatchItMixin {
 
+  final _plansController = di<PlansController>();
+
   PlansView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = di<PlansController>();
     List<Widget> children = _buildHeader();
-    children.addAll(_buildPlans(context, controller));
+    children.addAll(_buildPlans(context));
     children.add(const Spacer());
-    children.addAll(_buildCTA(context, controller));
+    children.addAll(_buildCTA(context));
     return MyScaffold(
         appBar: AppBar(
           actions: [
             MyCTATextButton(onPressed: () async {
-              await controller.restorePurchase();
+              await _plansController.restorePurchase();
               if (!context.mounted) return;
               context.go('/home');
             },
@@ -36,11 +37,11 @@ class PlansView extends StatelessWidget with WatchItMixin {
     );
   }
 
-  List<Widget> _buildCTA(BuildContext context, PlansController controller) {
+  List<Widget> _buildCTA(BuildContext context) {
     return [
           MyCTAButton(
             onPressed: () async {
-              await controller.purchasePlan();
+              await _plansController.purchasePlan();
               if (!context.mounted) return;
               context.go('/home');
             },
@@ -55,13 +56,13 @@ class PlansView extends StatelessWidget with WatchItMixin {
     ];
   }
 
-  List<Widget> _buildPlans(BuildContext context, PlansController controller) {
+  List<Widget> _buildPlans(BuildContext context) {
     final selectedPlanDescription = watchPropertyValue((PlansController x) => x.selectedPlanDescription);
     return [
             MyToggleButton(
-                onPressed: controller.updateSelectedPlan,
-                options: controller.planNames,
-                defaultOption: controller.selectedPlan),
+                onPressed: _plansController.updateSelectedPlan,
+                options: _plansController.planNames,
+                defaultOption: _plansController.selectedPlan),
             ListTile(title: Text('${selectedPlanDescription['title']}'),
                 trailing: Text('${selectedPlanDescription['price']}'),),
         ];
