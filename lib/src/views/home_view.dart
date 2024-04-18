@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/controllers/home_controller.dart';
+import 'package:sortmaster_photos/src/utils.dart';
 import 'package:watch_it/watch_it.dart';
 
 class HomeView extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -16,7 +16,6 @@ class HomeView extends StatefulWidget with WatchItStatefulWidgetMixin {
 class HomeViewState extends State<HomeView> {
 
   final _homeController = di<HomeController>();
-  final _monthNumberToMonthName = DateFormat('MMMM');
 
   Future<void> _initState() async {
     await _homeController.refresh();
@@ -62,7 +61,7 @@ class HomeViewState extends State<HomeView> {
               if (!context.mounted) return;
               context.pushNamed('assetsByYearMonth', pathParameters: {'year': e.year.toString(), 'month': e.month.toString()});
             },
-            title: Text('${e.year} ${_monthNumberToMonthName.format(DateTime(0, e.month))}'),
+            title: Text('${e.year} ${Utils.monthNumberToMonthName(e.month)}'),
             trailing: const Icon(Icons.arrow_forward_ios))
     ).toList();
   }

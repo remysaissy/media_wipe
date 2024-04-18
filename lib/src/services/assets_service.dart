@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:exif/exif.dart';
 import 'package:flutter/foundation.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:photo_manager/photo_manager.dart' as pm;
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/services/db_service.dart';
 import 'package:sortmaster_photos/src/utils.dart';
@@ -21,12 +20,12 @@ class AssetsService {
     final dbPersistedAssets = await _list();
     final List<String> newlyPersistedIDs = [];
 
-    final type = RequestType.fromTypes([RequestType.image, RequestType.video]);
-    final count = await PhotoManager.getAssetCount(type: type);
+    final type = pm.RequestType.fromTypes([pm.RequestType.image, pm.RequestType.video]);
+    final count = await pm.PhotoManager.getAssetCount(type: type);
 
     for (int index = 0; index < count; index += _REFRESH_BATCH_SIZE) {
-      final assetsEntities = await PhotoManager.getAssetListRange(start: index, end: index + _REFRESH_BATCH_SIZE, type: type);
-      for (AssetEntity assetEntity in assetsEntities) {
+      final assetsEntities = await pm.PhotoManager.getAssetListRange(start: index, end: index + _REFRESH_BATCH_SIZE, type: type);
+      for (pm.AssetEntity assetEntity in assetsEntities) {
         if (!dbPersistedAssets.containsKey(assetEntity.id)) {
           final asset = await _createAssetModel(assetEntity);
           await _create(asset);
@@ -53,18 +52,25 @@ class AssetsService {
     return await _listForYearMonth(year: year, month: month);
   }
 
-  Future<Asset> _createAssetModel(AssetEntity element) async {
+  Future<Asset> _createAssetModel(pm.AssetEntity element) async {
     final exifData = await _extractMetadata(element);
     DateTime creationDate = element.createDateTime;
     if (exifData.containsKey('EXIF DateTimeOriginal')) {
       creationDate = Utils.creationDateFormat.parse(exifData['EXIF DateTimeOriginal'].toString());
     }
     final yearMonth = Asset.toYearMonth(year: creationDate.year, month: creationDate.month);
-    final assetUrl = (element.type == AssetType.video) ? (await element.getMediaUrl())! : 'file://${(await element.file)!.path}';
-    return Asset(id: element.id, assetUrl: assetUrl, creationDate: creationDate, yearMonth: yearMonth);
+    final assetUrl = (element.type == pm.AssetType.video) ? (await element.getMediaUrl())! : 'file://${(await element.file)!.path}';
+    AssetType assetType = AssetType.Image;
+    if (element.isLivePhoto) {
+      assetType = AssetType.LivePhoto;
+    }
+    if (element.type == pm.AssetType.video) {
+      assetType = AssetType.Video;
+    }
+    return Asset(id: element.id, assetUrl: assetUrl, assetType: assetType, creationDate: creationDate, yearMonth: yearMonth);
   }
 
-  Future<Map<String, IfdTag>> _extractMetadata(AssetEntity element) async {
+  Future<Map<String, IfdTag>> _extractMetadata(pm.AssetEntity element) async {
     final bytes = await element.originBytes;
     if (bytes == null) {
       return {};
@@ -107,13 +113,6 @@ class AssetsService {
 
   Future<void> _create(Asset asset) async {
     await _dbService.create(DBTables.Assets, asset.toJson());
-  }
-
-  Future<void> _delete(Asset asset) async {
-    await _dbService.delete(DBTables.Assets,
-      where: 'id = ?',
-      whereArgs: [asset.id],
-    );
   }
 
   Future<void> _deleteAll(Set<String> ids) async {

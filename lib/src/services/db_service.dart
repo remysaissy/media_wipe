@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -20,12 +17,12 @@ class DBService {
 
   Future<void> init() async {
     final dbPath = join(await getDatabasesPath(), 'app.db');
-    if (kDebugMode) {
-      final dbFile = File(dbPath);
-      if (dbFile.existsSync()) {
-        dbFile.deleteSync();
-      }
-    }
+    // if (kDebugMode) {
+    //   final dbFile = File(dbPath);
+    //   if (dbFile.existsSync()) {
+    //     dbFile.deleteSync();
+    //   }
+    // }
     _db = await openDatabase(
       dbPath,
       onCreate: (db, version) async {

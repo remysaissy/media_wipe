@@ -10,6 +10,7 @@ import 'package:sortmaster_photos/src/services/permissions_service.dart';
 import 'package:sortmaster_photos/src/controllers/plans_controller.dart';
 import 'package:sortmaster_photos/src/services/plans_service.dart';
 import 'package:sortmaster_photos/src/controllers/settings_controller.dart';
+import 'package:sortmaster_photos/src/services/sessions_service.dart';
 import 'package:sortmaster_photos/src/services/settings_service.dart';
 
 final di = GetIt.instance;
@@ -41,6 +42,12 @@ void _setupServices() {
   });
   di.registerSingletonAsync<AssetsService>(() async {
     final service = AssetsService();
+    await service.init();
+    return service;
+  }, dependsOn: [DBService]);
+
+  di.registerSingletonAsync<SessionsService>(() async {
+    final service = SessionsService();
     await service.init();
     return service;
   }, dependsOn: [DBService]);
