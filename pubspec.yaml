@@ -10,10 +10,10 @@ environment:
   sdk: '>=2.19.3 <3.0.0'
 
 dependencies:
-  card_swiper: ^3.0.1
   exif: ^3.3.0
   flutter:
     sdk: flutter
+  flutter_cache_manager: ^3.3.1
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.0.5
@@ -22,10 +22,12 @@ dependencies:
   in_app_purchase: ^3.1.13
   in_app_review: ^2.0.9
   intl: ^0.18.1
+  material_symbols_icons: ^4.2719.3
   package_info: ^2.0.2
   path: ^1.9.0
   permission_handler: ^11.3.1
   photo_manager: ^3.0.0
+  photo_view: ^0.15.0
   rating_dialog: ^2.0.4
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
@@ -59,3 +61,4 @@ flutter:
     - assets/onboarding/
     - assets/plans/
     - assets/images/
+    - assets/schemas/

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 
@@ -14,7 +13,7 @@ Future<void> myRating(BuildContext context) async {
         image: Image.asset('assets/icons/icon.png', height: 100, width: 100),
         submitButtonText: 'Submit',
         commentHint: 'Set your custom comment hint',
-        onCancelled: () => context.pop(),
+        // onCancelled: () => context.pop(),
         onSubmitted: _onSubmitted);
 
   showDialog(

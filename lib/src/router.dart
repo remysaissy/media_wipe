@@ -1,11 +1,11 @@
 import 'package:go_router/go_router.dart';
-import 'package:sortmaster_photos/src/assets/assets_view.dart';
-import 'package:sortmaster_photos/src/home/home_view.dart';
-import 'package:sortmaster_photos/src/loader/loading_view.dart';
-import 'package:sortmaster_photos/src/onboarding/onboarding_view.dart';
-import 'package:sortmaster_photos/src/permissions/permissions_view.dart';
-import 'package:sortmaster_photos/src/plans/plans_view.dart';
-import 'package:sortmaster_photos/src/settings/settings_view.dart';
+import 'package:sortmaster_photos/src/views/assets_view.dart';
+import 'package:sortmaster_photos/src/views/home_view.dart';
+import 'package:sortmaster_photos/src/views/loading_view.dart';
+import 'package:sortmaster_photos/src/views/onboarding_view.dart';
+import 'package:sortmaster_photos/src/views/permissions_view.dart';
+import 'package:sortmaster_photos/src/views/plans_view.dart';
+import 'package:sortmaster_photos/src/views/settings_view.dart';
 
 GoRouter setupRoutes()  {
   // SettingsController controller = di<SettingsController>();

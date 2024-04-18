@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sortmaster_photos/src/onboarding/onboarding_model.dart';
+import 'package:sortmaster_photos/src/models/onboarding_model.dart';
 
 class OnboardingService {
 

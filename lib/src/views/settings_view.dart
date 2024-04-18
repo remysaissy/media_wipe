@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/components/my_rating.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/settings/settings_controller.dart';
+import 'package:sortmaster_photos/src/controllers/settings_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SettingsView extends StatelessWidget with WatchItMixin {

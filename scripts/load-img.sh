@@ -10,9 +10,9 @@ echo "Loading photos from $(pwd)/$FOLDER in $PLATFORM simulator $SIM_ID"
 load_image() {
     if [ "$PLATFORM" = "ios" ]
     then
-      xcrun simctl addmedia $SIM_ID $file
+      xcrun simctl addmedia $SIM_ID "$file"
     else
-      adb push $file /sdcard/Pictures/
+      adb push "$file" /sdcard/Pictures/
     fi
 }
 

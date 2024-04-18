@@ -5,7 +5,7 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Container(
+    return Container(
         color: Colors.white,
         child: Stack(
             alignment: AlignmentDirectional.center,
@@ -18,6 +18,6 @@ class LoadingView extends StatelessWidget {
               ),
               const CircularProgressIndicator(),
             ])
-    ));
+    );
   }
 }

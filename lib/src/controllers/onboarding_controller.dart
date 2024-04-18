@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:sortmaster_photos/src/di.dart';
-import 'package:sortmaster_photos/src/onboarding/onboarding_model.dart';
-import 'package:sortmaster_photos/src/onboarding/onboarding_service.dart';
+import 'package:sortmaster_photos/src/models/onboarding_model.dart';
+import 'package:sortmaster_photos/src/services/onboarding_service.dart';
 
 class OnboardingController with ChangeNotifier {
 

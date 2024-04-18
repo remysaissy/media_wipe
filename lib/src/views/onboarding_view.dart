@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sortmaster_photos/src/components/my_cta_button.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/onboarding/onboarding_controller.dart';
-import 'package:sortmaster_photos/src/onboarding/onboarding_page.dart';
+import 'package:sortmaster_photos/src/controllers/onboarding_controller.dart';
+import 'package:sortmaster_photos/src/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:watch_it/watch_it.dart';

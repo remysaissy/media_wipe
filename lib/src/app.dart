@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sortmaster_photos/src/router.dart';
-import 'package:sortmaster_photos/src/settings/settings_controller.dart';
+import 'package:sortmaster_photos/src/controllers/settings_controller.dart';
 import 'package:sortmaster_photos/src/theme.dart';
 import 'package:watch_it/watch_it.dart';
 

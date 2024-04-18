@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sortmaster_photos/src/components/my_cta_button.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/permissions/permissions_controller.dart';
+import 'package:sortmaster_photos/src/controllers/permissions_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
 class PermissionsView extends StatelessWidget {

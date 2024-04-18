@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/home/home_controller.dart';
+import 'package:sortmaster_photos/src/controllers/home_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
 class HomeView extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -47,7 +47,7 @@ class HomeViewState extends State<HomeView> {
               onPressed: () async {
                 await _homeController.refresh();
               },
-              icon: const Icon(Icons.get_app),
+              icon: const Icon(Icons.refresh),
             )
           ],
         ),

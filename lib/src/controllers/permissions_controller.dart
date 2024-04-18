@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sortmaster_photos/src/di.dart';
-import 'package:sortmaster_photos/src/permissions/permissions_service.dart';
+import 'package:sortmaster_photos/src/services/permissions_service.dart';
 
 class PermissionsController with ChangeNotifier {
 

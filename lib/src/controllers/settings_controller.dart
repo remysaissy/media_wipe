@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sortmaster_photos/src/di.dart';
-import 'package:sortmaster_photos/src/permissions/permissions_service.dart';
-import 'package:sortmaster_photos/src/permissions/permissions_model.dart';
-import 'package:sortmaster_photos/src/settings/settings_service.dart';
+import 'package:sortmaster_photos/src/services/permissions_service.dart';
+import 'package:sortmaster_photos/src/models/permissions_model.dart';
+import 'package:sortmaster_photos/src/services/settings_service.dart';
 
 class SettingsController with ChangeNotifier {
 

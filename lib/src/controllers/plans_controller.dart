@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sortmaster_photos/src/di.dart';
-import 'package:sortmaster_photos/src/plans/plans_service.dart';
+import 'package:sortmaster_photos/src/services/plans_service.dart';
 
 class PlansController with ChangeNotifier {
 

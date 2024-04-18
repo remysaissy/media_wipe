@@ -5,7 +5,7 @@ import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
 import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_toggle_button.dart';
-import 'package:sortmaster_photos/src/plans/plans_controller.dart';
+import 'package:sortmaster_photos/src/controllers/plans_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
 class PlansView extends StatelessWidget with WatchItMixin {

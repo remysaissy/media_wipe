@@ -1,5 +1,5 @@
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sortmaster_photos/src/permissions/permissions_model.dart';
+import 'package:sortmaster_photos/src/models/permissions_model.dart';
 
 class PermissionsService {
 

@@ -9,10 +9,10 @@ mkdir -p $FOLDER
 
 # $1: image ID
 generate_image() {
-  # file_name="$(uuidgen | tr "[:upper:]" "[:lower:]").jpg"
-  file_name="$1.jpg"
+   file_name="$(uuidgen | tr "[:upper:]" "[:lower:]")_$1.jpg"
+#  file_name="$1.jpg"
   output=$FOLDER/$file_name
-  creation_date=$(perl -MPOSIX -le 'use Time::Local; $time = int(rand(6 * 31536000)) + Time::Local::timelocal(0, 0, 0, 1, 0, 2018); print strftime("%Y:%m:%d %H:%M:%S", localtime($time))')
+  creation_date=$(perl -MPOSIX -le 'use Time::Local; $time = int(rand(6 * 31536000)) + Time::Local::timelocal(0, 0, 0, 1, 0, 2023); print strftime("%Y:%m:%d %H:%M:%S", localtime($time))')
   text=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9' | head -c 30)
   shapes=("rectangle" "polygon" "circle")
   shape=${shapes[$((RANDOM % ${#shapes[@]}))]}

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sortmaster_photos/src/plans/plans_model.dart';
+import 'package:sortmaster_photos/src/models/plans_model.dart';
 
 /// A service that handles In App Purchases.
 class PlansService {
