@@ -1,14 +1,5 @@
-
-
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
 import 'package:sortmaster_photos/src/components/my_image_card.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
