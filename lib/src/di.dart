@@ -16,64 +16,22 @@ import 'package:sortmaster_photos/src/services/settings_service.dart';
 final di = GetIt.instance;
 
 void _setupServices() {
-  di.registerSingletonAsync<DBService>(() async {
-    final service = DBService();
-    await service.init();
-    return service;
-  });
-
-  di.registerSingletonAsync<SettingsService>(() async {
-    final service = SettingsService();
-    await service.init();
-    return service;
-  });
-  di.registerSingletonAsync<OnboardingService>(() async {
-    final service = OnboardingService();
-    await service.init();
-    return service;
-  });
-  di.registerSingletonAsync<PlansService>(() async {
-    final service = PlansService();
-    await service.init();
-    return service;
-  });
-  di.registerSingletonAsync<PermissionsService>(() async {
-    return PermissionsService();
-  });
-  di.registerSingletonAsync<AssetsService>(() async {
-    final service = AssetsService();
-    await service.init();
-    return service;
-  }, dependsOn: [DBService]);
-
-  di.registerSingletonAsync<SessionsService>(() async {
-    final service = SessionsService();
-    await service.init();
-    return service;
-  }, dependsOn: [DBService]);
+  di.registerSingletonAsync<DBService>(() async => DBService().init());
+  di.registerSingletonAsync<SettingsService>(() async => SettingsService().init());
+  di.registerSingletonAsync<OnboardingService>(() async => OnboardingService().init());
+  di.registerSingletonAsync<PlansService>(() async => PlansService().init());
+  di.registerSingletonAsync<PermissionsService>(() async => PermissionsService());
+  di.registerSingletonAsync<AssetsService>(() async => AssetsService().init(), dependsOn: [DBService]);
+  di.registerSingletonAsync<SessionsService>(() async => SessionsService().init(), dependsOn: [DBService]);
 }
 
 void _setupControllers() {
-  di.registerSingletonAsync<SettingsController>(() async {
-    final service = SettingsController();
-    await service.init();
-    return service;
-  }, dependsOn: [SettingsService]);
-  di.registerSingletonWithDependencies<OnboardingController>(() {
-    return OnboardingController();
-  }, dependsOn: [OnboardingService]);
-  di.registerSingletonWithDependencies<PlansController>(() {
-    return PlansController();
-  }, dependsOn: [PlansService]);
-  di.registerSingletonWithDependencies<PermissionsController>(() {
-    return PermissionsController();
-  }, dependsOn: [PermissionsService]);
-  di.registerSingletonWithDependencies<HomeController>(() {
-    return HomeController();
-  }, dependsOn: [AssetsService]);
-  di.registerSingletonWithDependencies<AssetsController>(() {
-    return AssetsController();
-  }, dependsOn: [AssetsService]);
+  di.registerSingletonAsync<SettingsController>(() async => SettingsController().init(), dependsOn: [SettingsService]);
+  di.registerSingletonWithDependencies<OnboardingController>(() => OnboardingController(), dependsOn: [OnboardingService]);
+  di.registerSingletonWithDependencies<PlansController>(() => PlansController(), dependsOn: [PlansService]);
+  di.registerSingletonWithDependencies<PermissionsController>(() => PermissionsController(), dependsOn: [PermissionsService]);
+  di.registerSingletonWithDependencies<HomeController>(() => HomeController(), dependsOn: [AssetsService]);
+  di.registerSingletonWithDependencies<AssetsController>(() => AssetsController(), dependsOn: [AssetsService]);
 }
 
 void setupDI() {

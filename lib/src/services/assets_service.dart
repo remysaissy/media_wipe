@@ -12,8 +12,9 @@ class AssetsService {
   final int _REFRESH_BATCH_SIZE = 100;
   late DBService _dbService;
 
-  Future<void> init() async {
+  Future<AssetsService> init() async {
     _dbService = di<DBService>();
+    return this;
   }
 
   Future<void> refresh({VoidCallback? onProgress}) async {
@@ -48,8 +49,8 @@ class AssetsService {
     return await _listAvailableYearMonths();
   }
 
-  Future<List<Asset>> listForYearMonth({required int year, required int month}) async {
-    return await _listForYearMonth(year: year, month: month);
+  Future<List<Asset>> listForYearMonth({required int yearMonth}) async {
+    return await _listForYearMonth(yearMonth: yearMonth);
   }
 
   Future<Asset> _createAssetModel(pm.AssetEntity element) async {
@@ -100,8 +101,7 @@ class AssetsService {
     return entries.map((e) => Asset.creationDateFromJson(e)).toList();
   }
 
-  Future<List<Asset>> _listForYearMonth({required int year, required int month}) async {
-    final yearMonth = Asset.toYearMonth(year: year, month: month);
+  Future<List<Asset>> _listForYearMonth({required int yearMonth}) async {
     final entries = await _dbService.retrieve(
       DBTables.Assets,
       where: 'year_month = ?',

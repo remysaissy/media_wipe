@@ -63,4 +63,4 @@ flutter:
     - assets/onboarding/
     - assets/plans/
     - assets/images/
-    - assets/schemas/
+    - assets/schemas/v1/

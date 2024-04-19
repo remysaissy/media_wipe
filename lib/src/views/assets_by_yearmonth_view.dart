@@ -9,31 +9,24 @@ import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 import 'package:watch_it/watch_it.dart';
 
-enum AssetsViewMode {
-  YearMonth,
-}
+class AssetsByYearMonthView extends StatefulWidget with WatchItStatefulWidgetMixin {
 
-class AssetsView extends StatefulWidget with WatchItStatefulWidgetMixin {
+  final int year;
+  final int month;
 
-  final AssetsViewMode assetsViewMode;
-  final int? year;
-  final int? month;
-
-  const AssetsView({super.key, required this.assetsViewMode, this.year, this.month});
+  AssetsByYearMonthView({super.key, required this.year, required this.month});
 
   @override
-  State<StatefulWidget> createState() => _AssetsViewState();
+  State<StatefulWidget> createState() => _AssetsByYearMonthViewState();
 }
 
-class _AssetsViewState extends State<AssetsView> {
+class _AssetsByYearMonthViewState extends State<AssetsByYearMonthView> {
 
   final AssetsController _assetsController = di<AssetsController>();
 
   Future<void> _initState() async {
-    if (widget.assetsViewMode == AssetsViewMode.YearMonth) {
-      await _assetsController.loadWithYearMonth(year: widget.year!, month: widget.month!);
-      await _assetsController.startSession(year: widget.year!, month: widget.month!);
-    }
+    final yearMonth = Asset.toYearMonth(year: widget.year, month: widget.month);
+    await _assetsController.init(yearMonth: yearMonth);
   }
 
   @override
@@ -49,24 +42,19 @@ class _AssetsViewState extends State<AssetsView> {
     final currentSelectionAsset = watchPropertyValue((AssetsController x) => x.currentSelectionAsset);
     final currentSelectionIndex = watchPropertyValue((AssetsController x) => x.currentSelectionIndex);
     final totalAssetsForMonth = watchPropertyValue((AssetsController x) => x.totalAssetsForMonth);
-    final isCurrentMonthFinished = watchPropertyValue((AssetsController x) => x.isCurrentMonthFinished);
     Widget card;
-    if (isCurrentMonthFinished) {
-      card = _buildSessionSummary(context);
-    } else {
-      if (currentSelectionAsset != null) {
-        if (currentSelectionAsset.assetType == AssetType.Video) {
-          card = MyVideoCard(asset: currentSelectionAsset);
-        } else {
-          card = MyImageCard(asset: currentSelectionAsset);
-        }
+    if (currentSelectionAsset != null) {
+      if (currentSelectionAsset.assetType == AssetType.Video) {
+        card = MyVideoCard(asset: currentSelectionAsset);
       } else {
-        card = _buildLoading(context);
+        card = MyImageCard(asset: currentSelectionAsset);
       }
+    } else {
+      card = _buildLoading(context);
     }
     return MyScaffold(
         appBar: AppBar(
-          title: Text('${Utils.monthNumberToMonthName(widget.month!)} ${widget.year}'),
+          title: Text('${Utils.monthNumberToMonthName(widget.month)} ${widget.year}'),
           actions: [
             Text('${currentSelectionIndex+1}/${totalAssetsForMonth}'),
             IconButton(
@@ -86,21 +74,15 @@ class _AssetsViewState extends State<AssetsView> {
                         FloatingActionButton(onPressed: () async {
                           await _assetsController.onKeepPressed(onEnd: () {
                             if (!context.mounted) return;
-                            context.pop();
+                            _assetsController.assetsToDrop.isNotEmpty ? context.go('/assets/summary') : context.go('/home');
                           });
                         },
                             heroTag: null,
                             child: const Icon(Symbols.check)),
-                        // FloatingActionButton(onPressed: () async {
-                        //   await _assetsController.onInfoPressed();
-                        //   if (!context.mounted) return;
-                        // },
-                        //     heroTag: null,
-                        //     child: const Icon(Symbols.info)),
                         FloatingActionButton(onPressed: () async {
                           await _assetsController.onDropPressed(onEnd: () {
                             if (!context.mounted) return;
-                            context.pop();
+                            _assetsController.assetsToDrop.isNotEmpty ? context.go('/assets/summary') : context.go('/home');
                           });
                         },
                             heroTag: null,
@@ -122,9 +104,5 @@ class _AssetsViewState extends State<AssetsView> {
       margin: const EdgeInsets.all(10),
       child: const CircularProgressIndicator(),
     );
-  }
-
-  Widget _buildSessionSummary(BuildContext context) {
-    return Text('Session finished');
   }
 }

@@ -9,30 +9,40 @@ class AssetsController with ChangeNotifier {
 
   final _assetsService = di<AssetsService>();
   final _sessionsService = di<SessionsService>();
+  late int _yearMonth;
+  int get yearMonth => _yearMonth;
   late List<Asset> _assetsFromMonth = [];
   late int _currentSelectionIndex = 0;
   int get currentSelectionIndex => _currentSelectionIndex;
   int get totalAssetsForMonth => _assetsFromMonth.length;
 
   Asset? get currentSelectionAsset => (_assetsFromMonth.isNotEmpty && _currentSelectionIndex > -1 && _currentSelectionIndex < _assetsFromMonth.length) ? _assetsFromMonth[_currentSelectionIndex] : null;
-  bool get isCurrentMonthFinished => (_assetsFromMonth.length == _currentSelectionIndex) ? true : false;
 
-  Future<void> loadWithYearMonth({required int year, required int month}) async {
-    _assetsFromMonth = await _assetsService.listForYearMonth(year: year, month: month);
+  List<Asset> get assetsToDrop => _assetsFromMonth.where((asset) => (_currentSession != null && _currentSession!.assetIdsToDrop.contains(asset.id))).toList();
+
+  Future<void> init({required int yearMonth}) async {
+    _yearMonth = yearMonth;
+    _assetsFromMonth = await _assetsService.listForYearMonth(yearMonth: yearMonth);
     _currentSelectionIndex = 0;
+    _currentSession = await _sessionsService.createOrRecoverSession(yearMonth: yearMonth, firstAssetId: currentSelectionAsset!.id);
     notifyListeners();
   }
 
-  Future<void> onKeepPressed({VoidCallback? onNextAvailable, VoidCallback? onEnd}) async {
+  Future<void> onKeepPressed({Asset? asset, VoidCallback? onNextAvailable, VoidCallback? onEnd}) async {
     print('Keep');
-    if (_assetsFromMonth.length == _currentSelectionIndex+1) {
-      _currentSession?.assetIdsToDrop.remove(currentSelectionAsset!.id);
+    var newIndex = _currentSelectionIndex;
+    if (asset == null) {
+      asset = currentSelectionAsset;
+      newIndex = _currentSelectionIndex+1;
+    }
+    if (_assetsFromMonth.length <= newIndex) {
+      _currentSession?.assetIdsToDrop.remove(asset!.id);
       if (onEnd != null) onEnd();
     } else {
-      _currentSession?.assetIdsToDrop.remove(currentSelectionAsset!.id);
+      _currentSession?.assetIdsToDrop.remove(asset!.id);
       if (onNextAvailable != null) onNextAvailable();
     }
-    _currentSelectionIndex = _currentSelectionIndex+1;
+    _currentSelectionIndex = newIndex;
     notifyListeners();
   }
 
@@ -68,14 +78,16 @@ class AssetsController with ChangeNotifier {
   late Session? _currentSession;
   Session? get currentSession => _currentSession;
 
-  Future<void> startSession({required int year, required int month}) async {
-    _currentSession = await _sessionsService.createOrRecoverSession(year: year, month: month, firstAssetId: currentSelectionAsset!.id);
+  Future<void> startSession() async {
+    _currentSession = await _sessionsService.createOrRecoverSession(yearMonth: yearMonth, firstAssetId: currentSelectionAsset!.id);
+    print('Session: ${_currentSession?.yearMonth} ${_currentSession?.id} ${_currentSession?.currentAssetId} ${_currentSession?.assetIdsToDrop}');
     notifyListeners();
   }
 
-  Future<void> finishSession() async {
+  Future<void> finishSession({bool isCanceled = false}) async {
     if (_currentSession != null) {
-      await _sessionsService.finishSession(session: _currentSession!);
+      print('Session: ${_currentSession?.yearMonth} ${_currentSession?.id} ${_currentSession?.currentAssetId} ${_currentSession?.assetIdsToDrop}');
+      await _sessionsService.finishSession(session: _currentSession!, isCanceled: isCanceled);
       _currentSession = null;
       notifyListeners();
     }

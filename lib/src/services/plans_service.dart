@@ -8,8 +8,9 @@ class PlansService {
 
   late SharedPreferences _sharedPreferences;
 
-  Future<void> init() async {
+  Future<PlansService> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
+    return this;
   }
 
   Future<Plan?> plan() async {

@@ -13,6 +13,13 @@ class SettingsController with ChangeNotifier {
   late ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;
 
+  Future<SettingsController> init() async {
+    _themeMode = await _settingsService.themeMode();
+    _currentPermissions = await _permissionsService.permissions();
+    notifyListeners();
+    return this;
+  }
+
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
     if (newThemeMode != null) {
       _themeMode = newThemeMode;
@@ -28,11 +35,5 @@ class SettingsController with ChangeNotifier {
       await _permissionsService.authorizePhotos();
       _currentPermissions = await _permissionsService.permissions();
       notifyListeners();
-  }
-
-  Future<void> init() async {
-    _themeMode = await _settingsService.themeMode();
-    _currentPermissions = await _permissionsService.permissions();
-    notifyListeners();
   }
 }

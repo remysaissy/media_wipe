@@ -7,8 +7,9 @@ class SettingsService {
 
   late SharedPreferences _sharedPreferences;
 
-  Future<void> init() async {
+  Future<SettingsService> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
+    return this;
   }
 
   Future<ThemeMode> themeMode() async {

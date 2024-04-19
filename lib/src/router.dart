@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:sortmaster_photos/src/views/assets_view.dart';
+import 'package:sortmaster_photos/src/views/assets_by_yearmonth_view.dart';
+import 'package:sortmaster_photos/src/views/assets_summary_view.dart';
 import 'package:sortmaster_photos/src/views/home_view.dart';
 import 'package:sortmaster_photos/src/views/loading_view.dart';
 import 'package:sortmaster_photos/src/views/onboarding_view.dart';
@@ -41,13 +42,16 @@ GoRouter setupRoutes()  {
         builder: (context, state) => HomeView(),
       ),
       GoRoute(
-        path: '/assets/yearmonth/:year/:month',
+        path: '/assets/sort/:year/:month',
         name: 'assetsByYearMonth',
-        builder: (context, state) => AssetsView(
-          assetsViewMode: AssetsViewMode.YearMonth,
+        builder: (context, state) => AssetsByYearMonthView(
           year: int.parse(state.pathParameters['year']!),
           month: int.parse(state.pathParameters['month']!),
         ),
+      ),
+      GoRoute(
+        path: '/assets/summary',
+        builder: (context, state) => AssetsSummaryView(),
       ),
       GoRoute(
         path: '/settings',

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -13,9 +14,8 @@ class DBService {
 
   final int SCHEMA_VERSION = 1;
   late Database _db;
-  Database get db => _db;
 
-  Future<void> init() async {
+  Future<DBService> init() async {
     final dbPath = join(await getDatabasesPath(), 'app.db');
     // if (kDebugMode) {
     //   final dbFile = File(dbPath);
@@ -26,11 +26,15 @@ class DBService {
     _db = await openDatabase(
       dbPath,
       onCreate: (db, version) async {
-        final schema = await rootBundle.loadString('assets/schemas/v$SCHEMA_VERSION.sql');
-        await db.execute(schema);
+        final batch = db.batch();
+        batch.execute(await rootBundle.loadString('assets/schemas/v$version/assets.sql'));
+        batch.execute(await rootBundle.loadString('assets/schemas/v$version/sessions.sql'));
+        batch.execute(await rootBundle.loadString('assets/schemas/v$version/preferences.sql'));
+        await batch.commit();
       },
       version: SCHEMA_VERSION,
     );
+      return this;
   }
 
   Future<int> create(DBTables table, Map<String, Object?> values) async {

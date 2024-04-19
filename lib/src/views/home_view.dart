@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/controllers/home_controller.dart';
+import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 import 'package:watch_it/watch_it.dart';
 

@@ -6,8 +6,9 @@ class OnboardingService {
 
   late SharedPreferences _sharedPreferences;
 
-  Future<void> init() async {
+  Future<OnboardingService> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
+    return this;
   }
 
   Future<OnboardingModel> onboarding() async {

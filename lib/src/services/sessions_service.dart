@@ -9,13 +9,14 @@ class SessionsService {
 
   late DBService _dbService;
 
-  Future<void> init() async {
+  Future<SessionsService> init() async {
     _dbService = di<DBService>();
+    return this;
   }
 
-  Future<Session> createOrRecoverSession({required int year, required int month, required String firstAssetId}) async {
-    final yearMonth = Asset.toYearMonth(year: year, month: month);
+  Future<Session> createOrRecoverSession({required int yearMonth, required String firstAssetId}) async {
     Session? session = await _getByYearMonth(yearMonth: yearMonth);
+    print('Session: ${session}');
     if (session == null) {
       session = Session(currentAssetId: firstAssetId, yearMonth: yearMonth, assetIdsToDrop: []);
       await _create(session);
@@ -38,11 +39,14 @@ class SessionsService {
   }
 
   Future<void> _create(Session session) async {
-    await _dbService.create(DBTables.Sessions, session.toJson());
+    session.id = await _dbService.create(DBTables.Sessions, session.toJson());
   }
 
   Future<void> _update(Session session) async {
-    await _dbService.update(DBTables.Sessions, session.toJson());
+    var values = session.toJson();
+    values.remove('id');
+    await _dbService.update(DBTables.Sessions,
+        values, where: 'id = ?', whereArgs: [session.id]);
   }
 
   Future<void> _delete(int id) async {
@@ -52,11 +56,14 @@ class SessionsService {
     );
   }
 
-  Future<void> finishSession({required Session session}) async {
+  Future<void> finishSession({required Session session, bool isCanceled = false}) async {
     // Update the session with its latest assets to drop, in case of.
     await _update(session);
-    if (session.assetIdsToDrop.isNotEmpty) {
-      await PhotoManager.editor.deleteWithIds(session.assetIdsToDrop);
+    if (!isCanceled) {
+      if (session.assetIdsToDrop.isNotEmpty) {
+        print('Drop all IDs: ${session.assetIdsToDrop}');
+        // await PhotoManager.editor.deleteWithIds(session.assetIdsToDrop);
+      }
     }
     await _delete(session.id!);
   }
