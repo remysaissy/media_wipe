@@ -1,5 +1,4 @@
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sortmaster_photos/src/models/permissions_model.dart';
 
 class PermissionsService {
 
@@ -7,8 +6,8 @@ class PermissionsService {
     await Permission.photos.request();
   }
 
-  Future<PermissionsModel> permissions() async {
+  Future<bool> isPhotosAuthorized() async {
     final photosStatus = await Permission.photos.status;
-    return PermissionsModel(photos: photosStatus.isGranted);
+    return photosStatus.isGranted;
   }
 }

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 enum DBTables {
   Assets,
   Sessions,
-  SessionItems,
+  Settings,
 }
 
 class DBService {
@@ -18,10 +18,10 @@ class DBService {
   Future<DBService> init() async {
     final dbPath = join(await getDatabasesPath(), 'app.db');
     // if (kDebugMode) {
-    //   final dbFile = File(dbPath);
-    //   if (dbFile.existsSync()) {
-    //     dbFile.deleteSync();
-    //   }
+      final dbFile = File(dbPath);
+      if (dbFile.existsSync()) {
+        dbFile.deleteSync();
+      }
     // }
     _db = await openDatabase(
       dbPath,
@@ -29,7 +29,6 @@ class DBService {
         final batch = db.batch();
         batch.execute(await rootBundle.loadString('assets/schemas/v$version/assets.sql'));
         batch.execute(await rootBundle.loadString('assets/schemas/v$version/sessions.sql'));
-        batch.execute(await rootBundle.loadString('assets/schemas/v$version/preferences.sql'));
         await batch.commit();
       },
       version: SCHEMA_VERSION,

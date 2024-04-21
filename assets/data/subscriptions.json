@@ -1,0 +1,20 @@
+[
+  {
+    "productId": "free",
+    "name": "free",
+    "title": "Enjoy a 3-day trial",
+    "price": "Free"
+  },
+  {
+    "productId": "weekly",
+    "name": "weekly",
+    "title": "Enjoy the full version for a week",
+    "price": "4.99 eur"
+  },
+  {
+    "productId": "lifetime",
+    "name": "lifetime",
+    "title": "Fully own your copy",
+    "price": "99 eur"
+  }
+]

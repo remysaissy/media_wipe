@@ -1,69 +1,71 @@
+import 'dart:convert';
+
+import 'package:sortmaster_photos/src/models/abstract_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
-enum AssetType {
-  Image,
-  Video,
-  LivePhoto
-}
+class AssetData {
 
-extension IntToAssetTypeExt on int {
-  AssetType toAssetType() {
-    if (this == 1) return AssetType.Video;
-    if (this == 2) return AssetType.LivePhoto;
-    return AssetType.Image;
-  }
-}
-
-extension AssetTypeToIntExt on AssetType {
-  int toInt() {
-    if (this == AssetType.Video) return 1;
-    if (this == AssetType.LivePhoto) return 2;
-    return 0;
-  }
-}
-
-class Asset {
   final String id;
-  final String assetUrl;
-  final AssetType assetType;
   final DateTime creationDate;
-  final int yearMonth;
 
-  Asset({
-    required this.id,
-    required this.assetUrl,
-    required this.assetType,
-    required this.creationDate,
-    required this.yearMonth
-  });
+  AssetData({required this.id, required this.creationDate});
 
-  Asset.fromJson(Map<String, dynamic> json):
+  AssetData.fromJson(Map<String, dynamic> json):
         id = json['id'] as String,
-        assetUrl = json['asset_url'] as String,
-        assetType = (json['asset_type'] as int).toAssetType(),
-        creationDate = DateTime.fromMillisecondsSinceEpoch(json['creation_date'] as int),
-        yearMonth = json['year_month'] as int;
+        creationDate = DateTime.fromMillisecondsSinceEpoch(json['creationDate']);
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'asset_url': assetUrl,
-    'asset_type': assetType.toInt(),
-    'creation_date': creationDate.millisecondsSinceEpoch,
-    'year_month': yearMonth,
+    'creationDate': creationDate.millisecondsSinceEpoch
   };
+}
 
-  // Utility function when we need only a specific field.
-  static DateTime creationDateFromJson(Map<String, dynamic> json) {
-    return DateTime.fromMillisecondsSinceEpoch(json['creation_date'] as int);
+class AssetsModel extends AbstractModel {
+
+  AssetsModel() {
+    enableSerialization('assets.dat');
   }
 
-  // Utility function when we need only a specific field.
-  static String idFromJson(Map<String, dynamic> json) {
-    return json['id'] as String;
+  Map<String, List<AssetData>> _assets = {};
+  Map<String, List<AssetData>> get assets => _assets;
+  set assets(Map<String, List<AssetData>> assets) {
+    _assets = assets;
+    _updatedAt = DateTime.now();
+    scheduleSave();
+    notifyListeners();
   }
 
-  // Build the stored Asset model yearMonth field from the two separate values.
-  static int toYearMonth({required int year, required int month}) {
-    return int.parse('${Utils.yearFormatter.format(year)}${Utils.monthFormatter.format(month)}');
+  void updateAssetEntry(String key, List<AssetData> value) {
+    _assets[key] = value;
+    _updatedAt = DateTime.now();
+    scheduleSave();
+    notifyListeners();
   }
+
+  DateTime _updatedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime get updatedAt => _updatedAt;
+
+  @override
+  void reset([bool notify = true]) {
+    Utils.logger.i("[AssetsModel] Reset");
+    copyFromJson({});
+    super.reset(notify);
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Define serialization methods
+
+  //Json Serialization
+  @override
+  AssetsModel copyFromJson(Map<String, dynamic> json) {
+    _assets = json.containsKey('_assets') ? jsonDecode(json['_assets']) : {};
+    _updatedAt = json.containsKey('_updatedAt') ? DateTime.fromMillisecondsSinceEpoch(json['_updatedAt']) : DateTime.fromMillisecondsSinceEpoch(0);
+    return this;
+  }
+
+  @override
+  Map<String, dynamic> toJson() => {
+    '_assets': jsonEncode(_assets),
+    '_updatedAt': _updatedAt.millisecondsSinceEpoch,
+  };
 }

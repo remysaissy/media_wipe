@@ -9,14 +9,7 @@ import 'package:sortmaster_photos/src/views/plans_view.dart';
 import 'package:sortmaster_photos/src/views/settings_view.dart';
 
 GoRouter setupRoutes()  {
-  // SettingsController controller = di<SettingsController>();
-  String initialLocation = '/home';
-  // controller.selector == LoaderSelector.Loading ? '/loading'
-  //     : controller.selector == LoaderSelector.Onboarding ? '/onboarding'
-  //     : controller.selector == LoaderSelector.Subscription ? '/plans'
-  //     : controller.selector == LoaderSelector.Permissions ? '/permissions'
-  //     : controller.selector == LoaderSelector.Home ? '/home'
-  //     : '/loading';
+  String initialLocation = '/settings';
 
   return GoRouter(
     initialLocation: initialLocation,

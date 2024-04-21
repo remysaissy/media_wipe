@@ -1,49 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:sortmaster_photos/src/commands/settings/refresh_subscriptions_command.dart';
+import 'package:sortmaster_photos/src/commands/settings/purchase_subscription_command.dart';
+import 'package:sortmaster_photos/src/commands/settings/restore_subscription_command.dart';
 import 'package:sortmaster_photos/src/components/my_cta_button.dart';
 import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
 import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_toggle_button.dart';
-import 'package:sortmaster_photos/src/controllers/plans_controller.dart';
-import 'package:watch_it/watch_it.dart';
+import 'package:sortmaster_photos/src/models/settings_model.dart';
 
-class PlansView extends StatelessWidget with WatchItMixin {
+class PlansView extends StatefulWidget {
+  const PlansView({super.key});
 
-  final _plansController = di<PlansController>();
+  @override
+  State<StatefulWidget> createState() => _PlansViewState();
+}
 
-  PlansView({super.key});
+class _PlansViewState extends State<PlansView> {
+
+  late int _selectedPlanIndex;
+  void _onPlanSelected(int index) {
+    setState(() {
+        _selectedPlanIndex = index;
+    });
+  }
+
+  Future<void> _initState() async {
+    await RefreshSubscriptionsCommand(context).run();
+  }
+
+  @override
+  void initState() {
+    _selectedPlanIndex = 0;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _initState();
+      });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<SubscriptionData> subscriptionPlans = context.select<SettingsModel, List<SubscriptionData>>((value) => value.subscriptionPlans);
     List<Widget> children = _buildHeader();
-    children.addAll(_buildPlans(context));
-    children.add(const Spacer());
-    children.addAll(_buildCTA(context));
-    return MyScaffold(
+    if (subscriptionPlans.isNotEmpty) {
+      children.addAll(_buildPlans(context, subscriptionPlans));
+      children.add(const Spacer());
+      children.addAll(_buildCTA(context, subscriptionPlans));
+    }
+    return Provider.value(value: subscriptionPlans,
+    child: MyScaffold(
         appBar: AppBar(
           actions: [
             MyCTATextButton(onPressed: () async {
-              await _plansController.restorePurchase();
               if (!context.mounted) return;
-              context.go('/home');
+              await RestoreSubscriptionCommand(context).run();
+              context.pop();
             },
                 text: 'Already purchased?')
           ],
         ),
         child: Column(
-          children: children
+            children: children
         )
-    );
+    ));
   }
 
-  List<Widget> _buildCTA(BuildContext context) {
+  List<Widget> _buildCTA(BuildContext context, List<SubscriptionData> subscriptionPlans) {
     return [
           MyCTAButton(
             onPressed: () async {
-              await _plansController.purchasePlan();
               if (!context.mounted) return;
-              context.go('/home');
+              await  PurchaseSubscriptionCommand(context).run(productId: subscriptionPlans[_selectedPlanIndex].productId);
+              context.pop();
             },
             child: const Text('Continue',
             textAlign: TextAlign.center),
@@ -56,15 +86,14 @@ class PlansView extends StatelessWidget with WatchItMixin {
     ];
   }
 
-  List<Widget> _buildPlans(BuildContext context) {
-    final selectedPlanDescription = watchPropertyValue((PlansController x) => x.selectedPlanDescription);
+  List<Widget> _buildPlans(BuildContext context, List<SubscriptionData> subscriptionPlans) {
     return [
             MyToggleButton(
-                onPressed: _plansController.updateSelectedPlan,
-                options: _plansController.planNames,
-                defaultOption: _plansController.selectedPlan),
-            ListTile(title: Text('${selectedPlanDescription['title']}'),
-                trailing: Text('${selectedPlanDescription['price']}'),),
+                onPressed: _onPlanSelected,
+                options: subscriptionPlans.map((e) => e.name).toList(),
+                defaultOption: _selectedPlanIndex),
+            ListTile(title: Text(subscriptionPlans[_selectedPlanIndex].title),
+                trailing: Text(subscriptionPlans[_selectedPlanIndex].price)),
         ];
   }
 
