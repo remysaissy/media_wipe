@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
@@ -19,4 +20,11 @@ class Utils {
 
   static final Logger _logger = Logger();
   static Logger get logger => _logger;
+
+  static Widget buildLoading(BuildContext context) {
+    return const Align(
+        alignment: Alignment.center, // This will horizontally center from the top
+        child: CircularProgressIndicator()
+    );
+  }
 }

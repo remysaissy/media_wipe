@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sortmaster_photos/src/models/settings_model.dart';
 
 class OnboardingPage extends StatelessWidget {
 
-  final String urlImage;
-  final String title;
-  final String description;
+  final OnboardingData onboardingData;
 
-  const OnboardingPage({super.key, required this.urlImage,required this.title, required this.description });
+  const OnboardingPage({super.key, required this.onboardingData});
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +13,20 @@ class OnboardingPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
-          urlImage,
+          onboardingData.urlImage,
           width: 250,
           height: 200,
         ),
         const SizedBox(height: 30,),
         Text(
-          title,
+          onboardingData.title,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30,),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            description,
+            onboardingData.description,
             textAlign: TextAlign.center,
           ),
         ),

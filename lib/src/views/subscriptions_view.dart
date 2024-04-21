@@ -11,14 +11,14 @@ import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_toggle_button.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 
-class PlansView extends StatefulWidget {
-  const PlansView({super.key});
+class SubscriptionsView extends StatefulWidget {
+  const SubscriptionsView({super.key});
 
   @override
-  State<StatefulWidget> createState() => _PlansViewState();
+  State<StatefulWidget> createState() => _SubscriptionsViewState();
 }
 
-class _PlansViewState extends State<PlansView> {
+class _SubscriptionsViewState extends State<SubscriptionsView> {
 
   late int _selectedPlanIndex;
   void _onPlanSelected(int index) {

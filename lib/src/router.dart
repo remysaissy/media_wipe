@@ -5,26 +5,24 @@ import 'package:sortmaster_photos/src/views/home_view.dart';
 import 'package:sortmaster_photos/src/views/loading_view.dart';
 import 'package:sortmaster_photos/src/views/onboarding_view.dart';
 import 'package:sortmaster_photos/src/views/permissions_view.dart';
-import 'package:sortmaster_photos/src/views/plans_view.dart';
+import 'package:sortmaster_photos/src/views/subscriptions_view.dart';
 import 'package:sortmaster_photos/src/views/settings_view.dart';
 
 GoRouter setupRoutes()  {
-  String initialLocation = '/settings';
-
   return GoRouter(
-    initialLocation: initialLocation,
+    initialLocation: '/home',
     routes: [
       GoRoute(
-        path: '/loading',
+        path: '/',
         builder: (context, state) => const LoadingView(),
       ),
       GoRoute(
         path: '/onboarding',
-        builder: (context, state) => OnboardingView(),
+        builder: (context, state) => const OnboardingView(),
       ),
       GoRoute(
         path: '/plans',
-        builder: (context, state) => PlansView(),
+        builder: (context, state) => const SubscriptionsView(),
       ),
       GoRoute(
         path: '/permissions',

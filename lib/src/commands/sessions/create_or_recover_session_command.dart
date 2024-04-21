@@ -6,11 +6,10 @@ class CreateOrRecoverSessionCommand extends AbstractCommand {
 
   CreateOrRecoverSessionCommand(super.context);
 
-  Future<SessionData> run({required int year, required int month, bool reset = false}) async {
+  Future<void> run({required int year, required int month, bool}) async {
     final yearMonth = Utils.stringifyYearMonth(year: year, month: month);
-    if (!sessionsModel.sessions.containsKey(yearMonth) || reset) {
+    if (!sessionsModel.sessions.containsKey(yearMonth)) {
         sessionsModel.sessions[yearMonth] = SessionData(assetIdsToDrop: [], isFinished: false);
     }
-    return sessionsModel.sessions[yearMonth]!;
   }
 }

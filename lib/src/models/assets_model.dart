@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:photo_manager/photo_manager.dart';
 import 'package:sortmaster_photos/src/models/abstract_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
@@ -18,6 +19,10 @@ class AssetData {
     'id': id,
     'creationDate': creationDate.millisecondsSinceEpoch
   };
+
+  Future<AssetEntity?> loadEntity() async {
+    return await AssetEntity.fromId(id);
+  }
 }
 
 class AssetsModel extends AbstractModel {

@@ -3,16 +3,12 @@ import 'dart:convert';
 
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:sortmaster_photos/src/utils.dart';
 
 class SubscriptionsService {
 
   Future<List<SubscriptionData>> listSubscriptions() async {
-    Utils.logger.i('list subscriptions');
     final subscriptionsString = await rootBundle.loadString('assets/data/subscriptions.json');
-    Utils.logger.i('list subscriptions==> $subscriptionsString');
     final List<dynamic> entries = jsonDecode(subscriptionsString);
-    Utils.logger.i('list subscriptions==> ${entries.length}');
     return entries.map((e) => SubscriptionData.fromJson(e)).toList();
   }
 

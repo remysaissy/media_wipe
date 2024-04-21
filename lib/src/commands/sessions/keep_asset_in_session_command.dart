@@ -7,14 +7,12 @@ class KeepAssetInSessionCommand extends AbstractCommand {
 
   KeepAssetInSessionCommand(super.context);
 
-  Future<bool> run({required AssetData assetData}) async {
+  Future<void> run({required AssetData assetData}) async {
     final yearMonth = Utils.stringifyYearMonth(year: assetData.creationDate.year, month: assetData.creationDate.month);
-    if (!sessionsModel.sessions.containsKey(yearMonth)) {
-      return false;
+    if (sessionsModel.sessions.containsKey(yearMonth)) {
+      final sessionData = sessionsModel.sessions[yearMonth]!;
+      sessionData.assetIdsToDrop.remove(assetData.id);
+      sessionsModel.sessions[yearMonth] = sessionData;
     }
-    final sessionData = sessionsModel.sessions[yearMonth]!;
-    sessionData.assetIdsToDrop.remove(assetData.id);
-    sessionsModel.sessions[yearMonth] = sessionData;
-    return true;
   }
 }

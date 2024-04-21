@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:sortmaster_photos/src/models/abstract_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
+class OnboardingData {
+  final String urlImage;
+  final String title;
+  final String description;
+
+  OnboardingData({required this.urlImage, required this.title, required this.description});
+
+  OnboardingData.fromJson(Map<String, dynamic> json):
+        urlImage = json['urlImage'],
+        title = json['title'],
+        description = json['description'];
+}
+
 class SubscriptionData {
   final String productId;
   final String name;
@@ -66,6 +79,13 @@ class SettingsModel extends AbstractModel {
   List<SubscriptionData> get subscriptionPlans => _subscriptionPlans;
   set subscriptionPlans(List<SubscriptionData> subscriptionPlans) {
     _subscriptionPlans = subscriptionPlans;
+    notifyListeners();
+  }
+
+  List<OnboardingData> _onboardingSteps = [];
+  List<OnboardingData> get onboardingSteps => _onboardingSteps;
+  set onboardingSteps(List<OnboardingData> onboardingSteps) {
+    _onboardingSteps = onboardingSteps;
     notifyListeners();
   }
 
