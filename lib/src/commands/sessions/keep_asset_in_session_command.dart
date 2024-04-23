@@ -12,7 +12,7 @@ class KeepAssetInSessionCommand extends AbstractCommand {
     if (sessionsModel.sessions.containsKey(yearMonth)) {
       final sessionData = sessionsModel.sessions[yearMonth]!;
       sessionData.assetIdsToDrop.remove(assetData.id);
-      sessionsModel.sessions[yearMonth] = sessionData;
+      sessionsModel.updateSession(yearMonth, sessionData);
     }
   }
 }

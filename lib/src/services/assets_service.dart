@@ -17,7 +17,7 @@ class AssetsService {
 
   Future<Map<String, List<AssetData>>> listAssetsPerYearMonth() async {
     Map<String, List<AssetData>> assets = {};
-    final type = pm.RequestType.fromTypes([pm.RequestType.image, pm.RequestType.video]);
+    final type = pm.RequestType.fromTypes([pm.RequestType.image]);
     final count = await pm.PhotoManager.getAssetCount(type: type);
     for (int index = 0; index < count; index += _refreshBatchSize) {
       final assetsEntities = await pm.PhotoManager.getAssetListRange(start: index, end: index + _refreshBatchSize, type: type);

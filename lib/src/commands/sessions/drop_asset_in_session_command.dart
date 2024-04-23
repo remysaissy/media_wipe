@@ -7,15 +7,17 @@ class DropAssetInSessionCommand extends AbstractCommand {
 
   DropAssetInSessionCommand(super.context);
 
-  Future<bool> run({required AssetData assetData}) async {
+  Future<void> run({required AssetData assetData}) async {
     final yearMonth = Utils.stringifyYearMonth(year: assetData.creationDate.year, month: assetData.creationDate.month);
-    if (!sessionsModel.sessions.containsKey(yearMonth)) {
-      return false;
+    SessionData sessionData;
+    if (sessionsModel.sessions.containsKey(yearMonth)) {
+      sessionData = sessionsModel.sessions[yearMonth]!;
+    } else {
+      sessionData = SessionData(assetIdsToDrop: [], isFinished: false);
     }
-    final sessionData = sessionsModel.sessions[yearMonth]!;
-    final assetIdsToDropSet = sessionData.assetIdsToDrop.toSet();
-    assetIdsToDropSet.add(assetData.id);
-    sessionsModel.sessions[yearMonth] = SessionData(assetIdsToDrop: assetIdsToDropSet.toList(), isFinished: sessionData.isFinished);
-    return true;
+    if (!sessionData.assetIdsToDrop.contains(assetData.id)) {
+      sessionData.assetIdsToDrop.add(assetData.id);
+    }
+    sessionsModel.updateSession(yearMonth, sessionData);
   }
 }

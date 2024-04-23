@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 
-class LoadingView extends StatelessWidget {
-  const LoadingView({super.key});
+class RoutingView extends StatelessWidget {
+  const RoutingView({super.key});
 
   void _go(BuildContext context, String location) {
     Future.delayed(const Duration(milliseconds: 10), () {

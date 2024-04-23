@@ -29,7 +29,7 @@ void main() async {
         /// ROOT CONTEXT, Allows Commands to retrieve a 'safe' context that is not tied to any one view. Allows them to work on async tasks without issues.
         Provider<BuildContext>(create: (c) => c),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

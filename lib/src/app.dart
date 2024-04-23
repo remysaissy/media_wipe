@@ -9,7 +9,7 @@ import 'package:sortmaster_photos/src/models/sessions_model.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 import 'package:sortmaster_photos/src/router.dart';
 import 'package:sortmaster_photos/src/theme.dart';
-import 'package:sortmaster_photos/src/views/loading_view.dart';
+import 'package:sortmaster_photos/src/views/routing_view.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
 
     /// If we've not loaded settings,
-    if (!_settingsLoaded) return const LoadingView();
+    if (!_settingsLoaded) return const RoutingView();
 
     ThemeMode themeMode = context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
      return Provider.value(value: themeMode,

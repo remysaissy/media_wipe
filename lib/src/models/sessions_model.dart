@@ -28,8 +28,12 @@ class SessionsModel extends AbstractModel {
 
   Map<String, SessionData> _sessions = {};
   Map<String, SessionData> get sessions => _sessions;
-  set sessions(Map<String, SessionData> sessions) {
-    _sessions = sessions;
+  void updateSession(String key, SessionData? session) {
+    if (session != null) {
+      _sessions[key] = session;
+    } else {
+      _sessions.remove(key);
+    }
     _updatedAt = DateTime.now();
     scheduleSave();
     notifyListeners();
