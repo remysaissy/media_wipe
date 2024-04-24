@@ -60,6 +60,9 @@ class SettingsModel extends AbstractModel {
     notifyListeners();
   }
 
+  bool get hasSubscription => (_productId == 'free' && _subscribedAt.difference(DateTime.now()).compareTo(const Duration(days: 3)) < 0) || _productId.isNotEmpty;
+  SubscriptionData? get currentSubscription => (hasSubscription && _subscriptionPlans.isNotEmpty) ? _subscriptionPlans.where((element) => element.productId == _productId).firstOrNull : null;
+
   DateTime _subscribedAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime get subscribedAt => _subscribedAt;
   set subscribedAt(DateTime subscribedAt) {

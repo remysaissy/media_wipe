@@ -1,16 +1,15 @@
 import 'package:go_router/go_router.dart';
-import 'package:sortmaster_photos/src/views/assets_by_year_month_view.dart';
-import 'package:sortmaster_photos/src/views/assets_summary_by_year_month_view.dart';
+import 'package:sortmaster_photos/src/views/sort_photos_view.dart';
+import 'package:sortmaster_photos/src/views/sort_photos_summary_view.dart';
 import 'package:sortmaster_photos/src/views/home_view.dart';
-import 'package:sortmaster_photos/src/views/routing_view.dart';
 import 'package:sortmaster_photos/src/views/onboarding_view.dart';
-import 'package:sortmaster_photos/src/views/permissions_view.dart';
-import 'package:sortmaster_photos/src/views/subscriptions_view.dart';
+import 'package:sortmaster_photos/src/views/routing_view.dart';
 import 'package:sortmaster_photos/src/views/settings_view.dart';
+import 'package:sortmaster_photos/src/views/subscriptions_view.dart';
 
-GoRouter setupRoutes()  {
+GoRouter setupRoutes() {
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
@@ -25,25 +24,21 @@ GoRouter setupRoutes()  {
         builder: (context, state) => const SubscriptionsView(),
       ),
       GoRoute(
-        path: '/permissions',
-        builder: (context, state) => const PermissionsView(),
-      ),
-      GoRoute(
         path: '/home',
         builder: (context, state) => const HomeView(),
       ),
       GoRoute(
-        path: '/assets/sort/:year/:month',
-        name: 'assetsByYearMonth',
-        builder: (context, state) => AssetsByYearMonthView(
+        path: '/photos/:year/:month/sort',
+        name: 'sortPhotos',
+        builder: (context, state) => SortPhotosView(
           year: int.parse(state.pathParameters['year']!),
           month: int.parse(state.pathParameters['month']!),
         ),
       ),
       GoRoute(
-        path: '/assets/summary/:year/:month',
-        name: 'summaryByYearMonth',
-        builder: (context, state) => AssetsSummaryByYearMonthView(
+        path: '/photos/:year/:month/summary',
+        name: 'sortPhotosSummary',
+        builder: (context, state) => SortPhotosSummaryView(
           year: int.parse(state.pathParameters['year']!),
           month: int.parse(state.pathParameters['month']!),
         ),

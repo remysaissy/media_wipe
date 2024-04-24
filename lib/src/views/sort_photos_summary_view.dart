@@ -12,11 +12,11 @@ import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/models/sessions_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
-class AssetsSummaryByYearMonthView extends StatelessWidget {
+class SortPhotosSummaryView extends StatelessWidget {
   final int year;
   final int month;
 
-  const AssetsSummaryByYearMonthView({super.key, required this.year, required this.month});
+  const SortPhotosSummaryView({super.key, required this.year, required this.month});
 
   @override
   Widget build(BuildContext context) {

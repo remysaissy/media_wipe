@@ -19,11 +19,11 @@ class SubscriptionsView extends StatefulWidget {
 }
 
 class _SubscriptionsViewState extends State<SubscriptionsView> {
-
   late int _selectedPlanIndex;
+
   void _onPlanSelected(int index) {
     setState(() {
-        _selectedPlanIndex = index;
+      _selectedPlanIndex = index;
     });
   }
 
@@ -34,75 +34,80 @@ class _SubscriptionsViewState extends State<SubscriptionsView> {
   @override
   void initState() {
     _selectedPlanIndex = 0;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _initState();
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initState();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<SubscriptionData> subscriptionPlans = context.select<SettingsModel, List<SubscriptionData>>((value) => value.subscriptionPlans);
+    List<SubscriptionData> subscriptionPlans =
+        context.select<SettingsModel, List<SubscriptionData>>(
+            (value) => value.subscriptionPlans);
     List<Widget> children = _buildHeader();
     if (subscriptionPlans.isNotEmpty) {
       children.addAll(_buildPlans(context, subscriptionPlans));
       children.add(const Spacer());
       children.addAll(_buildCTA(context, subscriptionPlans));
     }
-    return Provider.value(value: subscriptionPlans,
-    child: MyScaffold(
+    return MyScaffold(
         appBar: AppBar(
           actions: [
-            MyCTATextButton(onPressed: () async {
-              if (!context.mounted) return;
-              await RestoreSubscriptionCommand(context).run();
-              context.pop();
-            },
+            MyCTATextButton(
+                onPressed: () async {
+                  await RestoreSubscriptionCommand(context).run();
+                  if (!context.mounted) return;
+                  context.go('/');
+                },
                 text: 'Already purchased?')
           ],
         ),
-        child: Column(
-            children: children
-        )
-    ));
+        child: Column(children: children));
   }
 
-  List<Widget> _buildCTA(BuildContext context, List<SubscriptionData> subscriptionPlans) {
+  List<Widget> _buildCTA(
+      BuildContext context, List<SubscriptionData> subscriptionPlans) {
     return [
-          MyCTAButton(
-            onPressed: () async {
-              if (!context.mounted) return;
-              await  PurchaseSubscriptionCommand(context).run(productId: subscriptionPlans[_selectedPlanIndex].productId);
-              context.pop();
-            },
-            child: const Text('Continue',
-            textAlign: TextAlign.center),
-          ),
-          MyCTATextButton(onPressed: () async {
+      MyCTAButton(
+        onPressed: () async {
+          if (!context.mounted) return;
+          await PurchaseSubscriptionCommand(context)
+              .run(productId: subscriptionPlans[_selectedPlanIndex].productId);
+          if (!context.mounted) return;
+          context.go('/');
+        },
+        child: const Text('Continue', textAlign: TextAlign.center),
+      ),
+      MyCTATextButton(
+          onPressed: () async {
             const targetURL = 'https://www.app-privacy-policy.com/';
             await myLaunchURL(context, targetURL);
-            },
+          },
           text: 'Terms of use'),
     ];
   }
 
-  List<Widget> _buildPlans(BuildContext context, List<SubscriptionData> subscriptionPlans) {
+  List<Widget> _buildPlans(
+      BuildContext context, List<SubscriptionData> subscriptionPlans) {
     return [
-            MyToggleButton(
-                onPressed: _onPlanSelected,
-                options: subscriptionPlans.map((e) => e.name).toList(),
-                defaultOption: _selectedPlanIndex),
-            ListTile(title: Text(subscriptionPlans[_selectedPlanIndex].title),
-                trailing: Text(subscriptionPlans[_selectedPlanIndex].price)),
-        ];
+      MyToggleButton(
+          onPressed: _onPlanSelected,
+          options: subscriptionPlans.map((e) => e.name).toList(),
+          defaultOption: _selectedPlanIndex),
+      ListTile(
+          title: Text(subscriptionPlans[_selectedPlanIndex].title),
+          trailing: Text(subscriptionPlans[_selectedPlanIndex].price)),
+    ];
   }
 
   List<Widget> _buildHeader() {
     return [
-        Padding(padding: const EdgeInsets.all(50),
-        child: Image.asset(
-          'assets/onboarding/1.png',
-        ))
-      ];
+      Padding(
+          padding: const EdgeInsets.all(50),
+          child: Image.asset(
+            'assets/onboarding/1.png',
+          ))
+    ];
   }
 }

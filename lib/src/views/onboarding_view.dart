@@ -17,9 +17,9 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-
   late PageController _pagesController;
   late int _selectedPage;
+
   void _updateSelectedPage(int index) {
     setState(() {
       _selectedPage = index;
@@ -42,15 +42,18 @@ class _OnboardingViewState extends State<OnboardingView> {
 
   @override
   Widget build(BuildContext context) {
-    List<OnboardingData> onboardingPages = context.select<SettingsModel, List<OnboardingData>>((value) => value.onboardingSteps);
-    bool isLastPage = (_selectedPage+1 == onboardingPages.length) ? true : false;
-    return Provider.value(value: onboardingPages,
-      child: MyScaffold(
-          child: Column(children: [
-            _buildPageRows(onboardingPages),
-            isLastPage ? _buildValidateOnboardingRow(context) : _buildDotsRow(onboardingPages),
-          ]
-          )));
+    List<OnboardingData> onboardingPages =
+        context.select<SettingsModel, List<OnboardingData>>(
+            (value) => value.onboardingSteps);
+    bool isLastPage =
+        (_selectedPage + 1 == onboardingPages.length) ? true : false;
+    return MyScaffold(
+        child: Column(children: [
+      _buildPageRows(onboardingPages),
+      isLastPage
+          ? _buildValidateOnboardingRow(context)
+          : _buildDotsRow(onboardingPages),
+    ]));
   }
 
   Widget _buildPageRows(List<OnboardingData> onboardingPages) {
@@ -66,36 +69,32 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   Widget _buildDotsRow(List<OnboardingData> onboardingPages) {
-      return Center(
-        child: SmoothPageIndicator(
-          controller: _pagesController,
-          count: onboardingPages.length,
-          effect: const WormEffect(
-            spacing: 20,
-            dotColor: Colors.black26,
-            activeDotColor: Colors.teal,
-          ),
-          //to click on dots and move
-          onDotClicked: (index) =>
-              _pagesController.animateToPage(
-                index,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease,
-              ),
+    return Center(
+      child: SmoothPageIndicator(
+        controller: _pagesController,
+        count: onboardingPages.length,
+        effect: const WormEffect(
+          spacing: 20,
+          dotColor: Colors.black26,
+          activeDotColor: Colors.teal,
         ),
-      );
+        //to click on dots and move
+        onDotClicked: (index) => _pagesController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.ease,
+        ),
+      ),
+    );
   }
 
   Widget _buildValidateOnboardingRow(BuildContext context) {
     return MyCTAButton(
         onPressed: () async {
-            await UpdateOnboardingCommand(context).run(isOnboarded: true);
-            if (!context.mounted) return;
-            context.go('/');
+          await UpdateOnboardingCommand(context).run(isOnboarded: true);
+          if (!context.mounted) return;
+          context.go('/');
         },
-        child: const Text(
-          'Continue',
-          textAlign: TextAlign.center)
-    );
+        child: const Text('Continue', textAlign: TextAlign.center));
   }
 }

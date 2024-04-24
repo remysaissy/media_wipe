@@ -7,6 +7,7 @@ import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/components/my_rating.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:sortmaster_photos/src/utils.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -14,35 +15,37 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      child: ListView(
-        children: [
-          _buildTheme(context),
-          _buildPurchase(context),
-          _buildAuthorizePhotos(context),
-          _buildRateApp(context),
-          _buildLink(context, 'Terms of service', 'https://www.app-privacy-policy.com/'),
-          _buildLink(context, 'Privacy Policy', 'https://www.app-privacy-policy.com/'),
-        ],
-      )
-  );
+        appBar: AppBar(
+          title: const Text('Settings'),
+        ),
+        child: ListView(
+          children: [
+            _buildTheme(context),
+            _buildPurchase(context),
+            _buildAuthorizePhotos(context),
+            _buildRateApp(context),
+            _buildLink(context, 'Terms of service',
+                'https://www.app-privacy-policy.com/'),
+            _buildLink(context, 'Privacy Policy',
+                'https://www.app-privacy-policy.com/'),
+          ],
+        ));
   }
 
   Widget _buildAuthorizePhotos(BuildContext context) {
-    bool canAccessPhotoLibrary = context.select<SettingsModel, bool>((value) => value.canAccessPhotoLibrary);
-    return Provider.value(value: canAccessPhotoLibrary,
-        child: ListTile(
-            onTap: () async {
-              if (!canAccessPhotoLibrary) {
-                await AuthorizePhotosCommand(context).run();
-              }
-            },
-            leading: const Icon(Icons.camera),
-            title: const Text('Authorize access to photos'),
-            trailing: canAccessPhotoLibrary ? const Icon(Icons.check) : const Icon(Icons.arrow_forward_ios))
-    );
+    bool canAccessPhotoLibrary = context
+        .select<SettingsModel, bool>((value) => value.canAccessPhotoLibrary);
+    return ListTile(
+        onTap: canAccessPhotoLibrary ? null : () async {
+          if (!canAccessPhotoLibrary) {
+            await AuthorizePhotosCommand(context).run();
+          }
+        },
+        leading: const Icon(Icons.camera),
+        title: const Text('Authorize access to photos'),
+        trailing: canAccessPhotoLibrary
+            ? const Icon(Icons.check)
+            : const Icon(Icons.arrow_forward_ios));
   }
 
   Widget _buildRateApp(BuildContext context) {
@@ -57,29 +60,53 @@ class SettingsView extends StatelessWidget {
 
   Widget _buildLink(BuildContext context, String title, String targetURL) {
     return ListTile(
-      onTap: () async {
-        await myLaunchURL(context, targetURL);
-      },
-      leading: const Icon(Icons.web),
-      title: Text(title),
-      trailing: const Icon(Icons.arrow_forward_ios));
+        onTap: () async {
+          await myLaunchURL(context, targetURL);
+        },
+        leading: const Icon(Icons.web),
+        title: Text(title),
+        trailing: const Icon(Icons.arrow_forward_ios));
   }
 
   Widget _buildPurchase(BuildContext context) {
+    bool hasSubscription  = context
+        .select<SettingsModel, bool>((value) => value.hasSubscription);
+    SubscriptionData? subscription = context.select<SettingsModel, SubscriptionData?>((value) => value.currentSubscription);
+    DateTime subscribedAt  = context
+        .select<SettingsModel, DateTime>((value) => value.subscribedAt);
     return ListTile(
-      onTap: () {
-        if (!context.mounted) return;
-        context.push('/plans');
-      },
-      leading: const Icon(Icons.shopping_cart),
-      title: const Text('Purchase'),
-      trailing: const Icon(Icons.arrow_forward_ios));
+        onTap: hasSubscription ? null : () {
+          if (!context.mounted) return;
+          context.push('/subscriptions');
+        },
+        leading: const Icon(Icons.shopping_cart),
+        title: hasSubscription
+            ? _buildSubscriptionText(subscription, subscribedAt)
+            : const Text('Purchase'),
+        trailing: hasSubscription
+            ? const Icon(Icons.check)
+            : const Icon(Icons.arrow_forward_ios));
+  }
+
+  Widget _buildSubscriptionText(SubscriptionData? subscriptionData, DateTime subscribedAt) {
+    if (subscriptionData == null) {
+      return const Text('Already subscribed');
+    }
+    if (subscriptionData.productId == 'free') {
+      final daysLeft = 3 - subscribedAt.difference(DateTime.now()).inDays;
+      // .compareTo(const Duration(days: 3));
+      return Text(
+          '${subscriptionData.name}, ${daysLeft} days left');
+    }
+    return Text(
+        '${subscriptionData.name} since ${Utils.monthNumberToMonthName(
+            subscribedAt.month)} ${subscribedAt.year}');
   }
 
   Widget _buildTheme(BuildContext context) {
-    ThemeMode themeMode = context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
-    return Provider.value(value: themeMode,
-        child: ListTile(
+    ThemeMode themeMode =
+        context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
+    return ListTile(
           leading: const Icon(Icons.map),
           title: const Text('Theme'),
           trailing: DropdownButton<ThemeMode>(
@@ -88,7 +115,8 @@ class SettingsView extends StatelessWidget {
             // Call the updateThemeMode method any time the user selects a theme.
             onChanged: (ThemeMode? newThemeMode) async {
               if (context.mounted && newThemeMode != null) {
-                await UpdateThemeCommand(context).run(newThemeMode: newThemeMode);
+                await UpdateThemeCommand(context)
+                    .run(newThemeMode: newThemeMode);
               }
             },
             items: const [
@@ -106,9 +134,6 @@ class SettingsView extends StatelessWidget {
               )
             ],
           ),
-        )
-    );
+        );
   }
-
-
 }

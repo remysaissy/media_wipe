@@ -14,26 +14,31 @@ class RoutingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isOnboarded = context.select<SettingsModel, bool>((value) => value.isOnboarded);
+    final isOnboarded =
+        context.select<SettingsModel, bool>((value) => value.isOnboarded);
+    final hasSubscription =
+    context.select<SettingsModel, bool>((value) => value.hasSubscription);
     if (isOnboarded) {
-      _go(context, '/home');
+      if (!hasSubscription) {
+        _go(context, '/subscriptions');
+      } else {
+        _go(context, '/home');
+      }
     } else {
       _go(context, '/onboarding');
     }
-    return Provider.value(value: isOnboarded,
-        child: Container(
-            color: Colors.white,
-            child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  CircleAvatar(radius: 56, //radius of avatar
-                    backgroundColor: Colors.white,
-                    child: Padding(padding: const EdgeInsets.all(8),
-                      child: ClipOval(child: Image.asset('assets/icons/icon.png')),
-                    ),
-                  ),
-                  const CircularProgressIndicator(),
-                ])
-        ));
+    return Container(
+        color: Colors.white,
+        child: Stack(alignment: AlignmentDirectional.center, children: [
+          CircleAvatar(
+            radius: 56, //radius of avatar
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: ClipOval(child: Image.asset('assets/icons/icon.png')),
+            ),
+          ),
+          const CircularProgressIndicator(),
+        ]));
   }
 }

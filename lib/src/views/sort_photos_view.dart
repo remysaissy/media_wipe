@@ -11,18 +11,18 @@ import 'package:sortmaster_photos/src/components/my_photo_viewer_card.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
-class AssetsByYearMonthView extends StatefulWidget {
+class SortPhotosView extends StatefulWidget {
 
   final int year;
   final int month;
 
-  const AssetsByYearMonthView({super.key, required this.year, required this.month});
+  const SortPhotosView({super.key, required this.year, required this.month});
 
   @override
-  State<StatefulWidget> createState() => _AssetsByYearMonthViewState();
+  State<StatefulWidget> createState() => _SortPhotosViewState();
 }
 
-class _AssetsByYearMonthViewState extends State<AssetsByYearMonthView> {
+class _SortPhotosViewState extends State<SortPhotosView> {
 
   late int _currentSelectionIndex;
 
@@ -149,7 +149,7 @@ class _AssetsByYearMonthViewState extends State<AssetsByYearMonthView> {
                   if (!isNotLastIndex) {
                     Utils.logger.i('Move on');
                     if (context.mounted) {
-                      context.pushNamed('summaryByYearMonth', pathParameters: {'year': widget.year.toString(), 'month': widget.month.toString()});
+                      context.pushNamed('sortPhotosSummary', pathParameters: {'year': widget.year.toString(), 'month': widget.month.toString()});
                     }
                   }
                 },

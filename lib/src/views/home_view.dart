@@ -32,8 +32,7 @@ class HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     Map<String, List<AssetData>> assets = context.select<AssetsModel, Map<String, List<AssetData>>>((value) => value.assets);
     Widget child = assets.isEmpty ? Utils.buildLoading(context) : _buildYearMonths(context, assets);
-    return Provider.value(value: assets,
-        child: MyScaffold(
+    return MyScaffold(
             appBar: AppBar(
               title: const Text('Sort Master: Photos'),
               actions: [
@@ -53,7 +52,7 @@ class HomeViewState extends State<HomeView> {
               ],
             ),
             child: child
-        ));
+        );
   }
 
   Widget _buildYearMonths(BuildContext context, Map<String, List<AssetData>> assets) {
@@ -61,7 +60,7 @@ class HomeViewState extends State<HomeView> {
     final children = yearMonths.map((e) => ListTile(
             onTap: () async {
               if (!context.mounted) return;
-              context.pushNamed('assetsByYearMonth', pathParameters: {'year': e.year.toString(), 'month': e.month.toString()});
+              context.pushNamed('sortPhotos', pathParameters: {'year': e.year.toString(), 'month': e.month.toString()});
             },
             title: Text('${e.year} ${Utils.monthNumberToMonthName(e.month)}'),
             trailing: const Icon(Icons.arrow_forward_ios))
