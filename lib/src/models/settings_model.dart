@@ -78,6 +78,13 @@ class SettingsModel extends AbstractModel {
     notifyListeners();
   }
 
+  bool _canRequestInAppReview = false;
+  bool get canRequestInAppReview => _canRequestInAppReview;
+  set canRequestInAppReview(bool canRequestInAppReview) {
+    _canRequestInAppReview = canRequestInAppReview;
+    notifyListeners();
+  }
+
   List<SubscriptionData> _subscriptionPlans = [];
   List<SubscriptionData> get subscriptionPlans => _subscriptionPlans;
   set subscriptionPlans(List<SubscriptionData> subscriptionPlans) {

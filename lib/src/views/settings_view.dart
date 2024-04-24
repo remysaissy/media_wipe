@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/commands/settings/authorize_photos_command.dart';
-import 'package:sortmaster_photos/src/commands/settings/update_theme_command.dart';
+import 'package:sortmaster_photos/src/commands/settings/request_in_app_review_command.dart';
 import 'package:sortmaster_photos/src/components/my_launch_url.dart';
-import 'package:sortmaster_photos/src/components/my_rating.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
+import 'package:sortmaster_photos/src/components/my_theme_dropdown.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
@@ -20,7 +20,7 @@ class SettingsView extends StatelessWidget {
         ),
         child: ListView(
           children: [
-            _buildTheme(context),
+            const MyThemeDropDown(),
             _buildPurchase(context),
             _buildAuthorizePhotos(context),
             _buildRateApp(context),
@@ -36,11 +36,13 @@ class SettingsView extends StatelessWidget {
     bool canAccessPhotoLibrary = context
         .select<SettingsModel, bool>((value) => value.canAccessPhotoLibrary);
     return ListTile(
-        onTap: canAccessPhotoLibrary ? null : () async {
-          if (!canAccessPhotoLibrary) {
-            await AuthorizePhotosCommand(context).run();
-          }
-        },
+        onTap: canAccessPhotoLibrary
+            ? null
+            : () async {
+                if (!canAccessPhotoLibrary) {
+                  await AuthorizePhotosCommand(context).run();
+                }
+              },
         leading: const Icon(Icons.camera),
         title: const Text('Authorize access to photos'),
         trailing: canAccessPhotoLibrary
@@ -49,13 +51,16 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildRateApp(BuildContext context) {
+    bool canRequestInAppReview = context
+        .select<SettingsModel, bool>((value) => value.canRequestInAppReview);
     return ListTile(
-        onTap: () async {
-          await myRating(context);
-        },
+        onTap: !canRequestInAppReview
+            ? null
+            : () async {
+                await RequestInAppReviewCommand(context).run();
+              },
         leading: const Icon(Icons.star),
-        title: const Text('Rate the app!'),
-        trailing: const Icon(Icons.arrow_forward_ios));
+        title: const Text('Rate the app!'));
   }
 
   Widget _buildLink(BuildContext context, String title, String targetURL) {
@@ -69,16 +74,20 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildPurchase(BuildContext context) {
-    bool hasSubscription  = context
-        .select<SettingsModel, bool>((value) => value.hasSubscription);
-    SubscriptionData? subscription = context.select<SettingsModel, SubscriptionData?>((value) => value.currentSubscription);
-    DateTime subscribedAt  = context
-        .select<SettingsModel, DateTime>((value) => value.subscribedAt);
+    bool hasSubscription =
+        context.select<SettingsModel, bool>((value) => value.hasSubscription);
+    SubscriptionData? subscription =
+        context.select<SettingsModel, SubscriptionData?>(
+            (value) => value.currentSubscription);
+    DateTime subscribedAt =
+        context.select<SettingsModel, DateTime>((value) => value.subscribedAt);
     return ListTile(
-        onTap: hasSubscription ? null : () {
-          if (!context.mounted) return;
-          context.push('/subscriptions');
-        },
+        onTap: hasSubscription
+            ? null
+            : () {
+                if (!context.mounted) return;
+                context.push('/subscriptions');
+              },
         leading: const Icon(Icons.shopping_cart),
         title: hasSubscription
             ? _buildSubscriptionText(subscription, subscribedAt)
@@ -88,52 +97,17 @@ class SettingsView extends StatelessWidget {
             : const Icon(Icons.arrow_forward_ios));
   }
 
-  Widget _buildSubscriptionText(SubscriptionData? subscriptionData, DateTime subscribedAt) {
+  Widget _buildSubscriptionText(
+      SubscriptionData? subscriptionData, DateTime subscribedAt) {
     if (subscriptionData == null) {
       return const Text('Already subscribed');
     }
     if (subscriptionData.productId == 'free') {
       final daysLeft = 3 - subscribedAt.difference(DateTime.now()).inDays;
       // .compareTo(const Duration(days: 3));
-      return Text(
-          '${subscriptionData.name}, ${daysLeft} days left');
+      return Text('${subscriptionData.name}, ${daysLeft} days left');
     }
     return Text(
-        '${subscriptionData.name} since ${Utils.monthNumberToMonthName(
-            subscribedAt.month)} ${subscribedAt.year}');
-  }
-
-  Widget _buildTheme(BuildContext context) {
-    ThemeMode themeMode =
-        context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
-    return ListTile(
-          leading: const Icon(Icons.map),
-          title: const Text('Theme'),
-          trailing: DropdownButton<ThemeMode>(
-            // Read the selected themeMode from the controller
-            value: themeMode,
-            // Call the updateThemeMode method any time the user selects a theme.
-            onChanged: (ThemeMode? newThemeMode) async {
-              if (context.mounted && newThemeMode != null) {
-                await UpdateThemeCommand(context)
-                    .run(newThemeMode: newThemeMode);
-              }
-            },
-            items: const [
-              DropdownMenuItem(
-                value: ThemeMode.system,
-                child: Text('System Theme'),
-              ),
-              DropdownMenuItem(
-                value: ThemeMode.light,
-                child: Text('Light Theme'),
-              ),
-              DropdownMenuItem(
-                value: ThemeMode.dark,
-                child: Text('Dark Theme'),
-              )
-            ],
-          ),
-        );
+        '${subscriptionData.name} since ${Utils.monthNumberToMonthName(subscribedAt.month)} ${subscribedAt.year}');
   }
 }
