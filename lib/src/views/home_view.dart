@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -43,13 +42,6 @@ class HomeViewState extends State<HomeView> {
           title: const Text('Sort Master: Photos'),
           actions: [
             IconButton(
-              onPressed: () {
-                if (!context.mounted) return;
-                context.push("/settings");
-              },
-              icon: const Icon(Icons.settings),
-            ),
-            IconButton(
               onPressed: () async {
                 setState(() {
                   _isSortAsc = !_isSortAsc;
@@ -57,6 +49,13 @@ class HomeViewState extends State<HomeView> {
               },
               icon: Transform.flip(
                   flipY: _isSortAsc, child: const Icon(Icons.filter_list)),
+            ),
+            IconButton(
+              onPressed: () {
+                if (!context.mounted) return;
+                context.push("/settings");
+              },
+              icon: const Icon(Icons.settings),
             )
           ],
         ),

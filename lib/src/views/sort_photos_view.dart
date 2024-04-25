@@ -7,12 +7,13 @@ import 'package:sortmaster_photos/src/commands/sessions/drop_asset_in_session_co
 import 'package:sortmaster_photos/src/commands/sessions/keep_asset_in_session_command.dart';
 import 'package:sortmaster_photos/src/commands/sessions/reset_session_command.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/components/my_photo_viewer_card.dart';
+import 'package:sortmaster_photos/src/components/my_viewer.dart';
+import 'package:sortmaster_photos/src/components/my_viewer_controls.dart';
+import 'package:sortmaster_photos/src/components/my_viewer_metadata.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {
-
   final int year;
   final int month;
 
@@ -23,48 +24,80 @@ class SortPhotosView extends StatefulWidget {
 }
 
 class _SortPhotosViewState extends State<SortPhotosView> {
-
   late int _currentSelectionIndex;
+  late List<AssetData> _assets;
+
+  AssetData get assetData => _assets[_currentSelectionIndex];
 
   Future<void> _initState() async {
-    await CreateOrRecoverSessionCommand(context).run(year: widget.year, month: widget.month);
+    await CreateOrRecoverSessionCommand(context)
+        .run(year: widget.year, month: widget.month);
   }
 
   @override
   void initState() {
     _currentSelectionIndex = 0;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _initState();
-      });
+    _assets = [];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initState();
+    });
     super.initState();
   }
 
-    Future<void> _onRestart() async {
-      await ResetSessionCommand(context).run(year: widget.year, month: widget.month).then((value) => {
-        setState(() {
-          _currentSelectionIndex = 0;
-        })
-      });
+  Future<void> _onRestart() async {
+    await ResetSessionCommand(context)
+        .run(year: widget.year, month: widget.month)
+        .then((value) => {
+              setState(() {
+                _currentSelectionIndex = 0;
+              })
+            });
   }
 
-  Future<void> _onKeepPressed({required AssetData assetData, required bool updateIndex}) async {
-    await KeepAssetInSessionCommand(context).run(assetData: assetData).then((value) => {
-      if (updateIndex) {
-        setState(() {
-          _currentSelectionIndex++;
-        })
+  Future<void> _onKeepPressed() async {
+    bool isNotLastIndex = (_currentSelectionIndex + 1 < _assets.length);
+    await KeepAssetInSessionCommand(context)
+        .run(assetData: assetData)
+        .then((value) => {
+              if (isNotLastIndex)
+                {
+                  setState(() {
+                    _currentSelectionIndex++;
+                  })
+                }
+            });
+    if (!isNotLastIndex) {
+      Utils.logger.i('Move on');
+      if (context.mounted) {
+        context.pushNamed('sortPhotosSummary', pathParameters: {
+          'year': widget.year.toString(),
+          'month': widget.month.toString()
+        });
       }
-    });
+    }
   }
 
-  Future<void> _onDropPressed({required AssetData assetData, required bool updateIndex}) async {
-    await DropAssetInSessionCommand(context).run(assetData: assetData).then((value) => {
-      if (updateIndex) {
-        setState(() {
-          _currentSelectionIndex++;
-        })
+  Future<void> _onDropPressed() async {
+    bool isNotLastIndex = (_currentSelectionIndex + 1 < _assets.length);
+    await DropAssetInSessionCommand(context)
+        .run(assetData: assetData)
+        .then((value) => {
+              if (isNotLastIndex)
+                {
+                  setState(() {
+                    _currentSelectionIndex++;
+                  })
+                }
+            });
+    if (!isNotLastIndex) {
+      Utils.logger.i('Move on');
+      if (context.mounted) {
+        context.pushNamed('sortPhotosSummary', pathParameters: {
+          'year': widget.year.toString(),
+          'month': widget.month.toString()
+        });
       }
-    });
+    }
   }
 
   // Future<void> _onInfoPressed({required AssetData assetData, required AssetEntity assetEntity}) async {
@@ -95,86 +128,55 @@ class _SortPhotosViewState extends State<SortPhotosView> {
 
   @override
   Widget build(BuildContext context) {
-    final yearMonthKey = Utils.stringifyYearMonth(year: widget.year, month: widget.month);
-    Map<String, List<AssetData>> allAssets = context.select<AssetsModel, Map<String, List<AssetData>>>((value) => value.assets);
-    List<AssetData> assets = allAssets[yearMonthKey]!;
-    return Provider.value(value: allAssets,
-        child: MyScaffold(
+    final yearMonthKey =
+        Utils.stringifyYearMonth(year: widget.year, month: widget.month);
+    Map<String, List<AssetData>> allAssets =
+        context.select<AssetsModel, Map<String, List<AssetData>>>(
+            (value) => value.assets);
+    _assets = allAssets[yearMonthKey]!;
+    return MyScaffold(
         appBar: AppBar(
-          title: Text('${Utils.monthNumberToMonthName(widget.month)} ${widget.year}'),
+          title: Text(
+              '${Utils.monthNumberToMonthName(widget.month)} ${widget.year}'),
           actions: [
-            Text('${_currentSelectionIndex+1}/${assets.length}'),
+            Text('${_currentSelectionIndex + 1}/${_assets.length}'),
             IconButton(
               onPressed: _onRestart,
               icon: const Icon(Icons.refresh),
             ),
           ],
         ),
-        child: _buildContent(context, assets)));
+        child: _buildContent(context));
   }
 
-  Widget _buildContent(BuildContext context, List<AssetData> assets) {
-    return FutureBuilder(future: assets[_currentSelectionIndex].loadEntity(),
+  Widget _buildContent(BuildContext context) {
+    return FutureBuilder(
+        future: assetData.loadEntity(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               Utils.logger.e('Error ${snapshot.error} occurred');
               return Utils.buildLoading(context);
             } else if (snapshot.hasData) {
-              final entity = snapshot.data as AssetEntity;
-              return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                  _buildViewer(context, assets, entity),
-                  _buildControls(context, assets, entity)]
+              final assetEntity = snapshot.data as AssetEntity;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  MyViewer(assetData: assetData, assetEntity: assetEntity),
+                  const Spacer(),
+                  MyViewerMetadata(
+                      assetData: assetData, assetEntity: assetEntity),
+                  MyViewerControls(
+                      assetData: assetData,
+                      assetEntity: assetEntity,
+                      onDropPressed: _onDropPressed,
+                      onKeepPressed: _onKeepPressed),
+                ],
               );
             }
           }
           return Utils.buildLoading(context);
         });
   }
-
-  Widget _buildViewer(BuildContext context, List<AssetData> assets, AssetEntity assetEntity) {
-    return assets.isEmpty ? Utils.buildLoading(context) : MyPhotoViewerCard(assetData: assets[_currentSelectionIndex]);
-  }
-
-  Widget _buildControls(BuildContext context, List<AssetData> assets, AssetEntity entity) {
-    return Align(alignment: Alignment.bottomCenter,
-        child: Padding(padding: const EdgeInsets.all(8.0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FloatingActionButton(onPressed: () async {
-                  bool isNotLastIndex = (_currentSelectionIndex+1 < assets.length);
-                  await _onKeepPressed(assetData: assets[_currentSelectionIndex], updateIndex: isNotLastIndex);
-                  if (!isNotLastIndex) {
-                    Utils.logger.i('Move on');
-                    if (context.mounted) {
-                      context.pushNamed('sortPhotosSummary', pathParameters: {'year': widget.year.toString(), 'month': widget.month.toString()});
-                    }
-                  }
-                },
-                    heroTag: null,
-                    child: const Icon(Icons.check)),
-                // FloatingActionButton(onPressed: () async {
-                //  await _onInfoPressed(assetData: assets[_currentSelectionIndex], assetEntity: entity);
-                // },
-                //     heroTag: null,
-                //     child: const Icon(Icons.info)),
-                FloatingActionButton(onPressed: () async {
-                  bool isNotLastIndex = (_currentSelectionIndex+1 < assets.length);
-                  await _onDropPressed(assetData: assets[_currentSelectionIndex], updateIndex: isNotLastIndex);
-                  if (!isNotLastIndex) {
-                    Utils.logger.i('Move on');
-                    if (context.mounted) {
-                      context.pushNamed('summaryByYearMonth', pathParameters: {'year': widget.year.toString(), 'month': widget.month.toString()});
-                    }
-                  }
-                },
-                    heroTag: null,
-                    child: const Icon(Icons.close)),
-              ]),
-        )
-    );
-  }
-
 }
