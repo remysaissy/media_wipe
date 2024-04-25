@@ -29,7 +29,11 @@ class HomeViewState extends State<HomeView> {
     super.initState();
   }
 
-  @override
+  Future<void> _pullRefresh() async {
+    await RefreshPhotosCommand(context).run();
+  }
+
+    @override
   Widget build(BuildContext context) {
     final assets =
         context.select<AssetsModel, Map<String, Map<String, List<AssetData>>>>(
@@ -75,7 +79,9 @@ class HomeViewState extends State<HomeView> {
         return bInt.compareTo(aInt);
       }
     });
-    return ListView.builder(
+    return RefreshIndicator(
+        onRefresh: _pullRefresh,
+        child: ListView.builder(
         itemCount: yearKeys.length,
         itemBuilder: (BuildContext context, int index) {
           final year = yearKeys[index];
@@ -101,6 +107,6 @@ class HomeViewState extends State<HomeView> {
               }).toList(),
             ),
           );
-        });
+        }));
   }
 }

@@ -4,11 +4,11 @@ import 'package:sortmaster_photos/src/components/my_photo_viewer_card.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 
 class MyViewer extends StatelessWidget {
-
   final AssetData assetData;
   final AssetEntity assetEntity;
 
-  const MyViewer({super.key, required this.assetData, required this.assetEntity});
+  const MyViewer(
+      {super.key, required this.assetData, required this.assetEntity});
 
   @override
   Widget build(BuildContext context) {

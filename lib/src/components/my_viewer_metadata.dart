@@ -13,28 +13,34 @@ class MyViewerMetadata extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> children = [
+      _buildMetadataEntry(
+          title: Utils.creationDateFormat.format(assetData.creationDate),
+          leadingIcon: Icons.calendar_month),
+      _buildMetadataEntry(
+          title: '${assetEntity.width}x${assetEntity.height}',
+          leadingIcon: Icons.photo_size_select_large),
+    ];
+    return Stack(children: [
+      Column(children: children),
+      Align(
+          alignment: Alignment.topRight,
+          child: _buildFormatBadge(context, assetEntity)),
+    ]);
+  }
+
+  Widget _buildMetadataEntry(
+      {required String title, required IconData leadingIcon}) {
+    return ListTile(leading: Icon(leadingIcon), title: Text(title));
+  }
+
+  Widget _buildFormatBadge(BuildContext context, AssetEntity assetEntity) {
     return Utils.futureBuilder(
         future: assetEntity.mimeTypeAsync,
         onReady: (data) {
           final typeName =
               data != null ? data.split('/')[1].toLowerCase() : 'other';
-          List<Widget> children = [
-            Text(
-                'Created on ${Utils.creationDateFormat.format(assetData.creationDate)}'),
-            Text('${assetEntity.width}x${assetEntity.height}'),
-          ];
-          // No geolocation for now.
-          // if (assetEntity.latitude != 0) {
-          //   Text('${assetEntity.latitude}x${assetEntity.longitude}');
-          // }
-          return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: children),
-                MyRoundedBox(title: typeName)
-              ]);
+          return MyRoundedBox(title: typeName);
         });
   }
 }
