@@ -4,12 +4,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/commands/bootstrap_command.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/models/sessions_model.dart';
+import 'package:sortmaster_photos/src/models/app_model.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 import 'package:sortmaster_photos/src/router.dart';
 import 'package:sortmaster_photos/src/theme.dart';
-import 'package:sortmaster_photos/src/views/routing_view.dart';
+import 'package:sortmaster_photos/src/views/loading_view.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -21,40 +20,31 @@ class MyApp extends StatefulWidget {
 /// The Widget that configures your application.
 class _MyAppState extends State<MyApp> {
   late GoRouter _router;
-  bool _settingsLoaded = false;
+
+  Future<void> _initState() async {
+    await BootstrapCommand(context).run(context);
+  }
 
   @override
   void initState() {
     _router = setupRoutes();
-    context.read<SettingsModel>().load().then((value) async {
-      context.read<AssetsModel>().load();
-      context.read<SessionsModel>().load();
-
-      await BootstrapCommand(context).run();
-    });
-
-    /// Rebuild now that we have our loaded settings
-    setState(() => _settingsLoaded = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    /// If we've not loaded settings,
-    if (!_settingsLoaded) return const RoutingView();
+    bool appReady = context.select<AppModel, bool>((value) => value.appReady);
+    if (!appReady) return const LoadingView();
 
     ThemeMode themeMode =
         context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
+    bool touchMode = context.select((AppModel m) => m.touchMode);
+    double densityAmt = touchMode ? 0.0 : -1.0;
+    VisualDensity density =
+        VisualDensity(horizontal: densityAmt, vertical: densityAmt);
     return MaterialApp.router(
-      // Providing a restorationScopeId allows the Navigator built by the
-      // MaterialApp to restore the navigation stack when a user leaves and
-      // returns to the app after it has been killed while running in the
-      // background.
       restorationScopeId: 'app',
-
-      // Provide the generated AppLocalizations to the MaterialApp. This
-      // allows descendant Widgets to display the correct translations
-      // depending on the user's locale.
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -64,20 +54,10 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [
         Locale('en', ''), // English, no country code
       ],
-
-      // Use AppLocalizations to configure the correct application title
-      // depending on the user's locale.
-      //
-      // The appTitle is defined in .arb files found in the localization
-      // directory.
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appTitle,
-
-      // Define a light and dark color theme. Then, read the user's
-      // preferred ThemeMode (light, dark, or system default) from the
-      // SettingsController to display the correct theme.
-      theme: MyTheme.light(),
-      darkTheme: MyTheme.dark(),
+      theme: MyTheme.light(density),
+      darkTheme: MyTheme.dark(density),
       themeMode: themeMode,
 
       // Define routes available in the application.

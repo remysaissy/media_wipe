@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sortmaster_photos/src/models/app_model.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/models/sessions_model.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:sortmaster_photos/src/services/app_service.dart';
 import 'package:sortmaster_photos/src/services/assets_service.dart';
 import 'package:sortmaster_photos/src/services/in_app_review_service.dart';
 import 'package:sortmaster_photos/src/services/permissions_service.dart';
@@ -26,11 +28,13 @@ abstract class AbstractCommand {
   /// Convenience lookup methods for all commands to share
   ///
   /// Models
+  AppModel get appModel => getProvided();
   SettingsModel get settingsModel => getProvided();
   AssetsModel get assetsModel => getProvided();
   SessionsModel get sessionsModel => getProvided();
 
   /// Services
+  AppService get appService => getProvided();
   InAppReviewsService get inAppReviewsService => getProvided();
   PermissionsService get permissionsService => getProvided();
   SubscriptionsService get subscriptionsService => getProvided();

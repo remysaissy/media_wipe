@@ -29,21 +29,21 @@ abstract class AbstractModel extends ChangeNotifier {
   }
 
   //Loads a string from disk, and parses it into ourselves.
-  Future<void> load() async {
+  Future<dynamic> load() async {
     final baseDirectory = await getLibraryDirectory();
     final fullPath = join(baseDirectory.path, _fileName);
     _file = File(fullPath);
     final file = _file;
-    if (file == null) return;
+    if (file == null) return copyFromJson(jsonDecode("{}"));
 
     String string = '{}';
     if (await file.exists()) {
       await file.readAsString().catchError((e, s) {
         Utils.logger.e("$e", stackTrace: s);
-        return "{}";
+        return copyFromJson(jsonDecode("{}"));
       });
     }
-    copyFromJson(jsonDecode(string));
+    return copyFromJson(jsonDecode(string));
   }
 
   Future<void> save() async => _file?.writeAsString(jsonEncode(toJson()));

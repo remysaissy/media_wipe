@@ -5,7 +5,7 @@ class RequestInAppReviewCommand extends AbstractCommand {
 
   Future<void> run() async {
     if (await inAppReviewsService.isInAppReviewAvailable() == false) {
-      settingsModel.canRequestInAppReview = false;
+      appModel.canRequestInAppReview = false;
     } else {
       await inAppReviewsService.requestInAppReview();
     }

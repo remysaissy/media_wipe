@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/app.dart';
+import 'package:sortmaster_photos/src/models/app_model.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/models/sessions_model.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:sortmaster_photos/src/services/app_service.dart';
 import 'package:sortmaster_photos/src/services/assets_service.dart';
 import 'package:sortmaster_photos/src/services/in_app_review_service.dart';
 import 'package:sortmaster_photos/src/services/permissions_service.dart';
@@ -11,18 +13,21 @@ import 'package:sortmaster_photos/src/services/subscriptions_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final settingsModel = SettingsModel();
-  final assetsModel = AssetsModel();
-  final sessionsModel = SessionsModel();
+  final appModel = await AppModel().load() as AppModel;
+  final settingsModel = await SettingsModel().load() as SettingsModel;
+  final assetsModel = await AssetsModel().load() as AssetsModel;
+  final sessionsModel = await SessionsModel().load() as SessionsModel;
   runApp(
     MultiProvider(
       providers: [
         /// MODELS
+        ChangeNotifierProvider.value(value: appModel),
         ChangeNotifierProvider.value(value: settingsModel),
         ChangeNotifierProvider.value(value: assetsModel),
         ChangeNotifierProvider.value(value: sessionsModel),
 
         /// SERVICES
+        Provider(create: (_) => AppService()),
         Provider(create: (_) => InAppReviewsService()),
         Provider(create: (_) => PermissionsService()),
         Provider(create: (_) => SubscriptionsService()),

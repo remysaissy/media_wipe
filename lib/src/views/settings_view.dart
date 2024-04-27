@@ -6,6 +6,7 @@ import 'package:sortmaster_photos/src/commands/settings/request_in_app_review_co
 import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_theme_dropdown.dart';
+import 'package:sortmaster_photos/src/models/app_model.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
@@ -51,8 +52,8 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildRateApp(BuildContext context) {
-    bool canRequestInAppReview = context
-        .select<SettingsModel, bool>((value) => value.canRequestInAppReview);
+    bool canRequestInAppReview =
+        context.select<AppModel, bool>((value) => value.canRequestInAppReview);
     return ListTile(
         onTap: !canRequestInAppReview
             ? null

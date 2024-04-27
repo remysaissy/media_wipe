@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:sortmaster_photos/src/views/loading_view.dart';
 
 class RoutingView extends StatelessWidget {
   const RoutingView({super.key});
@@ -27,18 +28,6 @@ class RoutingView extends StatelessWidget {
     } else {
       _go(context, '/onboarding');
     }
-    return Container(
-        color: Colors.white,
-        child: Stack(alignment: AlignmentDirectional.center, children: [
-          CircleAvatar(
-            radius: 56, //radius of avatar
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: ClipOval(child: Image.asset('assets/icons/icon.png')),
-            ),
-          ),
-          const CircularProgressIndicator(),
-        ]));
+    return const LoadingView();
   }
 }

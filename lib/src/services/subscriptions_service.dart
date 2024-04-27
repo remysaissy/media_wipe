@@ -6,12 +6,6 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class SubscriptionsService {
 
-  Future<List<SubscriptionData>> listSubscriptions() async {
-    final subscriptionsString = await rootBundle.loadString('assets/data/subscriptions.json');
-    final List<dynamic> entries = jsonDecode(subscriptionsString);
-    return entries.map((e) => SubscriptionData.fromJson(e)).toList();
-  }
-
   Future<String?> restorePurchase() async {
     //     //Flow:
 //     // - check for restore against the store
