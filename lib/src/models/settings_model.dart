@@ -36,7 +36,7 @@ class SettingsModel extends AbstractModel {
     enableSerialization('settings.dat');
   }
 
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.light;
   ThemeMode get themeMode => _themeMode;
   set themeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
@@ -112,7 +112,7 @@ class SettingsModel extends AbstractModel {
   //Json Serialization
   @override
   SettingsModel copyFromJson(Map<String, dynamic> json) {
-    _themeMode = json.containsKey('_themeMode') ? json['_themeMode'].toThemeMode() : ThemeMode.system;
+    _themeMode = json.containsKey('_themeMode') ? json['_themeMode'].toThemeMode() : ThemeMode.light;
     _isOnboarded = json.containsKey('_isOnboarded') ? json['_isOnboarded'] as bool : false;
     _productId = json.containsKey('_productId') ? json['_productId'] : '';
     _subscribedAt = json.containsKey('_subscribedAt') ? DateTime.fromMillisecondsSinceEpoch(json['_subscribedAt']) :  DateTime.fromMillisecondsSinceEpoch(0);

@@ -34,9 +34,7 @@ class _SubscriptionsViewState extends State<SubscriptionsView> {
   @override
   void initState() {
     _selectedPlanIndex = 0;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initState();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 

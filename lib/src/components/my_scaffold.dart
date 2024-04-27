@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sortmaster_photos/src/constants.dart';
 
 class MyScaffold extends StatelessWidget {
 
@@ -11,10 +12,6 @@ class MyScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      body: SafeArea(
-        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: child)
-      ),
-    );
+      body: SafeArea(minimum: const EdgeInsets.all(Insets.medium), child: child));
   }
 }

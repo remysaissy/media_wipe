@@ -74,18 +74,22 @@ class _SortPhotosViewState extends State<SortPhotosView> {
         onReady: (data) {
           final assetEntity = data as AssetEntity;
           return Stack(children: [
-            ListView(
-                children: [
-                  Align(alignment: Alignment.center, child: MyViewer(assetData: _assetData, assetEntity: assetEntity)),
-                  MyViewerMetadata(assetData: _assetData, assetEntity: assetEntity),
-            Align(alignment: Alignment.bottomCenter,
-                child: MyViewerControls(
-                    assetData: _assetData,
-                    assetEntity: assetEntity,
-                    onKeepPressed: _onKeepPressed,
-                    onDropPressed: _onDropPressed))
+            ListView(children: [
+              Align(
+                  alignment: Alignment.center,
+                  child: MyViewer(
+                      assetData: _assetData, assetEntity: assetEntity)),
+              MyViewerMetadata(assetData: _assetData, assetEntity: assetEntity),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: MyViewerControls(
+                      assetData: _assetData,
+                      assetEntity: assetEntity,
+                      onKeepPressed: _onKeepPressed,
+                      onDropPressed: _onDropPressed))
             ])
           ]);
+        });
   }
 
   Future<void> _onUndo() async {
