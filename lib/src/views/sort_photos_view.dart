@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/commands/sessions/create_or_recover_session_command.dart';
 import 'package:sortmaster_photos/src/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:sortmaster_photos/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/components/my_viewer.dart';
 import 'package:sortmaster_photos/src/components/my_viewer_controls.dart';
 import 'package:sortmaster_photos/src/components/my_viewer_metadata.dart';
@@ -53,7 +52,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
         context.select<AssetsModel, Map<String, List<AssetData>>>(
             (value) => value.assets);
     _assets = allAssets[yearMonthKey]!;
-    return MyScaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(
               '${Utils.monthNumberToMonthName(widget.month)} ${widget.year}'),
@@ -65,30 +64,22 @@ class _SortPhotosViewState extends State<SortPhotosView> {
             ),
           ],
         ),
-        child: _buildContent(context));
+        body: SafeArea(child: _buildContent()));
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent() {
+    final controls = MyViewerControls(
+        onDropPressed: _onDropPressed, onKeepPressed: _onKeepPressed);
     return Utils.futureBuilder(
         future: _assetData.loadEntity(),
         onReady: (data) {
           final assetEntity = data as AssetEntity;
-          return Stack(children: [
-            ListView(children: [
-              Align(
-                  alignment: Alignment.center,
-                  child: MyViewer(
-                      assetData: _assetData, assetEntity: assetEntity)),
-              MyViewerMetadata(assetData: _assetData, assetEntity: assetEntity),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: MyViewerControls(
-                      assetData: _assetData,
-                      assetEntity: assetEntity,
-                      onKeepPressed: _onKeepPressed,
-                      onDropPressed: _onDropPressed))
-            ])
-          ]);
+          return SingleChildScrollView(
+              child: Column(children: [
+            MyViewer(assetEntity: assetEntity),
+            MyViewerMetadata(assetData: _assetData, assetEntity: assetEntity),
+            controls,
+          ]));
         });
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class RoutingView extends StatelessWidget {
       if (!hasSubscription) {
         _go(context, '/subscriptions');
       } else {
-        _go(context, '/home');
+        _go(context, '/photos');
       }
     } else {
       _go(context, '/onboarding');

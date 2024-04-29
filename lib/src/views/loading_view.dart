@@ -5,21 +5,28 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: Container(
-                color: Colors.white,
-                child: Stack(alignment: AlignmentDirectional.center, children: [
-                  CircleAvatar(
-                    radius: 56, //radius of avatar
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child:
-                          ClipOval(child: Image.asset('assets/icons/icon.png')),
+    return Scaffold(
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(child:
+              Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 56, //radius of avatar
+                      backgroundColor: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: ClipOval(child: Image.asset('assets/icons/icon.png')),
+                      ),
                     ),
-                  ),
-                  const CircularProgressIndicator(),
-                ]))));
+                    const CircularProgressIndicator.adaptive(),
+                  ])
+              )
+            ]
+        )
+    );
   }
 }

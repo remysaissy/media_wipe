@@ -29,7 +29,7 @@ class Utils {
     return const Align(
         alignment: Alignment.center,
         // This will horizontally center from the top
-        child: CircularProgressIndicator());
+        child: CircularProgressIndicator.adaptive());
   }
 
   static Widget futureBuilder<T>({

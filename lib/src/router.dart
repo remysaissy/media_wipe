@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
+import 'package:sortmaster_photos/src/views/list_months_view.dart';
 import 'package:sortmaster_photos/src/views/sort_photos_view.dart';
 import 'package:sortmaster_photos/src/views/sort_photos_summary_view.dart';
-import 'package:sortmaster_photos/src/views/home_view.dart';
+import 'package:sortmaster_photos/src/views/list_years_view.dart';
 import 'package:sortmaster_photos/src/views/onboarding_view.dart';
 import 'package:sortmaster_photos/src/views/routing_view.dart';
 import 'package:sortmaster_photos/src/views/settings_view.dart';
@@ -24,8 +25,16 @@ GoRouter setupRoutes() {
         builder: (context, state) => const SubscriptionsView(),
       ),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeView(),
+        path: '/photos',
+        name: 'listYears',
+        builder: (context, state) => const ListYearsView(),
+      ),
+      GoRoute(
+        path: '/photos/:year',
+        name: 'listMonths',
+        builder: (context, state) => ListMonthsView(
+          year: int.parse(state.pathParameters['year']!),
+        ),
       ),
       GoRoute(
         path: '/photos/:year/:month/sort',

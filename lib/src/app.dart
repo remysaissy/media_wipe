@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     bool appReady = context.select<AppModel, bool>((value) => value.appReady);
-    if (!appReady) return const LoadingView();
+    if (!appReady) return const Directionality(textDirection: TextDirection.ltr, child: LoadingView());;
 
     ThemeMode themeMode =
         context.select<SettingsModel, ThemeMode>((value) => value.themeMode);

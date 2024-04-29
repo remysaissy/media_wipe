@@ -2,30 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sortmaster_photos/src/commands/assets/refresh_photos_command.dart';
-import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class ListYearsView extends StatefulWidget {
+  const ListYearsView({super.key});
 
   @override
-  State<StatefulWidget> createState() => HomeViewState();
+  State<StatefulWidget> createState() => ListYearsViewState();
 }
 
-class HomeViewState extends State<HomeView> {
+class ListYearsViewState extends State<ListYearsView> {
   late bool _isSortAsc;
-
-  Future<void> _initState() async {
-    await RefreshPhotosCommand(context).run();
-  }
 
   @override
   void initState() {
     _isSortAsc = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initState();
-    });
     super.initState();
   }
 
@@ -33,7 +25,7 @@ class HomeViewState extends State<HomeView> {
     await RefreshPhotosCommand(context).run();
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     final assets =
         context.select<AssetsModel, Map<String, Map<String, List<AssetData>>>>(
@@ -41,7 +33,7 @@ class HomeViewState extends State<HomeView> {
     Widget child = assets.isEmpty
         ? Utils.buildLoading(context)
         : _buildContent(context, assets);
-    return MyScaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text('Sort Master: Photos'),
           actions: [
@@ -63,7 +55,7 @@ class HomeViewState extends State<HomeView> {
             )
           ],
         ),
-        child: child);
+        body: SafeArea(child: child));
   }
 
   Widget _buildContent(
@@ -79,34 +71,21 @@ class HomeViewState extends State<HomeView> {
         return bInt.compareTo(aInt);
       }
     });
-    return RefreshIndicator(
+    return RefreshIndicator.adaptive(
         onRefresh: _pullRefresh,
         child: ListView.builder(
-        itemCount: yearKeys.length,
-        itemBuilder: (BuildContext context, int index) {
-          final year = yearKeys[index];
-          // Keep months order consistent.
-          var months = assets[year]!.keys.toList();
-          months.sort((a, b) {
-            final aInt = int.parse(a);
-            final bInt = int.parse(b);
-            return aInt.compareTo(bInt);
-          });
-          return Card(
-            child: ExpansionTile(
-              title: Text(year),
-              children: months.map((month) {
-                return ListTile(
-                    onTap: () async {
-                      if (!context.mounted) return;
-                      context.pushNamed('sortPhotos',
-                          pathParameters: {'year': year, 'month': month});
-                    },
-                    title: Text(Utils.monthNumberToMonthName(int.parse(month))),
-                    trailing: const Icon(Icons.keyboard_arrow_right));
-              }).toList(),
-            ),
-          );
-        }));
+            itemCount: yearKeys.length,
+            itemBuilder: (BuildContext context, int index) {
+              final year = yearKeys[index];
+              return Card(
+                  child: ListTile(
+                      onTap: () async {
+                        if (!context.mounted) return;
+                        context.pushNamed('listMonths',
+                            pathParameters: {'year': year});
+                      },
+                      title: Text(year),
+                      trailing: Icon(Icons.adaptive.arrow_forward)));
+            }));
   }
 }

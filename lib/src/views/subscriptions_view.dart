@@ -8,7 +8,7 @@ import 'package:sortmaster_photos/src/components/my_cta_button.dart';
 import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
 import 'package:sortmaster_photos/src/components/my_launch_url.dart';
 import 'package:sortmaster_photos/src/models/settings_model.dart';
-import 'package:sortmaster_photos/src/views/subsciptions_item_view.dart';
+import 'package:sortmaster_photos/src/views/subscriptions_item_view.dart';
 
 class SubscriptionsView extends StatefulWidget {
   const SubscriptionsView({super.key});
@@ -64,10 +64,18 @@ class _SubscriptionsViewState extends State<SubscriptionsView> {
       ),
       body: SingleChildScrollView(
           child: Column(children: [
-        Image.asset('assets/onboarding/1.png',
-            height: MediaQuery.of(context).orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 0.3
-                : MediaQuery.of(context).size.height * 0.2),
+        CarouselSlider(
+          options: CarouselOptions(autoPlay: true),
+          items: [
+            'assets/subscriptions/1.png',
+            'assets/subscriptions/2.png',
+            'assets/subscriptions/3.png'
+          ]
+              .map(
+                (item) => Center(child: Image.asset(item)),
+              )
+              .toList(),
+        ),
         CarouselSlider.builder(
           carouselController: _controller,
           itemCount: _subscriptionPlans.length,

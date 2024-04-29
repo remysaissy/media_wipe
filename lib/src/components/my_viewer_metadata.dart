@@ -16,17 +16,21 @@ class MyViewerMetadata extends StatelessWidget {
     List<Widget> children = [
       _buildMetadataEntry(
           title: Utils.creationDateFormat.format(assetData.creationDate),
-          leadingIcon: Icons.calendar_month),
+          leadingIcon: Icons.calendar_month_rounded),
       _buildMetadataEntry(
           title: '${assetEntity.width}x${assetEntity.height}',
-          leadingIcon: Icons.photo_size_select_large),
+          leadingIcon: Icons.photo_size_select_large_rounded),
     ];
-    return Stack(children: [
-      Column(children: children),
-      Align(
-          alignment: Alignment.topRight,
-          child: _buildFormatBadge(context, assetEntity)),
-    ]);
+    return SizedBox(
+        height: MediaQuery.of(context).orientation == Orientation.portrait
+            ? MediaQuery.of(context).size.height * 0.18
+            : MediaQuery.of(context).size.height * 0.3,
+        child: Stack(children: [
+          Column(children: children),
+          Align(
+              alignment: Alignment.topRight,
+              child: _buildFormatBadge(context, assetEntity)),
+        ]));
   }
 
   Widget _buildMetadataEntry(

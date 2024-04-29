@@ -35,7 +35,7 @@ class _OnboardingState extends State<OnboardingView> {
       controls.add(Flexible(
         child: ElevatedButton(
           onPressed: _controller.previousPage,
-          child: const Icon(Icons.arrow_back),
+          child: Icon(Icons.adaptive.arrow_back),
         ),
       ));
     }
@@ -43,7 +43,7 @@ class _OnboardingState extends State<OnboardingView> {
       controls.add(Flexible(
         child: ElevatedButton(
           onPressed: _controller.nextPage,
-          child: const Icon(Icons.arrow_forward),
+          child: Icon(Icons.adaptive.arrow_forward),
         ),
       ));
     } else {
@@ -83,7 +83,7 @@ class _OnboardingState extends State<OnboardingView> {
               });
             }),
       ),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: controls)
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: controls)
     ])));
   }
 }
