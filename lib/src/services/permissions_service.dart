@@ -1,9 +1,13 @@
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionsService {
-
   Future<void> authorizePhotos() async {
-    await Permission.photos.request();
+    final photosStatus = await Permission.photos.status;
+    if (photosStatus.isDenied) {
+      await Permission.photos.request();
+    } else if (!photosStatus.isGranted) {
+      openAppSettings();
+    }
   }
 
   Future<bool> isPhotosAuthorized() async {

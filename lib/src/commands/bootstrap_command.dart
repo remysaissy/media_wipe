@@ -14,13 +14,6 @@ class BootstrapCommand extends AbstractCommand {
     appModel.onboardingPages = await appService.refreshOnboardingPages();
     settingsModel.subscriptionPlans = await appService.refreshSubscriptions();
 
-    // There can be run in background.
-    Future.delayed(const Duration(milliseconds: 10), () async {
-      if (settingsModel.canAccessPhotoLibrary) {
-        await RefreshPhotosCommand(context).run();
-      }
-    });
-
     // Once bootstrap is done.
     appModel.appReady = true;
   }

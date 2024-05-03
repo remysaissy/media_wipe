@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:sortmaster_photos/src/views/authorize_view.dart';
 import 'package:sortmaster_photos/src/views/list_months_view.dart';
 import 'package:sortmaster_photos/src/views/sort_photos_view.dart';
 import 'package:sortmaster_photos/src/views/sort_photos_summary_view.dart';
@@ -23,6 +24,10 @@ GoRouter setupRoutes() {
       GoRoute(
         path: '/subscriptions',
         builder: (context, state) => const SubscriptionsView(),
+      ),
+      GoRoute(
+        path: '/authorize',
+        builder: (context, state) => const AuthorizeView(),
       ),
       GoRoute(
         path: '/photos',

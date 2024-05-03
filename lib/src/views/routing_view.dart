@@ -18,16 +18,22 @@ class RoutingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isOnboarded =
         context.select<SettingsModel, bool>((value) => value.isOnboarded);
-    final hasSubscription =
-    context.select<SettingsModel, bool>((value) => value.hasSubscription);
-    if (isOnboarded) {
+    if (!isOnboarded) {
+      _go(context, '/onboarding');
+    } else {
+      final hasSubscription =
+          context.select<SettingsModel, bool>((value) => value.hasSubscription);
       if (!hasSubscription) {
         _go(context, '/subscriptions');
       } else {
-        _go(context, '/photos');
+        final canAccessPhotoLibrary = context.select<SettingsModel, bool>(
+            (value) => value.canAccessPhotoLibrary);
+        if (!canAccessPhotoLibrary) {
+          _go(context, '/authorize');
+        } else {
+          _go(context, '/photos');
+        }
       }
-    } else {
-      _go(context, '/onboarding');
     }
     return const LoadingView();
   }

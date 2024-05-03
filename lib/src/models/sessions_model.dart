@@ -10,6 +10,10 @@ class SessionData {
 
   SessionData({required this.assetIdsToDrop, required this.isFinished});
 
+  SessionData.empty():
+      assetIdsToDrop = [],
+      isFinished = false;
+
   SessionData.fromJson(Map<String, dynamic> json):
         isFinished = json['isFinished'] as bool,
         assetIdsToDrop = jsonDecode(json['assetIdsToDrop'] as String);
@@ -28,12 +32,8 @@ class SessionsModel extends AbstractModel {
 
   Map<String, SessionData> _sessions = {};
   Map<String, SessionData> get sessions => _sessions;
-  void updateSession(String key, SessionData? session) {
-    if (session != null) {
-      _sessions[key] = session;
-    } else {
-      _sessions.remove(key);
-    }
+  set sessions(Map<String, SessionData> sessions) {
+    _sessions = sessions;
     _updatedAt = DateTime.now();
     scheduleSave();
     notifyListeners();

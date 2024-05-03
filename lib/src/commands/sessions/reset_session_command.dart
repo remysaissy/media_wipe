@@ -8,7 +8,9 @@ class ResetSessionCommand extends AbstractCommand {
 
   Future<void> run({required int year, required int month}) async {
     final yearMonth = Utils.stringifyYearMonth(year: year, month: month);
-    final sessionData = SessionData(assetIdsToDrop: [], isFinished: false);
-    sessionsModel.updateSession(yearMonth, sessionData);
+    final sessionData = SessionData.empty();
+    var sessions = sessionsModel.sessions;
+    sessions[yearMonth] = sessionData;
+    sessionsModel.sessions = sessions;
   }
 }

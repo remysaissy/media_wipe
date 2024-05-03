@@ -15,9 +15,14 @@ class ListYearsView extends StatefulWidget {
 class ListYearsViewState extends State<ListYearsView> {
   late bool _isSortAsc;
 
+  Future<void> _initState() async {
+    await RefreshPhotosCommand(context).run();
+  }
+
   @override
   void initState() {
     _isSortAsc = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 

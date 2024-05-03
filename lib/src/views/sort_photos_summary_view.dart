@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:sortmaster_photos/src/commands/assets/refresh_photos_command.dart';
 import 'package:sortmaster_photos/src/commands/sessions/cancel_session_command.dart';
 import 'package:sortmaster_photos/src/commands/sessions/finish_session_command.dart';
 import 'package:sortmaster_photos/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
 import 'package:sortmaster_photos/src/components/my_photo_viewer_card.dart';
 import 'package:sortmaster_photos/src/components/my_scaffold.dart';
 import 'package:sortmaster_photos/src/models/assets_model.dart';
 import 'package:sortmaster_photos/src/models/sessions_model.dart';
 import 'package:sortmaster_photos/src/utils.dart';
 
-class SortPhotosSummaryView extends StatelessWidget {
+class SortPhotosSummaryView extends StatefulWidget {
   final int year;
   final int month;
 
@@ -20,66 +20,86 @@ class SortPhotosSummaryView extends StatelessWidget {
       {super.key, required this.year, required this.month});
 
   @override
-  Widget build(BuildContext context) {
-    final yearMonthKey = Utils.stringifyYearMonth(year: year, month: month);
-    Map<String, List<AssetData>> allAssets =
-        context.select<AssetsModel, Map<String, List<AssetData>>>(
-            (value) => value.assets);
-    List<AssetData> assets = allAssets[yearMonthKey]!;
-    Map<String, SessionData> allSessions =
-        context.select<SessionsModel, Map<String, SessionData>>(
-            (value) => value.sessions);
-    SessionData session = allSessions[yearMonthKey]!;
-    return Provider.value(
-        value: allSessions,
-        child: MyScaffold(
-            appBar: AppBar(
-              leading: null,
-              title: const Text('Review of photos to delete'),
-              actions: [
-                MyCTATextButton(
-                    onPressed: () async {
-                      await CancelSessionCommand(context)
-                          .run(year: year, month: month);
-                      if (!context.mounted) return;
-                      context.go('/home');
-                    },
-                    text: 'Cancel'),
-                MyCTATextButton(
-                    onPressed: () async {
-                      await FinishSessionCommand(context)
-                          .run(year: year, month: month);
-                      if (!context.mounted) return;
-                      context.go('/home');
-                    },
-                    text: 'Validate'),
-              ],
-            ),
-            child: GridView.count(
-              crossAxisCount: 2,
-              // Generate 100 widgets that display their index in the List.
-              children: List.generate(session.assetIdsToDrop.length, (index) {
-                final currentAssetId = session.assetIdsToDrop[index];
-                final currentAsset = assets
-                    .where((element) => element.id == currentAssetId)
-                    .first;
+  State<StatefulWidget> createState() => _SortPhotosSummaryState();
+}
 
-                return GestureDetector(
-                  onTap: () async {
-                    print('Gesture');
-                    await KeepAssetInSessionCommand(context)
-                        .run(assetData: currentAsset);
+class _SortPhotosSummaryState extends State<SortPhotosSummaryView> {
+  Widget _buildNothingToValidate(BuildContext context) {
+    return Scaffold(
+        body: SafeArea(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+          const Center(child: Text('Nothing to delete!')),
+          Center(
+              child: TextButton(
+                  onPressed: () async {
+                    await CancelSessionCommand(context)
+                        .run(year: widget.year, month: widget.month);
+                    if (!context.mounted) return;
+                    context.go('/');
                   },
-                  child: Center(
-                      child: Utils.futureBuilder(
-                          future: currentAsset.loadEntity(),
-                          onReady: (data) {
-                            final assetEntity = data as AssetEntity;
-                            return MyPhotoViewerCard(assetEntity: assetEntity);
-                          })),
-                );
-              }),
-            )));
+                  child: const Text('Go to main screen')))
+        ])));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final allSessions = context.read<SessionsModel>().sessions;
+    final yearMonthKey =
+        Utils.stringifyYearMonth(year: widget.year, month: widget.month);
+    SessionData? session = allSessions[yearMonthKey];
+    context.watch<SessionsModel>();
+    if (session == null || session.assetIdsToDrop.isEmpty) {
+      return _buildNothingToValidate(context);
+    } else {
+      final allAssets = context.read<AssetsModel>().assets;
+      List<AssetData> assets = allAssets[yearMonthKey]!;
+      return Scaffold(
+          appBar: AppBar(
+            leading: null,
+            title: const Text('Review of photos to delete'),
+            actions: [
+              IconButton(
+                  onPressed: () async {
+                    if (!context.mounted) return;
+                    await FinishSessionCommand(context)
+                        .run(year: widget.year, month: widget.month);
+                    await RefreshPhotosCommand(context).run(year: widget.year);
+                    context.go('/');
+                  },
+                  icon: const Icon(Icons.check)),
+            ],
+          ),
+          body: SafeArea(
+              child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  itemCount: session.assetIdsToDrop.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final currentAssetId = session.assetIdsToDrop[index];
+                    final currentAsset = assets
+                        .where((element) => element.id == currentAssetId)
+                        .first;
+
+                    return GestureDetector(
+                      onTap: () async {
+                        await KeepAssetInSessionCommand(context)
+                            .run(assetData: currentAsset);
+                      },
+                      child: Center(
+                          child: Utils.futureBuilder(
+                              future: currentAsset.loadEntity(),
+                              onReady: (data) {
+                                final assetEntity = data as AssetEntity;
+                                return MyPhotoViewerCard(
+                                    assetEntity: assetEntity);
+                              })),
+                    );
+                  })));
+    }
   }
 
 // final AssetsController _assetsController = di<AssetsController>();

@@ -31,19 +31,19 @@ class _OnboardingState extends State<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     List<Widget> controls = [];
-    if (!_isFirstPage && !_isLastPage) {
-      controls.add(Flexible(
-        child: ElevatedButton(
-          onPressed: _controller.previousPage,
-          child: Icon(Icons.adaptive.arrow_back),
-        ),
-      ));
-    }
+    // if (!_isFirstPage && !_isLastPage) {
+    //   controls.add(Flexible(
+    //     child: ElevatedButton(
+    //       onPressed: _controller.previousPage,
+    //       child: Icon(Icons.adaptive.arrow_back),
+    //     ),
+    //   ));
+    // }
     if (!_isLastPage) {
       controls.add(Flexible(
         child: ElevatedButton(
           onPressed: _controller.nextPage,
-          child: Icon(Icons.adaptive.arrow_forward),
+          child: const Text('Next'),
         ),
       ));
     } else {

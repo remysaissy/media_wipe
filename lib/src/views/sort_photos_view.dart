@@ -92,7 +92,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
     await KeepAssetInSessionCommand(context).run(assetData: _assetData);
     if (_isLast) {
       if (context.mounted) {
-        context.pushNamed('sortPhotosSummary', pathParameters: {
+        context.goNamed('sortPhotosSummary', pathParameters: {
           'year': widget.year.toString(),
           'month': widget.month.toString()
         });
@@ -106,7 +106,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
     await DropAssetInSessionCommand(context).run(assetData: _assetData);
     if (_isLast) {
       if (context.mounted) {
-        context.pushNamed('sortPhotosSummary', pathParameters: {
+        context.goNamed('sortPhotosSummary', pathParameters: {
           'year': widget.year.toString(),
           'month': widget.month.toString()
         });

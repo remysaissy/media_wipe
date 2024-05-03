@@ -52,12 +52,12 @@ class AssetsModel extends AbstractModel {
     notifyListeners();
   }
 
-  void updateAssetEntry(String key, List<AssetData> value) {
-    _assets[key] = value;
-    _updatedAt = DateTime.now();
-    scheduleSave();
-    notifyListeners();
-  }
+  // void updateAssetEntry(String key, List<AssetData> value) {
+  //   _assets[key] = value;
+  //   _updatedAt = DateTime.now();
+  //   scheduleSave();
+  //   notifyListeners();
+  // }
 
   DateTime _updatedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
