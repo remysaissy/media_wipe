@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/utils.dart';
 
 abstract class AbstractModel extends ChangeNotifier {
   String? _fileName;

@@ -1,6 +1,6 @@
-import 'package:sortmaster_photos/src/globals/device_type.dart';
-import 'package:sortmaster_photos/src/models/abstract_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/globals/device_type.dart';
+import 'package:app/src/models/abstract_model.dart';
+import 'package:app/src/utils.dart';
 
 class OnboardingData {
   final String urlImage;

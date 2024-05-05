@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/components/dialog.dart';
+import 'package:app/src/components/dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> myLaunchURL(BuildContext context, String targetURL) async {

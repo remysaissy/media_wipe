@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:sortmaster_photos/src/models/abstract_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/models/abstract_model.dart';
+import 'package:app/src/utils.dart';
 
 class SessionData {
 

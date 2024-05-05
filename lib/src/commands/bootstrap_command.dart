@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/commands/abstract_command.dart';
-import 'package:sortmaster_photos/src/commands/assets/refresh_photos_command.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:app/src/commands/abstract_command.dart';
+import 'package:app/src/commands/assets/refresh_photos_command.dart';
 
 class BootstrapCommand extends AbstractCommand {
   BootstrapCommand(super.context);
@@ -16,5 +17,6 @@ class BootstrapCommand extends AbstractCommand {
 
     // Once bootstrap is done.
     appModel.appReady = true;
+    FlutterNativeSplash.remove();
   }
 }

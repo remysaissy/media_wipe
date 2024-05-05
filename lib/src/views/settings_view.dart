@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/settings/authorize_photos_command.dart';
-import 'package:sortmaster_photos/src/commands/settings/request_in_app_review_command.dart';
-import 'package:sortmaster_photos/src/components/my_launch_url.dart';
-import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/components/my_theme_dropdown.dart';
-import 'package:sortmaster_photos/src/models/app_model.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/commands/settings/authorize_photos_command.dart';
+import 'package:app/src/commands/settings/request_in_app_review_command.dart';
+import 'package:app/src/components/my_launch_url.dart';
+import 'package:app/src/components/my_scaffold.dart';
+import 'package:app/src/components/my_theme_dropdown.dart';
+import 'package:app/src/models/app_model.dart';
+import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/utils.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -26,9 +26,9 @@ class SettingsView extends StatelessWidget {
             _buildAuthorizePhotos(context),
             _buildRateApp(context),
             _buildLink(context, 'Terms of service',
-                'https://www.app-privacy-policy.com/'),
+                'https://www.app-privacy-policy.com/live.php?token=VfE77oxBRFx6OkYfJSXYOBZ8LDOznlSe'),
             _buildLink(context, 'Privacy Policy',
-                'https://www.app-privacy-policy.com/'),
+                'https://www.app-privacy-policy.com/live.php?token=9ho9lvMLJc5wOXUooQJoLjgN4taT04eC'),
           ],
         ));
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/constants.dart';
+import 'package:app/src/constants.dart';
 
 class MyScaffold extends StatelessWidget {
 

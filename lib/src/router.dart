@@ -1,13 +1,13 @@
 import 'package:go_router/go_router.dart';
-import 'package:sortmaster_photos/src/views/authorize_view.dart';
-import 'package:sortmaster_photos/src/views/list_months_view.dart';
-import 'package:sortmaster_photos/src/views/sort_photos_view.dart';
-import 'package:sortmaster_photos/src/views/sort_photos_summary_view.dart';
-import 'package:sortmaster_photos/src/views/list_years_view.dart';
-import 'package:sortmaster_photos/src/views/onboarding_view.dart';
-import 'package:sortmaster_photos/src/views/routing_view.dart';
-import 'package:sortmaster_photos/src/views/settings_view.dart';
-import 'package:sortmaster_photos/src/views/subscriptions_view.dart';
+import 'package:app/src/views/authorize_view.dart';
+import 'package:app/src/views/list_months_view.dart';
+import 'package:app/src/views/sort_photos_view.dart';
+import 'package:app/src/views/sort_photos_summary_view.dart';
+import 'package:app/src/views/list_years_view.dart';
+import 'package:app/src/views/onboarding_view.dart';
+import 'package:app/src/views/routing_view.dart';
+import 'package:app/src/views/settings_view.dart';
+import 'package:app/src/views/subscriptions_view.dart';
 
 GoRouter setupRoutes() {
   return GoRouter(

@@ -1,7 +1,7 @@
-import 'package:sortmaster_photos/src/commands/abstract_command.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/models/sessions_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/commands/abstract_command.dart';
+import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/sessions_model.dart';
+import 'package:app/src/utils.dart';
 
 class KeepAssetInSessionCommand extends AbstractCommand {
   KeepAssetInSessionCommand(super.context);

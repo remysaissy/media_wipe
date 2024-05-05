@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/settings/update_onboarding_command.dart';
-import 'package:sortmaster_photos/src/models/app_model.dart';
-import 'package:sortmaster_photos/src/views/onboarding_item_view.dart';
+import 'package:app/src/commands/settings/update_onboarding_command.dart';
+import 'package:app/src/models/app_model.dart';
+import 'package:app/src/views/onboarding_item_view.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});

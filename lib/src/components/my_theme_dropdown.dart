@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/settings/update_theme_command.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:app/src/commands/settings/update_theme_command.dart';
+import 'package:app/src/models/settings_model.dart';
 
 class MyThemeDropDown extends StatelessWidget {
   const MyThemeDropDown({super.key});

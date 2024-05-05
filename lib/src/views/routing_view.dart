@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
-import 'package:sortmaster_photos/src/views/loading_view.dart';
+import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/views/loading_view.dart';
 
 class RoutingView extends StatelessWidget {
   const RoutingView({super.key});

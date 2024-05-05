@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/utils.dart';
 
 class MyPhotoViewerCard extends StatelessWidget {
   final AssetEntity assetEntity;

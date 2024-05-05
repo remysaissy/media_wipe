@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/models/app_model.dart';
+import 'package:app/src/models/app_model.dart';
 
 class OnboardingItemView extends StatelessWidget {
   final OnboardingData item;

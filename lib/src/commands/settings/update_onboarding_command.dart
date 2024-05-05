@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/commands/abstract_command.dart';
+import 'package:app/src/commands/abstract_command.dart';
 
 class UpdateOnboardingCommand extends AbstractCommand {
 

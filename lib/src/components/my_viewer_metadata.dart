@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sortmaster_photos/src/components/my_rounded_box.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/components/my_rounded_box.dart';
+import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/utils.dart';
 
 class MyViewerMetadata extends StatelessWidget {
   final AssetData assetData;

@@ -1,7 +1,5 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sortmaster_photos/src/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class MyVideoViewerCard extends StatefulWidget {
@@ -18,12 +16,14 @@ class _MyVideoViewerState extends State<MyVideoViewerCard> {
 
   @override
   void initState() {
-    _controller = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    widget.assetEntity.getMediaUrl().then((value) => {
+    _controller = VideoPlayerController.networkUrl(Uri.parse(value!))
+    ..initialize().then((_) {
+    // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+    setState(() {});
+    })
+    });
+
     super.initState();
   }
 

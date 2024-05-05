@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:sortmaster_photos/src/commands/abstract_command.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:app/src/commands/abstract_command.dart';
+import 'package:app/src/models/settings_model.dart';
 
 class PurchaseSubscriptionCommand extends AbstractCommand {
 

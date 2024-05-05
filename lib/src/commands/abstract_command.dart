@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/models/app_model.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/models/sessions_model.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
-import 'package:sortmaster_photos/src/services/app_service.dart';
-import 'package:sortmaster_photos/src/services/assets_service.dart';
-import 'package:sortmaster_photos/src/services/in_app_review_service.dart';
-import 'package:sortmaster_photos/src/services/permissions_service.dart';
-import 'package:sortmaster_photos/src/services/subscriptions_service.dart';
+import 'package:app/src/models/app_model.dart';
+import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/sessions_model.dart';
+import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/services/app_service.dart';
+import 'package:app/src/services/assets_service.dart';
+import 'package:app/src/services/in_app_review_service.dart';
+import 'package:app/src/services/permissions_service.dart';
+import 'package:app/src/services/subscriptions_service.dart';
 
 abstract class AbstractCommand {
   static BuildContext? _lastKnownRoot;

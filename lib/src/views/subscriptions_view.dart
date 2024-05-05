@@ -2,13 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/settings/purchase_subscription_command.dart';
-import 'package:sortmaster_photos/src/commands/settings/restore_subscription_command.dart';
-import 'package:sortmaster_photos/src/components/my_cta_button.dart';
-import 'package:sortmaster_photos/src/components/my_cta_text_button.dart';
-import 'package:sortmaster_photos/src/components/my_launch_url.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
-import 'package:sortmaster_photos/src/views/subscriptions_item_view.dart';
+import 'package:app/src/commands/settings/purchase_subscription_command.dart';
+import 'package:app/src/commands/settings/restore_subscription_command.dart';
+import 'package:app/src/components/my_cta_button.dart';
+import 'package:app/src/components/my_cta_text_button.dart';
+import 'package:app/src/components/my_launch_url.dart';
+import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/views/subscriptions_item_view.dart';
 
 class SubscriptionsView extends StatefulWidget {
   const SubscriptionsView({super.key});
@@ -46,7 +46,7 @@ class _SubscriptionsViewState extends State<SubscriptionsView> {
     controls.add(Flexible(
         child: MyCTATextButton(
             onPressed: () async {
-              const targetURL = 'https://www.app-privacy-policy.com/';
+              const targetURL = 'https://www.app-privacy-policy.com/live.php?token=VfE77oxBRFx6OkYfJSXYOBZ8LDOznlSe';
               await myLaunchURL(context, targetURL);
             },
             text: 'Terms of use')));

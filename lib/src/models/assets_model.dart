@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sortmaster_photos/src/models/abstract_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/models/abstract_model.dart';
+import 'package:app/src/utils.dart';
 
 class AssetData {
   final String id;

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/sessions/create_or_recover_session_command.dart';
-import 'package:sortmaster_photos/src/commands/sessions/drop_asset_in_session_command.dart';
-import 'package:sortmaster_photos/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:sortmaster_photos/src/components/my_viewer.dart';
-import 'package:sortmaster_photos/src/components/my_viewer_controls.dart';
-import 'package:sortmaster_photos/src/components/my_viewer_metadata.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/commands/sessions/create_or_recover_session_command.dart';
+import 'package:app/src/commands/sessions/drop_asset_in_session_command.dart';
+import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
+import 'package:app/src/components/my_viewer.dart';
+import 'package:app/src/components/my_viewer_controls.dart';
+import 'package:app/src/components/my_viewer_metadata.dart';
+import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/sessions_model.dart';
+import 'package:app/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {
   final int year;
@@ -34,6 +35,16 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   Future<void> _initState() async {
     await CreateOrRecoverSessionCommand(context)
         .run(year: widget.year, month: widget.month);
+    final yearMonthKey =
+        Utils.stringifyYearMonth(year: widget.year, month: widget.month);
+    final session = context.read<SessionsModel>().sessions[yearMonthKey];
+    int index = 0;
+    for (index = 0; index < _assets.length; index++) {
+      if (session?.assetIdsToDrop.contains(_assets[index].id) == false) {
+        break;
+      }
+    }
+    _currentSelectionIndex = index;
   }
 
   @override
@@ -68,17 +79,19 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Widget _buildContent() {
-    final controls = MyViewerControls(
-        onDropPressed: _onDropPressed, onKeepPressed: _onKeepPressed);
     return Utils.futureBuilder(
         future: _assetData.loadEntity(),
         onReady: (data) {
           final assetEntity = data as AssetEntity;
           return SingleChildScrollView(
-              child: Column(children: [
+              child: Column(
+                  children: [
             MyViewer(assetEntity: assetEntity),
-            MyViewerMetadata(assetData: _assetData, assetEntity: assetEntity),
-            controls,
+            MyViewerControls(
+                assetData: _assetData,
+                assetEntity: assetEntity,
+                onDropPressed: _onDropPressed,
+                onKeepPressed: _onKeepPressed)
           ]));
         });
   }

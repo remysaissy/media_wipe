@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/assets/refresh_photos_command.dart';
-import 'package:sortmaster_photos/src/commands/sessions/cancel_session_command.dart';
-import 'package:sortmaster_photos/src/commands/sessions/finish_session_command.dart';
-import 'package:sortmaster_photos/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:sortmaster_photos/src/components/my_photo_viewer_card.dart';
-import 'package:sortmaster_photos/src/components/my_scaffold.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/models/sessions_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/commands/assets/refresh_photos_command.dart';
+import 'package:app/src/commands/sessions/cancel_session_command.dart';
+import 'package:app/src/commands/sessions/finish_session_command.dart';
+import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
+import 'package:app/src/components/my_photo_viewer_card.dart';
+import 'package:app/src/components/my_scaffold.dart';
+import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/sessions_model.dart';
+import 'package:app/src/utils.dart';
 
 class SortPhotosSummaryView extends StatefulWidget {
   final int year;

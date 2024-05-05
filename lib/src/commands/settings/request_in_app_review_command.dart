@@ -1,4 +1,4 @@
-import 'package:sortmaster_photos/src/commands/abstract_command.dart';
+import 'package:app/src/commands/abstract_command.dart';
 
 class RequestInAppReviewCommand extends AbstractCommand {
   RequestInAppReviewCommand(super.context);

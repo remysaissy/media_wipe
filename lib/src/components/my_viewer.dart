@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sortmaster_photos/src/components/my_photo_viewer_card.dart';
-import 'package:sortmaster_photos/src/components/my_video_viewer_card.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
+import 'package:app/src/components/my_photo_viewer_card.dart';
+import 'package:app/src/components/my_video_viewer_card.dart';
+import 'package:app/src/models/assets_model.dart';
 
 class MyViewer extends StatelessWidget {
   final AssetEntity assetEntity;
@@ -12,15 +12,13 @@ class MyViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if (assetEntity.type == AssetType.image) {
+    if (assetEntity.type == AssetType.image && !assetEntity.isLivePhoto) {
       child = MyPhotoViewerCard(assetEntity: assetEntity);
     } else {
       child = MyVideoViewerCard(assetEntity: assetEntity);
     }
     return SizedBox(
-        height: MediaQuery.of(context).orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.height * 0.6
-            : MediaQuery.of(context).size.height * 0.35,
+        height:MediaQuery.of(context).size.height * 0.75,
         child: child);
   }
 }

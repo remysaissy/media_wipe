@@ -3,12 +3,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/bootstrap_command.dart';
-import 'package:sortmaster_photos/src/models/app_model.dart';
-import 'package:sortmaster_photos/src/models/settings_model.dart';
-import 'package:sortmaster_photos/src/router.dart';
-import 'package:sortmaster_photos/src/theme.dart';
-import 'package:sortmaster_photos/src/views/loading_view.dart';
+import 'package:app/src/commands/bootstrap_command.dart';
+import 'package:app/src/models/app_model.dart';
+import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/router.dart';
+import 'package:app/src/theme.dart';
+import 'package:app/src/views/loading_view.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     bool appReady = context.select<AppModel, bool>((value) => value.appReady);
-    if (!appReady) return const Directionality(textDirection: TextDirection.ltr, child: LoadingView());;
+    if (!appReady) return const Directionality(textDirection: TextDirection.ltr, child: LoadingView());
 
     ThemeMode themeMode =
         context.select<SettingsModel, ThemeMode>((value) => value.themeMode);

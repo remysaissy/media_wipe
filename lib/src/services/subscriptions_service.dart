@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:sortmaster_photos/src/models/settings_model.dart';
+import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class SubscriptionsService {

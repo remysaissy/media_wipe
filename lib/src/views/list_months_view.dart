@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sortmaster_photos/src/commands/assets/refresh_photos_command.dart';
-import 'package:sortmaster_photos/src/models/assets_model.dart';
-import 'package:sortmaster_photos/src/utils.dart';
+import 'package:app/src/commands/assets/refresh_photos_command.dart';
+import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/utils.dart';
 
 class ListMonthsView extends StatefulWidget {
   final int year;

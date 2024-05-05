@@ -1,4 +1,4 @@
-package com.example.sortmaster_photos
+package com.example.app
 
 import io.flutter.embedding.android.FlutterActivity
 

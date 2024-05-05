@@ -1,4 +1,4 @@
-import 'package:sortmaster_photos/src/commands/abstract_command.dart';
+import 'package:app/src/commands/abstract_command.dart';
 
 class RefreshPhotosCommand extends AbstractCommand {
   RefreshPhotosCommand(super.context);
