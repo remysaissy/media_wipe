@@ -1,23 +1,17 @@
 import 'package:app/src/commands/abstract_command.dart';
 import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/models/sessions_model.dart';
-import 'package:app/src/utils.dart';
 
 class DropAssetInSessionCommand extends AbstractCommand {
   DropAssetInSessionCommand(super.context);
 
   Future<void> run({required AssetData assetData}) async {
-    final yearMonth = Utils.stringifyYearMonth(
-        year: assetData.creationDate.year, month: assetData.creationDate.month);
-    SessionData sessionData;
-    if (sessionsModel.sessions.containsKey(yearMonth)) {
-      sessionData = sessionsModel.sessions[yearMonth]!;
-    } else {
-      sessionData = SessionData.empty();
+    final index = assetsModel.assets.indexWhere((e) =>
+        e.year == assetData.creationDate.year &&
+        e.month == assetData.creationDate.month);
+    if (index >= 0) {
+      var assets = assetsModel.assets[index];
+      assets.assetIdsToDrop.add(assetData.id);
+      assetsModel.setAssetsAt(index, assets);
     }
-    if (!sessionData.assetIdsToDrop.contains(assetData.id)) {
-      sessionData.assetIdsToDrop.add(assetData.id);
-    }
-    sessionsModel.sessions[yearMonth] = sessionData;
   }
 }

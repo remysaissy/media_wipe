@@ -1,6 +1,8 @@
+import 'package:app/src/components/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 typedef FutureBuilderErrorCallback = Widget Function(Object? error);
 typedef FutureBuilderReadyCallback<T> = Widget Function(T? data);
@@ -53,5 +55,17 @@ class Utils {
           }
           return Utils.buildLoading(context);
         });
+  }
+
+  static Future<void> openURL(BuildContext context, String targetURL) async {
+    final url = Uri.tryParse(targetURL);
+    if (url == null) {
+      showAlertDialog(context, 'Error', 'Could not open the link.');
+    } else {
+      final success = await launchUrl(url);
+      if (!success) {
+        showAlertDialog(context, 'Error', 'Could not open the link.');
+      }
+    }
   }
 }

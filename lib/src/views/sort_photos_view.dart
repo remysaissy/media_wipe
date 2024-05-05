@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:app/src/commands/sessions/create_or_recover_session_command.dart';
 import 'package:app/src/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
 import 'package:app/src/components/my_viewer.dart';
 import 'package:app/src/components/my_viewer_controls.dart';
-import 'package:app/src/components/my_viewer_metadata.dart';
 import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {
@@ -33,18 +30,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   bool get _isLast => (_currentSelectionIndex + 1 == _assets.length);
 
   Future<void> _initState() async {
-    await CreateOrRecoverSessionCommand(context)
-        .run(year: widget.year, month: widget.month);
-    final yearMonthKey =
-        Utils.stringifyYearMonth(year: widget.year, month: widget.month);
-    final session = context.read<SessionsModel>().sessions[yearMonthKey];
-    int index = 0;
-    for (index = 0; index < _assets.length; index++) {
-      if (session?.assetIdsToDrop.contains(_assets[index].id) == false) {
-        break;
-      }
-    }
-    _currentSelectionIndex = index;
+    _currentSelectionIndex = 0;
   }
 
   @override
@@ -59,10 +45,12 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   Widget build(BuildContext context) {
     final yearMonthKey =
         Utils.stringifyYearMonth(year: widget.year, month: widget.month);
-    Map<String, List<AssetData>> allAssets =
-        context.select<AssetsModel, Map<String, List<AssetData>>>(
-            (value) => value.assets);
-    _assets = allAssets[yearMonthKey]!;
+    List<AssetsData> allAssets =
+        context.select<AssetsModel, List<AssetsData>>((value) => value.assets);
+    _assets = allAssets
+        .where((e) => e.year == widget.year && e.month == widget.month)
+        .first
+        .assets;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -84,8 +72,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
         onReady: (data) {
           final assetEntity = data as AssetEntity;
           return SingleChildScrollView(
-              child: Column(
-                  children: [
+              child: Column(children: [
             MyViewer(assetEntity: assetEntity),
             MyViewerControls(
                 assetData: _assetData,

@@ -1,13 +1,15 @@
 import 'package:app/src/commands/abstract_command.dart';
-import 'package:app/src/utils.dart';
 
 class CancelSessionCommand extends AbstractCommand {
   CancelSessionCommand(super.context);
 
   Future<void> run({required int year, required int month}) async {
-    final yearMonth = Utils.stringifyYearMonth(year: year, month: month);
-    var sessions = sessionsModel.sessions;
-    sessions.remove(yearMonth);
-    sessionsModel.sessions = sessions;
+    final index = assetsModel.assets
+        .indexWhere((e) => e.year == year && e.month == month);
+    if (index >= 0) {
+      var assets = assetsModel.assets[index];
+      assets.assetIdsToDrop = [];
+      assetsModel.setAssetsAt(index, assets);
+    }
   }
 }

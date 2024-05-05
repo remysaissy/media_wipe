@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:app/src/app.dart';
 import 'package:app/src/models/app_model.dart';
 import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:app/src/services/app_service.dart';
 import 'package:app/src/services/assets_service.dart';
@@ -18,7 +17,6 @@ void main() async {
   final appModel = await AppModel().load() as AppModel;
   final settingsModel = await SettingsModel().load() as SettingsModel;
   final assetsModel = await AssetsModel().load() as AssetsModel;
-  final sessionsModel = await SessionsModel().load() as SessionsModel;
   runApp(
     MultiProvider(
       providers: [
@@ -26,7 +24,6 @@ void main() async {
         ChangeNotifierProvider.value(value: appModel),
         ChangeNotifierProvider.value(value: settingsModel),
         ChangeNotifierProvider.value(value: assetsModel),
-        ChangeNotifierProvider.value(value: sessionsModel),
 
         /// SERVICES
         Provider(create: (_) => AppService()),

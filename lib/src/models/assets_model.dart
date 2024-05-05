@@ -4,6 +4,32 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:app/src/models/abstract_model.dart';
 import 'package:app/src/utils.dart';
 
+class AssetsData {
+  final int year;
+  final int month;
+  List<AssetData> assets;
+  List<String> assetIdsToDrop;
+
+  AssetsData(
+      {required this.year,
+      required this.month,
+      required this.assets,
+      required this.assetIdsToDrop});
+
+  AssetsData.fromJson(Map<String, dynamic> json)
+      : year = int.parse(json['year']),
+        month = int.parse(json['month']),
+        assets = jsonDecode(json['assets']),
+        assetIdsToDrop = jsonDecode(json['assetIdsToDrop']);
+
+  Map<String, dynamic> toJson() => {
+        'year': year,
+        'month': month,
+        'assets': jsonEncode(assets),
+        'assetIdsToDrop': jsonEncode(assetIdsToDrop)
+      };
+}
+
 class AssetData {
   final String id;
   final DateTime creationDate;
@@ -28,36 +54,23 @@ class AssetsModel extends AbstractModel {
     enableSerialization('assets.dat');
   }
 
-  Map<String, List<AssetData>> _assets = {};
+  List<AssetsData> _assets = [];
 
-  Map<String, List<AssetData>> get assets => _assets;
+  List<AssetsData> get assets => _assets;
 
-  Map<String, Map<String, List<AssetData>>> get assetsPerYearMonth {
-    Map<String, Map<String, List<AssetData>>> mapPerYear = {};
-    for (var items in _assets.entries) {
-      final dt = items.value.first.creationDate;
-      if (!mapPerYear.containsKey(dt.year.toString())) {
-        mapPerYear[dt.year.toString()] = {};
-      }
-      mapPerYear[dt.year.toString()]![dt.month.toString()] =
-          assets.values.first;
-    }
-    return mapPerYear;
-  }
-
-  set assets(Map<String, List<AssetData>> assets) {
+  set assets(List<AssetsData> assets) {
     _assets = assets;
     _updatedAt = DateTime.now();
     scheduleSave();
     notifyListeners();
   }
 
-  // void updateAssetEntry(String key, List<AssetData> value) {
-  //   _assets[key] = value;
-  //   _updatedAt = DateTime.now();
-  //   scheduleSave();
-  //   notifyListeners();
-  // }
+  void setAssetsAt(int index, AssetsData assets) {
+    _assets[index] = assets;
+    _updatedAt = DateTime.now();
+    scheduleSave();
+    notifyListeners();
+  }
 
   DateTime _updatedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -76,7 +89,7 @@ class AssetsModel extends AbstractModel {
   //Json Serialization
   @override
   AssetsModel copyFromJson(Map<String, dynamic> json) {
-    _assets = json.containsKey('_assets') ? jsonDecode(json['_assets']) : {};
+    _assets = json.containsKey('_assets') ? jsonDecode(json['_assets']) : [];
     _updatedAt = json.containsKey('_updatedAt')
         ? DateTime.fromMillisecondsSinceEpoch(json['_updatedAt'])
         : DateTime.fromMillisecondsSinceEpoch(0);

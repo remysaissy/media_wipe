@@ -1,16 +1,17 @@
 import 'package:app/src/commands/abstract_command.dart';
 import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/models/sessions_model.dart';
-import 'package:app/src/utils.dart';
 
 class KeepAssetInSessionCommand extends AbstractCommand {
   KeepAssetInSessionCommand(super.context);
 
   Future<void> run({required AssetData assetData}) async {
-    final yearMonth = Utils.stringifyYearMonth(
-        year: assetData.creationDate.year, month: assetData.creationDate.month);
-    var sessions = sessionsModel.sessions;
-    sessions[yearMonth]?.assetIdsToDrop.remove(assetData.id);
-    sessionsModel.sessions = sessions;
+    final index = assetsModel.assets.indexWhere((e) =>
+        e.year == assetData.creationDate.year &&
+        e.month == assetData.creationDate.month);
+    if (index >= 0) {
+      var assets = assetsModel.assets[index];
+      assets.assetIdsToDrop.removeWhere((e) => e == assetData.id);
+      assetsModel.setAssetsAt(index, assets);
+    }
   }
 }

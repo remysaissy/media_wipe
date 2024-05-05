@@ -1,3 +1,4 @@
+import 'package:app/src/utils.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +7,6 @@ import 'package:app/src/commands/settings/purchase_subscription_command.dart';
 import 'package:app/src/commands/settings/restore_subscription_command.dart';
 import 'package:app/src/components/my_cta_button.dart';
 import 'package:app/src/components/my_cta_text_button.dart';
-import 'package:app/src/components/my_launch_url.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:app/src/views/subscriptions_item_view.dart';
 
@@ -46,8 +46,9 @@ class _SubscriptionsViewState extends State<SubscriptionsView> {
     controls.add(Flexible(
         child: MyCTATextButton(
             onPressed: () async {
-              const targetURL = 'https://www.app-privacy-policy.com/live.php?token=VfE77oxBRFx6OkYfJSXYOBZ8LDOznlSe';
-              await myLaunchURL(context, targetURL);
+              const targetURL =
+                  'https://www.app-privacy-policy.com/live.php?token=VfE77oxBRFx6OkYfJSXYOBZ8LDOznlSe';
+              await Utils.openURL(context, targetURL);
             },
             text: 'Terms of use')));
     return Scaffold(
@@ -109,7 +110,7 @@ class _SubscriptionsViewState extends State<SubscriptionsView> {
         TextButton(
             onPressed: () async {
               const targetURL = 'https://www.app-privacy-policy.com/';
-              await myLaunchURL(context, targetURL);
+              await Utils.openURL(context, targetURL);
             },
             child: Text('Terms of use',
                 style: Theme.of(context).textTheme.bodySmall))
