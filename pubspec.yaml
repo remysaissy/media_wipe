@@ -34,6 +34,8 @@ dependencies:
   flutter_native_splash: ^2.4.0
   modal_bottom_sheet: ^3.0.0
   collection: ^1.18.0
+  objectbox: ^2.5.1
+  objectbox_flutter_libs: ^2.5.1
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +44,7 @@ dev_dependencies:
   flutter_lints: ^3.0.2
   flutter_launcher_icons: ^0.13.1
   build_runner: ^2.4.9
+  objectbox_generator: ^2.5.1
 
 flutter_launcher_icons:
   image_path: "assets/icons/icon.png"

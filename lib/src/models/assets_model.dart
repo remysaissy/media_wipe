@@ -1,8 +1,29 @@
 import 'dart:convert';
 
+import 'package:objectbox/objectbox.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:app/src/models/abstract_model.dart';
 import 'package:app/src/utils.dart';
+
+@Entity()
+class AssetData {
+  final String assetId;
+  final DateTime creationDate;
+
+  AssetData({required this.assetId, required this.creationDate});
+
+  AssetData.fromJson(Map<String, dynamic> json)
+      : assetId = json['id'] as String,
+        creationDate =
+        DateTime.fromMillisecondsSinceEpoch(json['creationDate']);
+
+  Map<String, dynamic> toJson() =>
+      {'id': assetId, 'creationDate': creationDate.millisecondsSinceEpoch};
+
+  Future<AssetEntity?> loadEntity() async {
+    return await AssetEntity.fromId(assetId);
+  }
+}
 
 class AssetsData {
   final int year;
@@ -28,25 +49,6 @@ class AssetsData {
         'assets': jsonEncode(assets),
         'assetIdsToDrop': jsonEncode(assetIdsToDrop)
       };
-}
-
-class AssetData {
-  final String id;
-  final DateTime creationDate;
-
-  AssetData({required this.id, required this.creationDate});
-
-  AssetData.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as String,
-        creationDate =
-            DateTime.fromMillisecondsSinceEpoch(json['creationDate']);
-
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'creationDate': creationDate.millisecondsSinceEpoch};
-
-  Future<AssetEntity?> loadEntity() async {
-    return await AssetEntity.fromId(id);
-  }
 }
 
 class AssetsModel extends AbstractModel {

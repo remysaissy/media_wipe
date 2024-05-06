@@ -10,7 +10,7 @@ class DropAssetInSessionCommand extends AbstractCommand {
         e.month == assetData.creationDate.month);
     if (index >= 0) {
       var assets = assetsModel.assets[index];
-      assets.assetIdsToDrop.add(assetData.id);
+      assets.assetIdsToDrop.add(assetData.assetId);
       assetsModel.setAssetsAt(index, assets);
     }
   }

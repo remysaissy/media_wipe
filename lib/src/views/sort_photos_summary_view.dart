@@ -78,7 +78,7 @@ class _SortPhotosSummaryState extends State<SortPhotosSummaryView> {
                   itemBuilder: (BuildContext context, int index) {
                     final currentAssetId = assets.assetIdsToDrop[index];
                     final currentAsset = assets.assets
-                        .where((element) => element.id == currentAssetId)
+                        .where((element) => element.assetId == currentAssetId)
                         .first;
 
                     return GestureDetector(

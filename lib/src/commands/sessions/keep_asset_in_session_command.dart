@@ -10,7 +10,7 @@ class KeepAssetInSessionCommand extends AbstractCommand {
         e.month == assetData.creationDate.month);
     if (index >= 0) {
       var assets = assetsModel.assets[index];
-      assets.assetIdsToDrop.removeWhere((e) => e == assetData.id);
+      assets.assetIdsToDrop.removeWhere((e) => e == assetData.assetId);
       assetsModel.setAssetsAt(index, assets);
     }
   }

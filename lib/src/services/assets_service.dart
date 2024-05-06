@@ -67,7 +67,7 @@ class AssetsService {
           filterOption: filter);
       for (pm.AssetEntity assetEntity in assetsEntities) {
         final asset = AssetData(
-            id: assetEntity.id, creationDate: assetEntity.createDateTime);
+            assetId: assetEntity.id, creationDate: assetEntity.createDateTime);
         final year = asset.creationDate.year;
         final month = asset.creationDate.month;
         var entry = assets

@@ -10,7 +10,7 @@ class FinishSessionCommand extends AbstractCommand {
       var assets = assetsModel.assets[index];
       await assetsService.deleteAssetsPerId(assets.assetIdsToDrop);
       for (var id in assets.assetIdsToDrop) {
-        assets.assets.removeWhere((e) => e.id == id);
+        assets.assets.removeWhere((e) => e.assetId == id);
       }
       assets.assetIdsToDrop = [];
       assetsModel.setAssetsAt(index, assets);
