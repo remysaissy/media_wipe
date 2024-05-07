@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:app/src/commands/abstract_command.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 
 class RestoreSubscriptionCommand extends AbstractCommand {
 
@@ -10,8 +10,8 @@ class RestoreSubscriptionCommand extends AbstractCommand {
   Future<bool> run() async {
     final restoredProductId = await subscriptionsService.restorePurchase();
     if (restoredProductId != null) {
-      settingsModel.productId = restoredProductId;
-      settingsModel.subscribedAt = DateTime.now();
+      settings42Model.productId = restoredProductId;
+      settings42Model.subscribedAt = DateTime.now();
     }
     return (restoredProductId != null);
   }

@@ -7,7 +7,7 @@ class UpdateOnboardingCommand extends AbstractCommand {
   UpdateOnboardingCommand(super.context);
 
   Future<void> run({required bool isOnboarded}) async {
-    settingsModel.isOnboarded = isOnboarded;
+    settings42Model.isOnboarded = isOnboarded;
   }
 
 }

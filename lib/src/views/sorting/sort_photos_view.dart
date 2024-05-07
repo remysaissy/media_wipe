@@ -1,3 +1,5 @@
+import 'package:app/src/models/asset.dart';
+import 'package:app/src/models/assets_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -6,7 +8,6 @@ import 'package:app/src/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
 import 'package:app/src/components/my_viewer.dart';
 import 'package:app/src/components/my_viewer_controls.dart';
-import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {
@@ -21,9 +22,9 @@ class SortPhotosView extends StatefulWidget {
 
 class _SortPhotosViewState extends State<SortPhotosView> {
   late int _currentSelectionIndex;
-  late List<AssetData> _assets;
+  late List<Asset> _assets;
 
-  AssetData get _assetData => _assets[_currentSelectionIndex];
+  Asset get _assetData => _assets[_currentSelectionIndex];
 
   bool get _isFirst => _currentSelectionIndex == 0;
 
@@ -43,14 +44,10 @@ class _SortPhotosViewState extends State<SortPhotosView> {
 
   @override
   Widget build(BuildContext context) {
-    final yearMonthKey =
-        Utils.stringifyYearMonth(year: widget.year, month: widget.month);
-    List<AssetsData> allAssets =
-        context.select<AssetsModel, List<AssetsData>>((value) => value.assets);
-    _assets = allAssets
-        .where((e) => e.year == widget.year && e.month == widget.month)
-        .first
-        .assets;
+    _assets = context
+        .read<AssetsModel>()
+        .listAssets(forYear: widget.year, forMonth: widget.month);
+    context.watch<AssetsModel>();
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -89,7 +86,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onKeepPressed() async {
-    await KeepAssetInSessionCommand(context).run(assetData: _assetData);
+    await KeepAssetInSessionCommand(context).run(id: _assetData.id);
     if (_isLast) {
       if (context.mounted) {
         context.goNamed('sortPhotosSummary', pathParameters: {
@@ -103,7 +100,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onDropPressed() async {
-    await DropAssetInSessionCommand(context).run(assetData: _assetData);
+    await DropAssetInSessionCommand(context).run(id: _assetData.id);
     if (_isLast) {
       if (context.mounted) {
         context.goNamed('sortPhotosSummary', pathParameters: {

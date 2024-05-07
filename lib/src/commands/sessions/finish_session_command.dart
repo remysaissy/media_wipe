@@ -4,16 +4,15 @@ class FinishSessionCommand extends AbstractCommand {
   FinishSessionCommand(super.context);
 
   Future<void> run({required int year, required int month}) async {
-    final index = assetsModel.assets
-        .indexWhere((e) => e.year == year && e.month == month);
-    if (index >= 0) {
-      var assets = assetsModel.assets[index];
-      await assetsService.deleteAssetsPerId(assets.assetIdsToDrop);
-      for (var id in assets.assetIdsToDrop) {
-        assets.assets.removeWhere((e) => e.assetId == id);
-      }
-      assets.assetIdsToDrop = [];
-      assetsModel.setAssetsAt(index, assets);
-    }
+    final assets =
+        assetsModel.listAssets(forYear: year, forMonth: month, toDrop: true);
+    final removedAssetIds = await assetsService
+        .deleteAssetsPerId(assets.map((e) => e.assetId).toList());
+    final ids = assets
+        .where((e) => removedAssetIds.contains(e.assetId))
+        .map((e) => e.id)
+        .toList();
+    await assetsModel.removeAssetsFromList(ids: ids);
+    await assetsModel.fetchAssets();
   }
 }

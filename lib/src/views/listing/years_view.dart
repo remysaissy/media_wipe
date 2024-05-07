@@ -1,9 +1,9 @@
+import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/views/listing/year.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/assets/refresh_photos_command.dart';
-import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/utils.dart';
 
 class YearsView extends StatefulWidget {
@@ -33,12 +33,11 @@ class YearsViewState extends State<YearsView> {
 
   @override
   Widget build(BuildContext context) {
-    final assets =
-        context.select<AssetsModel, List<AssetsData>>((value) => value.assets);
+    final years = context.read<AssetsModel>().listYears(isAsc: _isSortAsc);
     context.watch<AssetsModel>();
-    Widget child = assets.isEmpty
+    Widget child = years.isEmpty
         ? Utils.buildLoading(context)
-        : _buildContent(context, assets);
+        : _buildContent(context, years);
     return Scaffold(
         appBar: AppBar(
           title: const Text('MediaWipe'),
@@ -64,23 +63,13 @@ class YearsViewState extends State<YearsView> {
         body: SafeArea(child: child));
   }
 
-  Widget _buildContent(BuildContext context, List<AssetsData> assets) {
-    // Keep years order consistent.
-    var yearKeys =
-        assets.map((e) => e.year).toSet().toList();
-    yearKeys.sort((a, b) {
-      if (_isSortAsc) {
-        return a.compareTo(b);
-      } else {
-        return b.compareTo(a);
-      }
-    });
+  Widget _buildContent(BuildContext context, List<int> years) {
     return RefreshIndicator.adaptive(
         onRefresh: _pullRefresh,
         child: ListView.builder(
-            itemCount: yearKeys.length,
+            itemCount: years.length,
             itemBuilder: (BuildContext context, int index) {
-              final year = yearKeys[index];
+              final year = years[index];
               return Year(year: year.toString());
             }));
   }

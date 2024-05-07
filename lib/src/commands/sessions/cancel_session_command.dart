@@ -4,12 +4,10 @@ class CancelSessionCommand extends AbstractCommand {
   CancelSessionCommand(super.context);
 
   Future<void> run({required int year, required int month}) async {
-    final index = assetsModel.assets
-        .indexWhere((e) => e.year == year && e.month == month);
-    if (index >= 0) {
-      var assets = assetsModel.assets[index];
-      assets.assetIdsToDrop = [];
-      assetsModel.setAssetsAt(index, assets);
+    final assets = assetsModel.listAssets(forYear: year, forMonth: month);
+    for (var e in assets) {
+      e.toDrop = false;
     }
+    await assetsModel.updateAssets(assets: assets);
   }
 }

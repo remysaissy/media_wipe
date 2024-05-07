@@ -1,13 +1,13 @@
+import 'package:app/src/models/asset.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:app/src/components/my_viewer_metadata.dart';
-import 'package:app/src/models/assets_model.dart';
 
 class MyViewerControls extends StatelessWidget {
   final AsyncCallback? onKeepPressed;
   final AsyncCallback? onDropPressed;
-  final AssetData assetData;
+  final Asset assetData;
   final AssetEntity assetEntity;
 
   const MyViewerControls(

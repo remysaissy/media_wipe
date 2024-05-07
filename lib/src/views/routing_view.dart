@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/views/loading_view.dart';
 
 class RoutingView extends StatelessWidget {
@@ -26,7 +26,7 @@ class RoutingView extends StatelessWidget {
     //   if (!hasSubscription) {
     //     _go(context, '/subscriptions');
     //   } else {
-    final canAccessPhotoLibrary = context.select<SettingsModel, bool>(
+    final canAccessPhotoLibrary = context.select<Settings42Model, bool>(
         (value) => value.canAccessPhotoLibrary);
     if (!canAccessPhotoLibrary) {
       _go(context, '/authorize');

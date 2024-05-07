@@ -1,106 +1,73 @@
-import 'dart:convert';
-
+import 'package:app/src/models/asset.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:objectbox/objectbox.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:app/src/models/abstract_model.dart';
-import 'package:app/src/utils.dart';
 
-@Entity()
-class AssetData {
-  final String assetId;
-  final DateTime creationDate;
+class AssetsModel extends ChangeNotifier {
 
-  AssetData({required this.assetId, required this.creationDate});
+  final Box<Asset> _assetsBox;
 
-  AssetData.fromJson(Map<String, dynamic> json)
-      : assetId = json['id'] as String,
-        creationDate =
-        DateTime.fromMillisecondsSinceEpoch(json['creationDate']);
+  AssetsModel(this._assetsBox);
 
-  Map<String, dynamic> toJson() =>
-      {'id': assetId, 'creationDate': creationDate.millisecondsSinceEpoch};
+  List<Asset> _assets = [];
 
-  Future<AssetEntity?> loadEntity() async {
-    return await AssetEntity.fromId(assetId);
-  }
-}
-
-class AssetsData {
-  final int year;
-  final int month;
-  List<AssetData> assets;
-  List<String> assetIdsToDrop;
-
-  AssetsData(
-      {required this.year,
-      required this.month,
-      required this.assets,
-      required this.assetIdsToDrop});
-
-  AssetsData.fromJson(Map<String, dynamic> json)
-      : year = int.parse(json['year']),
-        month = int.parse(json['month']),
-        assets = jsonDecode(json['assets']),
-        assetIdsToDrop = jsonDecode(json['assetIdsToDrop']);
-
-  Map<String, dynamic> toJson() => {
-        'year': year,
-        'month': month,
-        'assets': jsonEncode(assets),
-        'assetIdsToDrop': jsonEncode(assetIdsToDrop)
-      };
-}
-
-class AssetsModel extends AbstractModel {
-  AssetsModel() {
-    enableSerialization('assets.dat');
-  }
-
-  List<AssetsData> _assets = [];
-
-  List<AssetsData> get assets => _assets;
-
-  set assets(List<AssetsData> assets) {
-    _assets = assets;
-    _updatedAt = DateTime.now();
-    scheduleSave();
-    notifyListeners();
-  }
-
-  void setAssetsAt(int index, AssetsData assets) {
-    _assets[index] = assets;
-    _updatedAt = DateTime.now();
-    scheduleSave();
-    notifyListeners();
-  }
-
-  DateTime _updatedAt = DateTime.fromMillisecondsSinceEpoch(0);
-
-  DateTime get updatedAt => _updatedAt;
-
-  @override
-  void reset([bool notify = true]) {
-    Utils.logger.i("[AssetsModel] Reset");
-    copyFromJson({});
-    super.reset(notify);
-  }
-
-  /////////////////////////////////////////////////////////////////////
-  // Define serialization methods
-
-  //Json Serialization
-  @override
-  AssetsModel copyFromJson(Map<String, dynamic> json) {
-    _assets = json.containsKey('_assets') ? jsonDecode(json['_assets']) : [];
-    _updatedAt = json.containsKey('_updatedAt')
-        ? DateTime.fromMillisecondsSinceEpoch(json['_updatedAt'])
-        : DateTime.fromMillisecondsSinceEpoch(0);
+  /// Use for initial loading.
+  Future<dynamic> load() async {
+    await fetchAssets();
     return this;
   }
 
-  @override
-  Map<String, dynamic> toJson() => {
-        '_assets': jsonEncode(_assets),
-        '_updatedAt': _updatedAt.millisecondsSinceEpoch,
-      };
+  /// Pivotal method to fetch the up to date list of assets from storage.
+  Future<void> fetchAssets() async {
+    _assets = _assetsBox.getAll();
+    notifyListeners();
+  }
+
+  Asset? getAsset({int? id, String? assetId, bool? toDrop}) {
+    return _assets.where((e) => (id == null || e.id == id)
+        && (assetId == null || e.assetId == assetId)
+        && (toDrop == null || e.toDrop == toDrop)).firstOrNull;
+  }
+
+  List<int> listYears({bool isAsc = false}) {
+    var years = _assets.map((e) => e.creationDate.year).toSet().toList();
+    years.sort((a, b) => isAsc ? a.compareTo(b) : b.compareTo(a));
+    return years;
+  }
+
+  List<int> listAssetsMonths({required int forYear, bool isAsc = false}) {
+    var months = listAssets(forYear: forYear).map((e) => e.creationDate.month).toSet().toList();
+    months.sort((a, b) => isAsc ? a.compareTo(b) : b.compareTo(a));
+    return months;
+  }
+
+  List<Asset> listAssets({int? forYear, int? butYear, int? forMonth, bool? toDrop}) {
+    return _assets.where((e) => (forYear == null || e.creationDate.year == forYear)
+        && (forMonth == null || e.creationDate.month == forMonth)
+        && (toDrop == null || e.toDrop == toDrop)).toList();
+  }
+
+  Future<void> updateAssets({required List<Asset> assets}) async {
+    await _assetsBox.putManyAsync(assets, mode: PutMode.update);
+    await fetchAssets();
+  }
+
+  Future<void> removeAssets({int? forYear, int? forMonth, bool? toDrop}) async {
+    final ids = _assets.where((e) => (forYear == null || e.creationDate.year == forYear)
+        && (forMonth == null || e.creationDate.month == forMonth)
+    && (toDrop == null || e.toDrop == toDrop)).map((e) => e.id).toList();
+    await _assetsBox.removeManyAsync(ids);
+    await fetchAssets();
+  }
+
+  Future<void> removeAssetsFromList({required List<int> ids}) async {
+    await _assetsBox.removeManyAsync(ids);
+    await fetchAssets();
+  }
+
+  Future<List<int>> addAssets({required List<Asset> assets}) async {
+    final ids = await _assetsBox.putManyAsync(assets, mode: PutMode.insert);
+    await fetchAssets();
+    return ids;
+  }
 }

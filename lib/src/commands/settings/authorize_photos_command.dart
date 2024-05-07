@@ -9,7 +9,7 @@ class AuthorizePhotosCommand extends AbstractCommand {
       await permissionsService.authorizePhotos();
     }
     final isGranted = await permissionsService.isPhotosAuthorized();
-    settingsModel.canAccessPhotoLibrary = isGranted;
+    settings42Model.canAccessPhotoLibrary = isGranted;
     return isGranted;
   }
 }

@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:app/src/views/authorize_view.dart';
 import 'package:app/src/views/listing/months_view.dart';
-import 'package:app/src/views/sort_photos_view.dart';
-import 'package:app/src/views/sort_photos_summary_view.dart';
+import 'package:app/src/views/sorting/sort_photos_view.dart';
+import 'package:app/src/views/sorting/sort_photos_summary_view.dart';
 import 'package:app/src/views/listing/years_view.dart';
 import 'package:app/src/views/onboarding_view.dart';
 import 'package:app/src/views/routing_view.dart';

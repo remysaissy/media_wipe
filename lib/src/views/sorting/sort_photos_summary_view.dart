@@ -44,13 +44,10 @@ class _SortPhotosSummaryState extends State<SortPhotosSummaryView> {
 
   @override
   Widget build(BuildContext context) {
-    var assets = context
-        .read<AssetsModel>()
-        .assets
-        .where((e) => e.year == widget.year && e.month == widget.month)
-        .firstOrNull;
+    final assets = context
+        .read<AssetsModel>().listAssets(forYear: widget.year, forMonth: widget.month, toDrop: true);
     context.watch<AssetsModel>();
-    if (assets == null || assets.assetIdsToDrop.isEmpty) {
+    if (assets.isEmpty) {
       return _buildNothingToValidate(context);
     } else {
       return Scaffold(
@@ -74,21 +71,17 @@ class _SortPhotosSummaryState extends State<SortPhotosSummaryView> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                   ),
-                  itemCount: assets.assetIdsToDrop.length,
+                  itemCount: assets.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final currentAssetId = assets.assetIdsToDrop[index];
-                    final currentAsset = assets.assets
-                        .where((element) => element.assetId == currentAssetId)
-                        .first;
-
+                    final asset = assets[index];
                     return GestureDetector(
                       onTap: () async {
                         await KeepAssetInSessionCommand(context)
-                            .run(assetData: currentAsset);
+                            .run(id: asset.id);
                       },
                       child: Center(
                           child: Utils.futureBuilder(
-                              future: currentAsset.loadEntity(),
+                              future: asset.loadEntity(),
                               onReady: (data) {
                                 final assetEntity = data as AssetEntity;
                                 return MyPhotoViewerCard(

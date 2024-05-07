@@ -1,5 +1,5 @@
 import 'package:app/src/commands/settings/authorize_photos_command.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class AuthorizePhotos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool canAccessPhotoLibrary = context
-        .select<SettingsModel, bool>((value) => value.canAccessPhotoLibrary);
+        .select<Settings42Model, bool>((value) => value.canAccessPhotoLibrary);
     return ListTile(
         onTap: canAccessPhotoLibrary
             ? null

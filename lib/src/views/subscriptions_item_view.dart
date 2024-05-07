@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app/src/models/app_model.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 
 class SubscriptionItemView extends StatelessWidget {
   final SubscriptionData item;

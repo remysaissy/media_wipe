@@ -7,7 +7,8 @@ class UpdateThemeCommand extends AbstractCommand {
   UpdateThemeCommand(super.context);
 
   Future<void> run({required ThemeMode newThemeMode}) async {
-    settingsModel.themeMode = newThemeMode;
+    settingsModel.settings.themeMode = newThemeMode;
+    await settingsModel.updateSettings();
   }
 
 }

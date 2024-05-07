@@ -1,4 +1,4 @@
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,12 +10,12 @@ class Purchase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       bool hasSubscription =
-      context.select<SettingsModel, bool>((value) => value.hasSubscription);
+      context.select<Settings42Model, bool>((value) => value.hasSubscription);
       SubscriptionData? subscription =
-      context.select<SettingsModel, SubscriptionData?>(
+      context.select<Settings42Model, SubscriptionData?>(
               (value) => value.currentSubscription);
       DateTime subscribedAt =
-      context.select<SettingsModel, DateTime>((value) => value.subscribedAt);
+      context.select<Settings42Model, DateTime>((value) => value.subscribedAt);
       return ListTile(
           onTap: hasSubscription
               ? null

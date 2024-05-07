@@ -1,11 +1,11 @@
+import 'package:app/src/models/asset.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:app/src/components/my_rounded_box.dart';
-import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/utils.dart';
 
 class MyViewerMetadata extends StatelessWidget {
-  final AssetData assetData;
+  final Asset assetData;
   final AssetEntity assetEntity;
 
   const MyViewerMetadata(

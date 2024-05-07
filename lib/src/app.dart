@@ -1,3 +1,4 @@
+import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/bootstrap_command.dart';
 import 'package:app/src/models/app_model.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/router.dart';
 import 'package:app/src/theme.dart';
 import 'package:app/src/views/loading_view.dart';
@@ -37,8 +38,7 @@ class _MyAppState extends State<MyApp> {
     bool appReady = context.select<AppModel, bool>((value) => value.appReady);
     if (!appReady) return const Directionality(textDirection: TextDirection.ltr, child: LoadingView());
 
-    ThemeMode themeMode =
-        context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
+    ThemeMode themeMode = context.watch<SettingsModel>().settings.themeMode;
     bool touchMode = context.select((AppModel m) => m.touchMode);
     double densityAmt = touchMode ? 0.0 : -1.0;
     VisualDensity density =

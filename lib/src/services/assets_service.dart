@@ -1,25 +1,27 @@
 import 'dart:async';
+import 'package:app/src/models/asset.dart';
 import 'package:photo_manager/photo_manager.dart' as pm;
-import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/utils.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class AssetsService {
   final int _refreshBatchSize = 1000;
   final _types =
       pm.RequestType.fromTypes([pm.RequestType.image, pm.RequestType.video]);
 
-  Future<void> deleteAssetsPerId(List<String> assetIds) async {
+  Future<List<String>> deleteAssetsPerId(List<String> assetIds) async {
     if (assetIds.isNotEmpty) {
       Utils.logger.i('Drop all IDs: ${assetIds}');
       // await PhotoManager.editor.deleteWithIds(sessionData.assetIdsToDrop);
     }
+    return assetIds;
   }
 
-  Future<int> getMediaCount() async {
+  Future<int> getAssetsCount() async {
     return await pm.PhotoManager.getAssetCount(type: _types);
   }
 
-  Future<int> getMediaCountPerYear({required int year}) async {
+  Future<int> getAssetsCountPerYear({required int year}) async {
     var filter = pm.AdvancedCustomFilter()
       ..addWhereCondition(
           pm.DateColumnWhereCondition(
@@ -36,11 +38,12 @@ class AssetsService {
           ),
           type: pm.LogicalType.and)
       ..addOrderBy(column: pm.CustomColumns.base.createDate, isAsc: false);
-    return await pm.PhotoManager.getAssetCount(type: _types, filterOption: filter);
+    return await pm.PhotoManager.getAssetCount(
+        type: _types, filterOption: filter);
   }
 
-  Future<List<AssetsData>> listMedia({required int year}) async {
-    List<AssetsData> assets = [];
+  Future<List<Asset>> listAssets({required int year}) async {
+    List<Asset> assets = [];
     var filter = pm.AdvancedCustomFilter()
       ..addWhereCondition(
           pm.DateColumnWhereCondition(
@@ -66,19 +69,9 @@ class AssetsService {
           type: _types,
           filterOption: filter);
       for (pm.AssetEntity assetEntity in assetsEntities) {
-        final asset = AssetData(
+        final asset = Asset(
             assetId: assetEntity.id, creationDate: assetEntity.createDateTime);
-        final year = asset.creationDate.year;
-        final month = asset.creationDate.month;
-        var entry = assets
-            .where((element) => element.year == year && element.month == month)
-            .firstOrNull;
-        if (entry == null) {
-          entry = AssetsData(year: year, month: month, assets: [asset], assetIdsToDrop: []);
-          assets.add(entry);
-        } else {
-          entry.assets.add(asset);
-        }
+        assets.add(asset);
       }
     }
     return assets;

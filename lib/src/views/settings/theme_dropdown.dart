@@ -1,15 +1,14 @@
+import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/settings/update_theme_command.dart';
-import 'package:app/src/models/settings_model.dart';
 
 class ThemeDropDown extends StatelessWidget {
   const ThemeDropDown({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ThemeMode themeMode =
-        context.select<SettingsModel, ThemeMode>((value) => value.themeMode);
+    ThemeMode themeMode = context.watch<SettingsModel>().settings.themeMode;
     return ListTile(
       leading: const Icon(Icons.map),
       title: const Text('Theme'),

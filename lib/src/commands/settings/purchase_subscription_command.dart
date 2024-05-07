@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:app/src/commands/abstract_command.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/src/models/settings42_model.dart';
 
 class PurchaseSubscriptionCommand extends AbstractCommand {
 
@@ -10,8 +10,8 @@ class PurchaseSubscriptionCommand extends AbstractCommand {
   Future<bool> run({required String productId}) async {
     final success = await subscriptionsService.purchase(productId: productId);
     if (success) {
-      settingsModel.productId = productId;
-      settingsModel.subscribedAt = DateTime.now();
+      settings42Model.productId = productId;
+      settings42Model.subscribedAt = DateTime.now();
     }
     return success;
   }
