@@ -13,13 +13,9 @@ class Asset {
   @Property(type: PropertyType.date)
   DateTime creationDate;
 
-  @Transient()
-  AssetEntity? entity;
-
   Asset({this.id = 0, required this.assetId, required this.creationDate, this.toDrop = false});
 
   Future<AssetEntity?> loadEntity() async {
-    entity = await AssetEntity.fromId(assetId);
-    return entity;
+    return await AssetEntity.fromId(assetId);
   }
 }

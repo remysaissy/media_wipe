@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:app/src/models/asset.dart';
 import 'package:photo_manager/photo_manager.dart' as pm;
 import 'package:app/src/utils.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class AssetsService {
   final int _refreshBatchSize = 1000;

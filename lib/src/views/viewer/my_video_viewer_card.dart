@@ -1,3 +1,4 @@
+import 'package:app/src/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
@@ -13,8 +14,8 @@ class MyVideoViewerCard extends StatefulWidget {
 }
 
 class _MyVideoViewerState extends State<MyVideoViewerCard> {
-  late VideoPlayerController _controller;
-  late ChewieController _chewieController;
+  VideoPlayerController? _controller;
+  ChewieController? _chewieController;
 
   @override
   void initState() {
@@ -22,7 +23,7 @@ class _MyVideoViewerState extends State<MyVideoViewerCard> {
           _controller = VideoPlayerController.networkUrl(Uri.parse(value!))
             ..initialize().then((_) {
               _chewieController = ChewieController(
-                videoPlayerController: _controller,
+                videoPlayerController: _controller!,
               );
               setState(() {});
             })
@@ -33,19 +34,21 @@ class _MyVideoViewerState extends State<MyVideoViewerCard> {
 
   @override
   void dispose() {
-    _controller.dispose();
-    _chewieController.dispose();
+    _controller?.dispose();
+    _chewieController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: _controller.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                // child: VideoPlayer(_controller))
-                child: Chewie(controller: _chewieController))
-            : Container());
+    if (_controller != null && _chewieController != null) {
+      return Center(
+          child: _controller!.value.isInitialized
+              ? AspectRatio(
+                  aspectRatio: _controller!.value.aspectRatio,
+                  child: Chewie(controller: _chewieController!))
+              : Container());
+    }
+    return Utils.buildLoading(context);
   }
 }

@@ -42,15 +42,15 @@ GoRouter setupRoutes() {
         ),
       ),
       GoRoute(
-        path: '/photos/:year/:month/sort',
+        path: '/sort/:year/:month/:mode',
         name: 'sortPhotos',
         builder: (context, state) => SortPhotosView(
           year: int.parse(state.pathParameters['year']!),
           month: int.parse(state.pathParameters['month']!),
-        ),
+          mode: state.pathParameters['mode']!)
       ),
       GoRoute(
-        path: '/photos/:year/:month/summary',
+        path: '/summary/:year/:month',
         name: 'sortPhotosSummary',
         builder: (context, state) => SortPhotosSummaryView(
           year: int.parse(state.pathParameters['year']!),

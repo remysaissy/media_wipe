@@ -15,6 +15,7 @@ class YearsView extends StatefulWidget {
 
 class YearsViewState extends State<YearsView> {
   late bool _isSortAsc;
+  late List<int> _years;
 
   Future<void> _initState() async {
     await RefreshPhotosCommand(context).run();
@@ -23,7 +24,10 @@ class YearsViewState extends State<YearsView> {
   @override
   void initState() {
     _isSortAsc = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
+    _years = context.read<AssetsModel>().listYears(isAsc: _isSortAsc);
+    if (_years.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
+    }
     super.initState();
   }
 
@@ -31,31 +35,33 @@ class YearsViewState extends State<YearsView> {
     await RefreshPhotosCommand(context).run();
   }
 
+  void _onToggleSort() {
+    setState(() {
+      _isSortAsc = !_isSortAsc;
+      _years = context.read<AssetsModel>().listYears(isAsc: _isSortAsc);
+    });
+  }
+
+  void _onSettings() {
+    if (!mounted) return;
+    context.push("/settings");
+  }
+
   @override
   Widget build(BuildContext context) {
-    final years = context.read<AssetsModel>().listYears(isAsc: _isSortAsc);
-    context.watch<AssetsModel>();
-    Widget child = years.isEmpty
-        ? Utils.buildLoading(context)
-        : _buildContent(context, years);
+    Widget child =
+        _years.isEmpty ? Utils.buildLoading(context) : _buildContent(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text('MediaWipe'),
           actions: [
             IconButton(
-              onPressed: () async {
-                setState(() {
-                  _isSortAsc = !_isSortAsc;
-                });
-              },
+              onPressed: _onToggleSort,
               icon: Transform.flip(
                   flipY: _isSortAsc, child: const Icon(Icons.filter_list)),
             ),
             IconButton(
-              onPressed: () {
-                if (!context.mounted) return;
-                context.push("/settings");
-              },
+              onPressed: _onSettings,
               icon: const Icon(Icons.settings),
             )
           ],
@@ -63,13 +69,13 @@ class YearsViewState extends State<YearsView> {
         body: SafeArea(child: child));
   }
 
-  Widget _buildContent(BuildContext context, List<int> years) {
+  Widget _buildContent(BuildContext context) {
     return RefreshIndicator.adaptive(
         onRefresh: _pullRefresh,
         child: ListView.builder(
-            itemCount: years.length,
+            itemCount: _years.length,
             itemBuilder: (BuildContext context, int index) {
-              final year = years[index];
+              final year = _years[index];
               return Year(year: year.toString());
             }));
   }

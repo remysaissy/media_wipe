@@ -1,20 +1,22 @@
 import 'package:app/src/models/asset.dart';
 import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/views/viewer/my_viewer.dart';
+import 'package:app/src/views/sorting/sort_photos_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:app/src/views/sorting/my_viewer.dart';
-import 'package:app/src/views/sorting/my_viewer_controls.dart';
 import 'package:app/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {
   final int year;
   final int month;
+  final String mode;
 
-  const SortPhotosView({super.key, required this.year, required this.month});
+  const SortPhotosView(
+      {super.key, required this.year, required this.month, required this.mode});
 
   @override
   State<StatefulWidget> createState() => _SortPhotosViewState();
@@ -30,24 +32,18 @@ class _SortPhotosViewState extends State<SortPhotosView> {
 
   bool get _isLast => (_currentSelectionIndex + 1 == _assets.length);
 
-  Future<void> _initState() async {
-    _currentSelectionIndex = 0;
-  }
-
   @override
   void initState() {
+    _assets = context.read<AssetsModel>().listAssets(
+        forYear: widget.year,
+        forMonth: widget.month,
+        toDrop: widget.mode == 'refine');
     _currentSelectionIndex = 0;
-    _assets = [];
-    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _assets = context
-        .read<AssetsModel>()
-        .listAssets(forYear: widget.year, forMonth: widget.month);
-    context.watch<AssetsModel>();
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -60,7 +56,10 @@ class _SortPhotosViewState extends State<SortPhotosView> {
             ),
           ],
         ),
-        body: SafeArea(child: _buildContent()));
+        body: SafeArea(
+            child: _assets.isNotEmpty
+                ? _buildContent()
+                : Utils.buildLoading(context)));
   }
 
   Widget _buildContent() {
@@ -71,7 +70,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
           return SingleChildScrollView(
               child: Column(children: [
             MyViewer(assetEntity: assetEntity),
-            MyViewerControls(
+            SortPhotosControls(
                 assetData: _assetData,
                 assetEntity: assetEntity,
                 onDropPressed: _onDropPressed,
@@ -88,12 +87,11 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   Future<void> _onKeepPressed() async {
     await KeepAssetInSessionCommand(context).run(id: _assetData.id);
     if (_isLast) {
-      if (context.mounted) {
-        context.goNamed('sortPhotosSummary', pathParameters: {
-          'year': widget.year.toString(),
-          'month': widget.month.toString()
-        });
-      }
+      if (!mounted) return;
+      context.goNamed('sortPhotosSummary', pathParameters: {
+        'year': widget.year.toString(),
+        'month': widget.month.toString()
+      });
     } else {
       setState(() => _currentSelectionIndex++);
     }
@@ -102,12 +100,11 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   Future<void> _onDropPressed() async {
     await DropAssetInSessionCommand(context).run(id: _assetData.id);
     if (_isLast) {
-      if (context.mounted) {
-        context.goNamed('sortPhotosSummary', pathParameters: {
-          'year': widget.year.toString(),
-          'month': widget.month.toString()
-        });
-      }
+      if (!mounted) return;
+      context.goNamed('sortPhotosSummary', pathParameters: {
+        'year': widget.year.toString(),
+        'month': widget.month.toString()
+      });
     } else {
       setState(() => _currentSelectionIndex++);
     }

@@ -1,16 +1,12 @@
+import 'package:app/src/views/sorting/delete_button.dart';
+import 'package:app/src/views/sorting/refine_button.dart';
+import 'package:app/src/views/sorting/summary_empty.dart';
+import 'package:app/src/views/sorting/summary_item.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:app/src/commands/assets/refresh_photos_command.dart';
-import 'package:app/src/commands/sessions/cancel_session_command.dart';
-import 'package:app/src/commands/sessions/finish_session_command.dart';
-import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:app/src/components/my_photo_viewer_card.dart';
 import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/utils.dart';
 
-class SortPhotosSummaryView extends StatefulWidget {
+class SortPhotosSummaryView extends StatelessWidget {
   final int year;
   final int month;
 
@@ -18,52 +14,20 @@ class SortPhotosSummaryView extends StatefulWidget {
       {super.key, required this.year, required this.month});
 
   @override
-  State<StatefulWidget> createState() => _SortPhotosSummaryState();
-}
-
-class _SortPhotosSummaryState extends State<SortPhotosSummaryView> {
-  Widget _buildNothingToValidate(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-          const Center(child: Text('Nothing to delete!')),
-          Center(
-              child: TextButton(
-                  onPressed: () async {
-                    await CancelSessionCommand(context)
-                        .run(year: widget.year, month: widget.month);
-                    if (!context.mounted) return;
-                    context.go('/');
-                  },
-                  child: const Text('Go to main screen')))
-        ])));
-  }
-
-  @override
   Widget build(BuildContext context) {
     final assets = context
-        .read<AssetsModel>().listAssets(forYear: widget.year, forMonth: widget.month, toDrop: true);
-    context.watch<AssetsModel>();
+        .watch<AssetsModel>()
+        .listAssets(forYear: year, forMonth: month, toDrop: true);
     if (assets.isEmpty) {
-      return _buildNothingToValidate(context);
+      return SummaryEmpty(year: year, month: month);
     } else {
       return Scaffold(
           appBar: AppBar(
             leading: null,
-            title: const Text('Review of photos to delete'),
+            title: Text('${assets.length} photos to delete'),
             actions: [
-              IconButton(
-                  onPressed: () async {
-                    if (!context.mounted) return;
-                    await FinishSessionCommand(context)
-                        .run(year: widget.year, month: widget.month);
-                    await RefreshPhotosCommand(context).run(year: widget.year);
-                    context.go('/');
-                  },
-                  icon: const Icon(Icons.check)),
+              RefineButton(year: year, month: month),
+              DeleteButton(year: year, month: month)
             ],
           ),
           body: SafeArea(
@@ -72,23 +36,8 @@ class _SortPhotosSummaryState extends State<SortPhotosSummaryView> {
                     crossAxisCount: 2,
                   ),
                   itemCount: assets.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final asset = assets[index];
-                    return GestureDetector(
-                      onTap: () async {
-                        await KeepAssetInSessionCommand(context)
-                            .run(id: asset.id);
-                      },
-                      child: Center(
-                          child: Utils.futureBuilder(
-                              future: asset.loadEntity(),
-                              onReady: (data) {
-                                final assetEntity = data as AssetEntity;
-                                return MyPhotoViewerCard(
-                                    assetEntity: assetEntity);
-                              })),
-                    );
-                  })));
+                  itemBuilder: (BuildContext context, int index) =>
+                      SummaryItem(asset: assets[index]))));
     }
   }
 }

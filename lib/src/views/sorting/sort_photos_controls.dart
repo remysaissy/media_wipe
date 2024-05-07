@@ -1,16 +1,16 @@
 import 'package:app/src/models/asset.dart';
-import 'package:app/src/views/sorting/my_viewer_metadata.dart';
+import 'package:app/src/views/viewer/my_viewer_metadata.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class MyViewerControls extends StatelessWidget {
+class SortPhotosControls extends StatelessWidget {
   final AsyncCallback? onKeepPressed;
   final AsyncCallback? onDropPressed;
   final Asset assetData;
   final AssetEntity assetEntity;
 
-  const MyViewerControls(
+  const SortPhotosControls(
       {super.key,
       this.onKeepPressed,
       this.onDropPressed,
