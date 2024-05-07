@@ -1,8 +1,8 @@
 import 'package:app/src/models/asset.dart';
+import 'package:app/src/views/sorting/my_viewer_metadata.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:app/src/components/my_viewer_metadata.dart';
 
 class MyViewerControls extends StatelessWidget {
   final AsyncCallback? onKeepPressed;

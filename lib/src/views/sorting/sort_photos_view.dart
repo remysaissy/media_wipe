@@ -6,8 +6,8 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
-import 'package:app/src/components/my_viewer.dart';
-import 'package:app/src/components/my_viewer_controls.dart';
+import 'package:app/src/views/sorting/my_viewer.dart';
+import 'package:app/src/views/sorting/my_viewer_controls.dart';
 import 'package:app/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {

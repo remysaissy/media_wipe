@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:app/src/components/my_photo_viewer_card.dart';
-import 'package:app/src/components/my_video_viewer_card.dart';
+import 'package:app/src/views/sorting/my_video_viewer_card.dart';
 import 'package:app/src/models/assets_model.dart';
 
 class MyViewer extends StatelessWidget {
