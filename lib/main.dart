@@ -12,7 +12,7 @@ import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/services/app_service.dart';
 import 'package:app/src/services/assets_service.dart';
 import 'package:app/src/services/in_app_review_service.dart';
-import 'package:app/src/services/permissions_service.dart';
+import 'package:app/src/services/settings_service.dart';
 import 'package:app/src/services/subscriptions_service.dart';
 
 void main() async {
@@ -37,7 +37,7 @@ void main() async {
         /// SERVICES
         Provider(create: (_) => AppService()),
         Provider(create: (_) => InAppReviewsService()),
-        Provider(create: (_) => PermissionsService()),
+        Provider(create: (_) => SettingsService()),
         Provider(create: (_) => SubscriptionsService()),
         Provider(create: (_) => AssetsService()),
 

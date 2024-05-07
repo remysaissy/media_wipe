@@ -1,15 +1,14 @@
 import 'package:app/src/commands/abstract_command.dart';
-import 'package:app/src/utils.dart';
 
 class AuthorizePhotosCommand extends AbstractCommand {
   AuthorizePhotosCommand(super.context);
 
-  Future<bool> run() async {
-    if (await permissionsService.isPhotosAuthorized() == false) {
-      await permissionsService.authorizePhotos();
+  Future<void> run() async {
+    if (await settingsService.isPhotosAuthorized() == false) {
+      await settingsService.authorizePhotos();
     }
-    final isGranted = await permissionsService.isPhotosAuthorized();
-    settings42Model.canAccessPhotoLibrary = isGranted;
-    return isGranted;
+    final isGranted = await settingsService.isPhotosAuthorized();
+    settingsModel.settings.hasPhotosAccess = isGranted;
+    await settingsModel.updateSettings();
   }
 }

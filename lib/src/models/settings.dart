@@ -19,5 +19,7 @@ class Settings {
     themeMode = mode;
   }
 
-  Settings({this.id = 0, this.themeMode = ThemeMode.system});
+  bool hasPhotosAccess;
+
+  Settings({this.id = 0, this.themeMode = ThemeMode.system, this.hasPhotosAccess = false});
 }

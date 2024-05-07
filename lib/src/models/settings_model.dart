@@ -30,7 +30,7 @@ class SettingsModel extends ChangeNotifier {
   Settings get settings => _settings!;
 
   Future<void> updateSettings() async {
-    await _settingsBox.putAsync(_settings!, mode: PutMode.update);
+    await _settingsBox.putAsync(settings, mode: PutMode.update);
     await fetchSettings();
   }
 }

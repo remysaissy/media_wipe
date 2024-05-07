@@ -8,7 +8,7 @@ import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/services/app_service.dart';
 import 'package:app/src/services/assets_service.dart';
 import 'package:app/src/services/in_app_review_service.dart';
-import 'package:app/src/services/permissions_service.dart';
+import 'package:app/src/services/settings_service.dart';
 import 'package:app/src/services/subscriptions_service.dart';
 
 abstract class AbstractCommand {
@@ -42,7 +42,7 @@ abstract class AbstractCommand {
 
   InAppReviewsService get inAppReviewsService => getProvided();
 
-  PermissionsService get permissionsService => getProvided();
+  SettingsService get settingsService => getProvided();
 
   SubscriptionsService get subscriptionsService => getProvided();
 

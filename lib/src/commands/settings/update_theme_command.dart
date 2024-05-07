@@ -10,5 +10,4 @@ class UpdateThemeCommand extends AbstractCommand {
     settingsModel.settings.themeMode = newThemeMode;
     await settingsModel.updateSettings();
   }
-
 }

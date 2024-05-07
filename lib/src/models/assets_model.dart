@@ -48,26 +48,34 @@ class AssetsModel extends ChangeNotifier {
   }
 
   Future<void> updateAssets({required List<Asset> assets}) async {
-    await _assetsBox.putManyAsync(assets, mode: PutMode.update);
-    await fetchAssets();
+    if (assets.isNotEmpty) {
+      await _assetsBox.putManyAsync(assets, mode: PutMode.update);
+      await fetchAssets();
+    }
   }
 
   Future<void> removeAssets({int? forYear, int? forMonth, bool? toDrop}) async {
     final ids = _assets.where((e) => (forYear == null || e.creationDate.year == forYear)
         && (forMonth == null || e.creationDate.month == forMonth)
     && (toDrop == null || e.toDrop == toDrop)).map((e) => e.id).toList();
-    await _assetsBox.removeManyAsync(ids);
-    await fetchAssets();
+    if (ids.isNotEmpty) {
+      await _assetsBox.removeManyAsync(ids);
+      await fetchAssets();
+    }
   }
 
   Future<void> removeAssetsFromList({required List<int> ids}) async {
-    await _assetsBox.removeManyAsync(ids);
-    await fetchAssets();
+    if (ids.isNotEmpty) {
+      await _assetsBox.removeManyAsync(ids);
+      await fetchAssets();
+    }
   }
 
   Future<List<int>> addAssets({required List<Asset> assets}) async {
     final ids = await _assetsBox.putManyAsync(assets, mode: PutMode.insert);
-    await fetchAssets();
+    if (ids.isNotEmpty) {
+      await fetchAssets();
+    }
     return ids;
   }
 }

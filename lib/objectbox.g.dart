@@ -53,7 +53,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 950458572113288239),
       name: 'Settings',
-      lastPropertyId: const obx_int.IdUid(2, 5044854582469888709),
+      lastPropertyId: const obx_int.IdUid(3, 5218197412612136639),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -65,6 +65,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 5044854582469888709),
             name: 'dbThemeMode',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5218197412612136639),
+            name: 'hasPhotosAccess',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -172,9 +177,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Settings object, fb.Builder fbb) {
           final dbThemeModeOffset = fbb.writeString(object.dbThemeMode);
-          fbb.startTable(3);
+          fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, dbThemeModeOffset);
+          fbb.addBool(2, object.hasPhotosAccess);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -183,9 +189,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final object = Settings(id: idParam)
-            ..dbThemeMode = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 6, '');
+          final hasPhotosAccessParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
+          final object =
+              Settings(id: idParam, hasPhotosAccess: hasPhotosAccessParam)
+                ..dbThemeMode = const fb.StringReader(asciiOptimization: true)
+                    .vTableGet(buffer, rootOffset, 6, '');
 
           return object;
         })
@@ -221,4 +230,8 @@ class Settings_ {
   /// see [Settings.dbThemeMode]
   static final dbThemeMode =
       obx.QueryStringProperty<Settings>(_entities[1].properties[1]);
+
+  /// see [Settings.hasPhotosAccess]
+  static final hasPhotosAccess =
+      obx.QueryBooleanProperty<Settings>(_entities[1].properties[2]);
 }

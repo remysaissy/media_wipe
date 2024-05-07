@@ -7,8 +7,7 @@ class BootstrapCommand extends AbstractCommand {
 
   Future<void> run(BuildContext context) async {
     // This permission can change from one launch to another.
-    settings42Model.canAccessPhotoLibrary =
-        await permissionsService.isPhotosAuthorized();
+    settingsModel.settings.hasPhotosAccess = await settingsService.isPhotosAuthorized();
     appModel.canRequestInAppReview =
         await inAppReviewsService.isInAppReviewAvailable();
     appModel.onboardingPages = await appService.refreshOnboardingPages();
@@ -16,6 +15,7 @@ class BootstrapCommand extends AbstractCommand {
 
     // Once bootstrap is done.
     appModel.appReady = true;
+    await settingsModel.updateSettings();
     FlutterNativeSplash.remove();
   }
 }

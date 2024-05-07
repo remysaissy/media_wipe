@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/bootstrap_command.dart';
 import 'package:app/src/models/app_model.dart';
-import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/router.dart';
 import 'package:app/src/theme.dart';
 import 'package:app/src/views/loading_view.dart';
@@ -36,7 +35,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     bool appReady = context.select<AppModel, bool>((value) => value.appReady);
-    if (!appReady) return const Directionality(textDirection: TextDirection.ltr, child: LoadingView());
+    if (!appReady)
+      return const Directionality(
+          textDirection: TextDirection.ltr, child: LoadingView());
 
     ThemeMode themeMode = context.watch<SettingsModel>().settings.themeMode;
     bool touchMode = context.select((AppModel m) => m.touchMode);

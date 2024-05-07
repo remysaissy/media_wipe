@@ -34,7 +34,7 @@
     },
     {
       "id": "3:950458572113288239",
-      "lastPropertyId": "2:5044854582469888709",
+      "lastPropertyId": "3:5218197412612136639",
       "name": "Settings",
       "properties": [
         {
@@ -47,6 +47,11 @@
           "id": "2:5044854582469888709",
           "name": "dbThemeMode",
           "type": 9
+        },
+        {
+          "id": "3:5218197412612136639",
+          "name": "hasPhotosAccess",
+          "type": 1
         }
       ],
       "relations": []
