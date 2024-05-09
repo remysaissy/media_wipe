@@ -1,5 +1,7 @@
+import 'package:app/src/commands/sessions/start_session_command.dart';
 import 'package:app/src/models/asset.dart';
 import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/views/viewer/my_viewer.dart';
 import 'package:app/src/views/sorting/sort_photos_controls.dart';
 import 'package:flutter/material.dart';
@@ -32,18 +34,30 @@ class _SortPhotosViewState extends State<SortPhotosView> {
 
   bool get _isLast => (_currentSelectionIndex + 1 == _assets.length);
 
+  Future<void> _initState() async {
+    await StartSessionCommand(context)
+        .run(year: widget.year, month: widget.month);
+  }
+
   @override
   void initState() {
-    _assets = context.read<AssetsModel>().listAssets(
-        forYear: widget.year,
-        forMonth: widget.month,
-        toDrop: widget.mode == 'refine');
+    _assets = [];
     _currentSelectionIndex = 0;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final session = context
+        .watch<SessionsModel>()
+        .getSession(year: widget.year, month: widget.month);
+    final whiteList = (widget.mode == 'refine') ? session?.assetsToDrop : null;
+    _assets = context.watch<AssetsModel>().listAssets(
+        forYear: widget.year, forMonth: widget.month, withAllowList: whiteList);
+    _currentSelectionIndex = (session?.assetIdInReview != null)
+        ? _assets.indexWhere((e) => e.id == session?.assetIdInReview)
+        : 0;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -80,14 +94,22 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onUndo() async {
-    if (_isFirst) return;
-    setState(() => _currentSelectionIndex--);
+    await KeepAssetInSessionCommand(context).run(
+        year: widget.year,
+        month: widget.month,
+        assetId: _assetData.id,
+        nextAssetId: _isFirst ? _assetData.id : _assets[_currentSelectionIndex - 1].id);
+    setState(() => _isFirst ? _currentSelectionIndex = 0 : _currentSelectionIndex--);
   }
 
   Future<void> _onKeepPressed() async {
-    await KeepAssetInSessionCommand(context).run(id: _assetData.id);
+    if (!mounted) return;
+    await KeepAssetInSessionCommand(context).run(
+        year: widget.year,
+        month: widget.month,
+        assetId: _assetData.id,
+        nextAssetId: _isLast ? null : _assets[_currentSelectionIndex + 1].id);
     if (_isLast) {
-      if (!mounted) return;
       context.goNamed('sortPhotosSummary', pathParameters: {
         'year': widget.year.toString(),
         'month': widget.month.toString()
@@ -98,9 +120,13 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onDropPressed() async {
-    await DropAssetInSessionCommand(context).run(id: _assetData.id);
+    if (!mounted) return;
+    await DropAssetInSessionCommand(context).run(
+        year: widget.year,
+        month: widget.month,
+        assetId: _assetData.id,
+        nextAssetId: _isLast ? null : _assets[_currentSelectionIndex + 1].id);
     if (_isLast) {
-      if (!mounted) return;
       context.goNamed('sortPhotosSummary', pathParameters: {
         'year': widget.year.toString(),
         'month': widget.month.toString()

@@ -5,44 +5,41 @@ import 'package:provider/provider.dart';
 import 'package:app/src/commands/assets/refresh_photos_command.dart';
 import 'package:app/src/utils.dart';
 
-class MonthsView extends StatefulWidget {
+class MonthsView extends StatelessWidget {
   final int year;
 
   const MonthsView({super.key, required this.year});
 
-  @override
-  State<StatefulWidget> createState() => MonthsViewState();
-}
-
-class MonthsViewState extends State<MonthsView> {
-  Future<void> _pullRefresh() async {
+  Future<void> _pullRefresh(BuildContext context) async {
+    if (!context.mounted) return;
     await RefreshPhotosCommand(context).run();
   }
 
   @override
   Widget build(BuildContext context) {
-    final months =
-        context.read<AssetsModel>().listAssetsMonths(forYear: widget.year, isAsc: true);
-    context.watch<AssetsModel>();
+    final months = context
+        .watch<AssetsModel>()
+        .listAssetsMonths(forYear: year, isAsc: true);
     Widget child = months.isEmpty
         ? Utils.buildLoading(context)
         : _buildContent(context, months);
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.year.toString()),
+          title: Text(year.toString()),
         ),
         body: SafeArea(child: child));
   }
 
   Widget _buildContent(BuildContext context, List<int> months) {
     return RefreshIndicator.adaptive(
-        onRefresh: _pullRefresh,
+        onRefresh: () async {
+          await _pullRefresh(context);
+        },
         child: ListView.builder(
             itemCount: months.length,
             itemBuilder: (BuildContext context, int index) {
               final month = months[index];
-              return Month(
-                  year: widget.year.toString(), month: month.toString());
+              return Month(year: year.toString(), month: month.toString());
             }));
   }
 }

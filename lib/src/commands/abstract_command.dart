@@ -1,10 +1,8 @@
 import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app/src/models/app_model.dart';
-import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/models/settings42_model.dart';
 import 'package:app/src/services/app_service.dart';
 import 'package:app/src/services/assets_service.dart';
 import 'package:app/src/services/in_app_review_service.dart';
@@ -29,13 +27,11 @@ abstract class AbstractCommand {
   /// Convenience lookup methods for all commands to share
   ///
   /// Models
-  AppModel get appModel => getProvided();
-
-  Settings42Model get settings42Model => getProvided();
-
   SettingsModel get settingsModel => getProvided();
 
   AssetsModel get assetsModel => getProvided();
+
+  SessionsModel get sessionsModel => getProvided();
 
   /// Services
   AppService get appService => getProvided();

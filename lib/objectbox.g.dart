@@ -16,6 +16,7 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'src/models/asset.dart';
+import 'src/models/session.dart';
 import 'src/models/settings.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -24,7 +25,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 9099405721974101011),
       name: 'Asset',
-      lastPropertyId: const obx_int.IdUid(4, 1033342714859717526),
+      lastPropertyId: const obx_int.IdUid(5, 6885162524059944980),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -41,11 +42,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(3, 2498480815078795357),
             name: 'creationDate',
             type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 1033342714859717526),
-            name: 'toDrop',
-            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -70,6 +66,40 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(3, 5218197412612136639),
             name: 'hasPhotosAccess',
             type: 1,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(4, 7031307153786005898),
+      name: 'Session',
+      lastPropertyId: const obx_int.IdUid(5, 8063042737748148283),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4859087747070741403),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 4417437459508877249),
+            name: 'assetsToDrop',
+            type: 27,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5649553013620512132),
+            name: 'assetInReview',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 9048013942482498381),
+            name: 'sessionYear',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 8063042737748148283),
+            name: 'sessionMonth',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -111,7 +141,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(3, 950458572113288239),
+      lastEntityId: const obx_int.IdUid(4, 7031307153786005898),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -122,7 +152,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         7392058732712303245,
         4600526659355473183,
         5069912361225904768,
-        578897168852608763
+        578897168852608763,
+        1033342714859717526,
+        6885162524059944980
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -140,11 +172,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Asset object, fb.Builder fbb) {
           final assetIdOffset = fbb.writeString(object.assetId);
-          fbb.startTable(5);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, assetIdOffset);
           fbb.addInt64(2, object.creationDate.millisecondsSinceEpoch);
-          fbb.addBool(3, object.toDrop);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -157,13 +188,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final creationDateParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
-          final toDropParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
           final object = Asset(
               id: idParam,
               assetId: assetIdParam,
-              creationDate: creationDateParam,
-              toDrop: toDropParam);
+              creationDate: creationDateParam);
 
           return object;
         }),
@@ -197,6 +225,48 @@ obx_int.ModelDefinition getObjectBoxModel() {
                     .vTableGet(buffer, rootOffset, 6, '');
 
           return object;
+        }),
+    Session: obx_int.EntityDefinition<Session>(
+        model: _entities[2],
+        toOneRelations: (Session object) => [],
+        toManyRelations: (Session object) => {},
+        getId: (Session object) => object.id,
+        setId: (Session object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Session object, fb.Builder fbb) {
+          final assetsToDropOffset = fbb.writeListInt64(object.assetsToDrop);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, assetsToDropOffset);
+          fbb.addInt64(2, object.assetIdInReview);
+          fbb.addInt64(3, object.sessionYear);
+          fbb.addInt64(4, object.sessionMonth);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final assetsToDropParam =
+              const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                  .vTableGet(buffer, rootOffset, 6, []);
+          final assetInReviewParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 8);
+          final sessionYearParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final sessionMonthParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final object = Session(
+              id: idParam,
+              assetsToDrop: assetsToDropParam,
+              assetIdInReview: assetInReviewParam,
+              sessionYear: sessionYearParam,
+              sessionMonth: sessionMonthParam);
+
+          return object;
         })
   };
 
@@ -215,10 +285,6 @@ class Asset_ {
   /// see [Asset.creationDate]
   static final creationDate =
       obx.QueryDateProperty<Asset>(_entities[0].properties[2]);
-
-  /// see [Asset.toDrop]
-  static final toDrop =
-      obx.QueryBooleanProperty<Asset>(_entities[0].properties[3]);
 }
 
 /// [Settings] entity fields to define ObjectBox queries.
@@ -234,4 +300,27 @@ class Settings_ {
   /// see [Settings.hasPhotosAccess]
   static final hasPhotosAccess =
       obx.QueryBooleanProperty<Settings>(_entities[1].properties[2]);
+}
+
+/// [Session] entity fields to define ObjectBox queries.
+class Session_ {
+  /// see [Session.id]
+  static final id =
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[0]);
+
+  /// see [Session.assetsToDrop]
+  static final assetsToDrop =
+      obx.QueryIntegerVectorProperty<Session>(_entities[2].properties[1]);
+
+  /// see [Session.assetIdInReview]
+  static final assetInReview =
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[2]);
+
+  /// see [Session.sessionYear]
+  static final sessionYear =
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[3]);
+
+  /// see [Session.sessionMonth]
+  static final sessionMonth =
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[4]);
 }

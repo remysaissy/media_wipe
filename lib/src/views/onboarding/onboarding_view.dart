@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/settings/update_onboarding_command.dart';
 import 'package:app/src/models/app_model.dart';
-import 'package:app/src/views/onboarding_item_view.dart';
+import 'package:app/src/views/onboarding/onboarding_item_view.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});

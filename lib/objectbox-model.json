@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:9099405721974101011",
-      "lastPropertyId": "4:1033342714859717526",
+      "lastPropertyId": "5:6885162524059944980",
       "name": "Asset",
       "properties": [
         {
@@ -23,11 +23,6 @@
           "id": "3:2498480815078795357",
           "name": "creationDate",
           "type": 10
-        },
-        {
-          "id": "4:1033342714859717526",
-          "name": "toDrop",
-          "type": 1
         }
       ],
       "relations": []
@@ -55,9 +50,43 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:7031307153786005898",
+      "lastPropertyId": "5:8063042737748148283",
+      "name": "Session",
+      "properties": [
+        {
+          "id": "1:4859087747070741403",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4417437459508877249",
+          "name": "assetsToDrop",
+          "type": 27
+        },
+        {
+          "id": "3:5649553013620512132",
+          "name": "assetInReview",
+          "type": 6
+        },
+        {
+          "id": "4:9048013942482498381",
+          "name": "sessionYear",
+          "type": 6
+        },
+        {
+          "id": "5:8063042737748148283",
+          "name": "sessionMonth",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:950458572113288239",
+  "lastEntityId": "4:7031307153786005898",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
@@ -72,7 +101,9 @@
     7392058732712303245,
     4600526659355473183,
     5069912361225904768,
-    578897168852608763
+    578897168852608763,
+    1033342714859717526,
+    6885162524059944980
   ],
   "retiredRelationUids": [],
   "version": 1

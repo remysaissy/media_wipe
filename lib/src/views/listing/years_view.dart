@@ -24,10 +24,7 @@ class YearsViewState extends State<YearsView> {
   @override
   void initState() {
     _isSortAsc = false;
-    _years = context.read<AssetsModel>().listYears(isAsc: _isSortAsc);
-    if (_years.isEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 
@@ -38,7 +35,6 @@ class YearsViewState extends State<YearsView> {
   void _onToggleSort() {
     setState(() {
       _isSortAsc = !_isSortAsc;
-      _years = context.read<AssetsModel>().listYears(isAsc: _isSortAsc);
     });
   }
 
@@ -49,6 +45,7 @@ class YearsViewState extends State<YearsView> {
 
   @override
   Widget build(BuildContext context) {
+    _years = context.watch<AssetsModel>().listYears(isAsc: _isSortAsc);
     Widget child =
         _years.isEmpty ? Utils.buildLoading(context) : _buildContent(context);
     return Scaffold(

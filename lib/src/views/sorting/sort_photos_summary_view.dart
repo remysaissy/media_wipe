@@ -1,3 +1,4 @@
+import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/views/sorting/delete_button.dart';
 import 'package:app/src/views/sorting/refine_button.dart';
 import 'package:app/src/views/sorting/summary_empty.dart';
@@ -15,9 +16,13 @@ class SortPhotosSummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final assets = context
-        .watch<AssetsModel>()
-        .listAssets(forYear: year, forMonth: month, toDrop: true);
+    final session =
+        context.watch<SessionsModel>().getSession(year: year, month: month);
+    if (session == null) {
+      return SummaryEmpty(year: year, month: month);
+    }
+    final assets = context.watch<AssetsModel>().listAssets(
+        forYear: year, forMonth: month, withAllowList: session.assetsToDrop);
     if (assets.isEmpty) {
       return SummaryEmpty(year: year, month: month);
     } else {

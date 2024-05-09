@@ -10,8 +10,8 @@ class RestoreSubscriptionCommand extends AbstractCommand {
   Future<bool> run() async {
     final restoredProductId = await subscriptionsService.restorePurchase();
     if (restoredProductId != null) {
-      settings42Model.productId = restoredProductId;
-      settings42Model.subscribedAt = DateTime.now();
+      // settings42Model.productId = restoredProductId;
+      // settings42Model.subscribedAt = DateTime.now();
     }
     return (restoredProductId != null);
   }

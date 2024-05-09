@@ -4,10 +4,10 @@ import 'package:app/src/views/listing/months_view.dart';
 import 'package:app/src/views/sorting/sort_photos_view.dart';
 import 'package:app/src/views/sorting/sort_photos_summary_view.dart';
 import 'package:app/src/views/listing/years_view.dart';
-import 'package:app/src/views/onboarding_view.dart';
+import 'package:app/src/views/onboarding/onboarding_view.dart';
 import 'package:app/src/views/routing_view.dart';
 import 'package:app/src/views/settings/settings_view.dart';
-import 'package:app/src/views/subscriptions_view.dart';
+import 'package:app/src/views/subscriptions/subscriptions_view.dart';
 
 GoRouter setupRoutes() {
   return GoRouter(
@@ -42,13 +42,12 @@ GoRouter setupRoutes() {
         ),
       ),
       GoRoute(
-        path: '/sort/:year/:month/:mode',
-        name: 'sortPhotos',
-        builder: (context, state) => SortPhotosView(
-          year: int.parse(state.pathParameters['year']!),
-          month: int.parse(state.pathParameters['month']!),
-          mode: state.pathParameters['mode']!)
-      ),
+          path: '/sort/:year/:month/:mode',
+          name: 'sortPhotos',
+          builder: (context, state) => SortPhotosView(
+              year: int.parse(state.pathParameters['year']!),
+              month: int.parse(state.pathParameters['month']!),
+              mode: state.pathParameters['mode']!)),
       GoRoute(
         path: '/summary/:year/:month',
         name: 'sortPhotosSummary',

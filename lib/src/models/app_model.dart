@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:app/src/globals/device_type.dart';
 import 'package:app/src/models/abstract_model.dart';
 import 'package:app/src/utils.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class OnboardingData {
   final String urlImage;
@@ -17,6 +22,7 @@ class OnboardingData {
 }
 
 class AppModel extends AbstractModel {
+
   late bool _appReady;
 
   bool get appReady => _appReady;

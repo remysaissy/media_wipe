@@ -1,4 +1,5 @@
 import 'package:app/src/models/settings.dart';
+import 'package:app/src/services/settings_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -10,8 +11,11 @@ class SettingsModel extends ChangeNotifier {
   Settings? _settings;
 
   /// Use for initial loading.
-  Future<dynamic> load() async {
+  Future<SettingsModel> load() async {
     await fetchSettings();
+    _settings?.hasPhotosAccess =
+    await SettingsService().isPhotosAuthorized();
+    await updateSettings();
     return this;
   }
 

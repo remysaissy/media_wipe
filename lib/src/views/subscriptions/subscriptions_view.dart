@@ -8,7 +8,7 @@ import 'package:app/src/commands/settings/restore_subscription_command.dart';
 import 'package:app/src/components/my_cta_button.dart';
 import 'package:app/src/components/my_cta_text_button.dart';
 import 'package:app/src/models/settings42_model.dart';
-import 'package:app/src/views/subscriptions_item_view.dart';
+import 'package:app/src/views/subscriptions/subscriptions_item_view.dart';
 
 class SubscriptionsView extends StatefulWidget {
   const SubscriptionsView({super.key});

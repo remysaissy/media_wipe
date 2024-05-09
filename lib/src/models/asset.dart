@@ -8,12 +8,10 @@ class Asset {
 
   String assetId;
 
-  bool toDrop;
-
   @Property(type: PropertyType.date)
   DateTime creationDate;
 
-  Asset({this.id = 0, required this.assetId, required this.creationDate, this.toDrop = false});
+  Asset({this.id = 0, required this.assetId, required this.creationDate});
 
   Future<AssetEntity?> loadEntity() async {
     return await AssetEntity.fromId(assetId);

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:objectbox/objectbox.dart';
 
 class AssetsModel extends ChangeNotifier {
-
   final Box<Asset> _assetsBox;
 
   AssetsModel(this._assetsBox);
@@ -12,7 +11,7 @@ class AssetsModel extends ChangeNotifier {
   List<Asset> _assets = [];
 
   /// Use for initial loading.
-  Future<dynamic> load() async {
+  Future<AssetsModel> load() async {
     await fetchAssets();
     return this;
   }
@@ -23,10 +22,12 @@ class AssetsModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Asset? getAsset({int? id, String? assetId, bool? toDrop}) {
-    return _assets.where((e) => (id == null || e.id == id)
-        && (assetId == null || e.assetId == assetId)
-        && (toDrop == null || e.toDrop == toDrop)).firstOrNull;
+  Asset? getAsset({int? id, String? assetId}) {
+    return _assets
+        .where((e) =>
+            (id == null || e.id == id) &&
+            (assetId == null || e.assetId == assetId))
+        .firstOrNull;
   }
 
   List<int> listYears({bool isAsc = false}) {
@@ -36,15 +37,22 @@ class AssetsModel extends ChangeNotifier {
   }
 
   List<int> listAssetsMonths({required int forYear, bool isAsc = false}) {
-    var months = listAssets(forYear: forYear).map((e) => e.creationDate.month).toSet().toList();
+    var months = listAssets(forYear: forYear)
+        .map((e) => e.creationDate.month)
+        .toSet()
+        .toList();
     months.sort((a, b) => isAsc ? a.compareTo(b) : b.compareTo(a));
     return months;
   }
 
-  List<Asset> listAssets({int? forYear, int? butYear, int? forMonth, bool? toDrop}) {
-    return _assets.where((e) => (forYear == null || e.creationDate.year == forYear)
-        && (forMonth == null || e.creationDate.month == forMonth)
-        && (toDrop == null || e.toDrop == toDrop)).toList();
+  List<Asset> listAssets(
+      {int? forYear, int? butYear, int? forMonth, List<int>? withAllowList}) {
+    return _assets
+        .where((e) =>
+            (forYear == null || e.creationDate.year == forYear) &&
+            (forMonth == null || e.creationDate.month == forMonth) &&
+            (withAllowList == null || withAllowList.contains(e.id)))
+        .toList();
   }
 
   Future<void> updateAssets({required List<Asset> assets}) async {
@@ -54,10 +62,13 @@ class AssetsModel extends ChangeNotifier {
     }
   }
 
-  Future<void> removeAssets({int? forYear, int? forMonth, bool? toDrop}) async {
-    final ids = _assets.where((e) => (forYear == null || e.creationDate.year == forYear)
-        && (forMonth == null || e.creationDate.month == forMonth)
-    && (toDrop == null || e.toDrop == toDrop)).map((e) => e.id).toList();
+  Future<void> removeAssets({int? forYear, int? forMonth}) async {
+    final ids = _assets
+        .where((e) =>
+            (forYear == null || e.creationDate.year == forYear) &&
+            (forMonth == null || e.creationDate.month == forMonth))
+        .map((e) => e.id)
+        .toList();
     if (ids.isNotEmpty) {
       await _assetsBox.removeManyAsync(ids);
       await fetchAssets();

@@ -1,5 +1,4 @@
 import 'package:app/src/utils.dart';
-import 'package:app/src/views/sorting/sort_photos_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,9 +20,7 @@ class Month extends StatelessWidget {
                 'mode': 'classic',
               });
             },
-            title:
-            Text(Utils.monthNumberToMonthName(int.parse(month))),
+            title: Text(Utils.monthNumberToMonthName(int.parse(month))),
             trailing: Icon(Icons.adaptive.arrow_forward)));
   }
-
 }

@@ -1,4 +1,4 @@
-import 'package:app/src/commands/sessions/cancel_session_command.dart';
+import 'package:app/src/commands/sessions/finish_session_command.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,8 +20,8 @@ class SummaryEmpty extends StatelessWidget {
           Center(
               child: TextButton(
                   onPressed: () async {
-                    await CancelSessionCommand(context)
-                        .run(year: year, month: month);
+                    await FinishSessionCommand(context)
+                        .run(year: year, month: month, cancel: true);
                     if (!context.mounted) return;
                     context.go('/');
                   },
