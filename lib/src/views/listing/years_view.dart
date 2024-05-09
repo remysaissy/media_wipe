@@ -33,9 +33,7 @@ class YearsViewState extends State<YearsView> {
   }
 
   void _onToggleSort() {
-    setState(() {
-      _isSortAsc = !_isSortAsc;
-    });
+    setState(() => _isSortAsc = !_isSortAsc);
   }
 
   void _onSettings() {

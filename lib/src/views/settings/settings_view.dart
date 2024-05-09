@@ -1,4 +1,5 @@
 import 'package:app/src/views/settings/authorize_photos.dart';
+import 'package:app/src/views/settings/debug_dry_removal.dart';
 import 'package:app/src/views/settings/link.dart';
 import 'package:app/src/views/settings/purchase.dart';
 import 'package:app/src/views/settings/rate_app.dart';
@@ -18,7 +19,7 @@ class SettingsView extends StatelessWidget {
         child: ListView(
           children: const [
             ThemeDropDown(),
-            Purchase(),
+            // Purchase(),
             AuthorizePhotos(),
             RateApp(),
             Link(
@@ -29,6 +30,7 @@ class SettingsView extends StatelessWidget {
                 title: 'Privacy Policy',
                 targetURL:
                     'https://www.app-privacy-policy.com/live.php?token=9ho9lvMLJc5wOXUooQJoLjgN4taT04eC'),
+            DebugDryRemoval(),
           ],
         ));
   }

@@ -29,7 +29,7 @@
     },
     {
       "id": "3:950458572113288239",
-      "lastPropertyId": "3:5218197412612136639",
+      "lastPropertyId": "5:2157820798339025752",
       "name": "Settings",
       "properties": [
         {
@@ -47,13 +47,23 @@
           "id": "3:5218197412612136639",
           "name": "hasPhotosAccess",
           "type": 1
+        },
+        {
+          "id": "4:316555022059172133",
+          "name": "hasInAppReview",
+          "type": 1
+        },
+        {
+          "id": "5:2157820798339025752",
+          "name": "debugDryRemoval",
+          "type": 1
         }
       ],
       "relations": []
     },
     {
       "id": "4:7031307153786005898",
-      "lastPropertyId": "5:8063042737748148283",
+      "lastPropertyId": "8:8365573264182440466",
       "name": "Session",
       "properties": [
         {
@@ -68,11 +78,6 @@
           "type": 27
         },
         {
-          "id": "3:5649553013620512132",
-          "name": "assetInReview",
-          "type": 6
-        },
-        {
           "id": "4:9048013942482498381",
           "name": "sessionYear",
           "type": 6
@@ -81,6 +86,16 @@
           "id": "5:8063042737748148283",
           "name": "sessionMonth",
           "type": 6
+        },
+        {
+          "id": "7:7468757591462912690",
+          "name": "assetIdInReview",
+          "type": 6
+        },
+        {
+          "id": "8:8365573264182440466",
+          "name": "refineAssetsToDrop",
+          "type": 27
         }
       ],
       "relations": []
@@ -103,7 +118,9 @@
     5069912361225904768,
     578897168852608763,
     1033342714859717526,
-    6885162524059944980
+    6885162524059944980,
+    5649553013620512132,
+    5914910433241501280
   ],
   "retiredRelationUids": [],
   "version": 1

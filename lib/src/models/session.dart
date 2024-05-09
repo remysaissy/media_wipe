@@ -7,6 +7,9 @@ class Session {
 
   List<int> assetsToDrop;
 
+  // Used only when dealing with the whitelist mode to avoid mutations to assetsToDrop to impact the refine process.
+  List<int>? refineAssetsToDrop;
+
   int? assetIdInReview;
 
   int sessionYear;

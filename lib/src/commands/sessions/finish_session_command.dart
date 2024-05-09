@@ -8,17 +8,19 @@ class FinishSessionCommand extends AbstractCommand {
     var session = sessionsModel.getSession(year: year, month: month);
     if (session == null) return;
     if (cancel == false) {
-      final assets = assetsModel.listAssets(forYear: year, forMonth: month, withAllowList: session.assetsToDrop);
-      print('Assets count: ${assets.length} ${assets[0].id} ${assets[0].assetId}');
-      final removedAssetIds = await assetsService
-          .deleteAssetsPerId(assets.map((e) => e.assetId).toList());
-      print('removedAssetIds count: ${removedAssetIds.length} ${removedAssetIds[0]}');
+      final assets = assetsModel.listAssets(
+          forYear: year, forMonth: month, withAllowList: session.assetsToDrop);
+      final removedAssetIds = await assetsService.deleteAssetsPerId(
+          assetIds: assets.map((e) => e.assetId).toList(),
+          isDry: settingsModel.settings.debugDryRemoval);
       final ids = assets
           .where((e) => removedAssetIds.contains(e.assetId))
           .map((e) => e.id)
           .toList();
-      print('db IDs count: ${ids.length} ${ids[0]}');
+      print('-> ${assetsModel.listAssets().length}');
+      print('Removal of ${ids.length} elements');
       await assetsModel.removeAssetsFromList(ids: ids);
+      print('-> ${assetsModel.listAssets().length}');
     }
     await sessionsModel.removeSessions(forYear: year, forMonth: month);
   }

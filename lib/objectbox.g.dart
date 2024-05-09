@@ -49,7 +49,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 950458572113288239),
       name: 'Settings',
-      lastPropertyId: const obx_int.IdUid(3, 5218197412612136639),
+      lastPropertyId: const obx_int.IdUid(5, 2157820798339025752),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -66,6 +66,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(3, 5218197412612136639),
             name: 'hasPhotosAccess',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 316555022059172133),
+            name: 'hasInAppReview',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 2157820798339025752),
+            name: 'debugDryRemoval',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -73,7 +83,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 7031307153786005898),
       name: 'Session',
-      lastPropertyId: const obx_int.IdUid(5, 8063042737748148283),
+      lastPropertyId: const obx_int.IdUid(8, 8365573264182440466),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -87,11 +97,6 @@ final _entities = <obx_int.ModelEntity>[
             type: 27,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5649553013620512132),
-            name: 'assetInReview',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
             id: const obx_int.IdUid(4, 9048013942482498381),
             name: 'sessionYear',
             type: 6,
@@ -100,6 +105,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(5, 8063042737748148283),
             name: 'sessionMonth',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 7468757591462912690),
+            name: 'assetIdInReview',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 8365573264182440466),
+            name: 'refineAssetsToDrop',
+            type: 27,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -154,7 +169,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         5069912361225904768,
         578897168852608763,
         1033342714859717526,
-        6885162524059944980
+        6885162524059944980,
+        5649553013620512132,
+        5914910433241501280
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -205,10 +222,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Settings object, fb.Builder fbb) {
           final dbThemeModeOffset = fbb.writeString(object.dbThemeMode);
-          fbb.startTable(4);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, dbThemeModeOffset);
           fbb.addBool(2, object.hasPhotosAccess);
+          fbb.addBool(3, object.hasInAppReview);
+          fbb.addBool(4, object.debugDryRemoval);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -219,10 +238,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final hasPhotosAccessParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
-          final object =
-              Settings(id: idParam, hasPhotosAccess: hasPhotosAccessParam)
-                ..dbThemeMode = const fb.StringReader(asciiOptimization: true)
-                    .vTableGet(buffer, rootOffset, 6, '');
+          final hasInAppReviewParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
+          final debugDryRemovalParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false);
+          final object = Settings(
+              id: idParam,
+              hasPhotosAccess: hasPhotosAccessParam,
+              hasInAppReview: hasInAppReviewParam,
+              debugDryRemoval: debugDryRemovalParam)
+            ..dbThemeMode = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '');
 
           return object;
         }),
@@ -236,12 +262,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Session object, fb.Builder fbb) {
           final assetsToDropOffset = fbb.writeListInt64(object.assetsToDrop);
-          fbb.startTable(6);
+          final refineAssetsToDropOffset = object.refineAssetsToDrop == null
+              ? null
+              : fbb.writeListInt64(object.refineAssetsToDrop!);
+          fbb.startTable(9);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, assetsToDropOffset);
-          fbb.addInt64(2, object.assetIdInReview);
           fbb.addInt64(3, object.sessionYear);
           fbb.addInt64(4, object.sessionMonth);
+          fbb.addInt64(6, object.assetIdInReview);
+          fbb.addOffset(7, refineAssetsToDropOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -253,8 +283,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final assetsToDropParam =
               const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
                   .vTableGet(buffer, rootOffset, 6, []);
-          final assetInReviewParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 8);
+          final assetIdInReviewParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 16);
           final sessionYearParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           final sessionMonthParam =
@@ -262,9 +292,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final object = Session(
               id: idParam,
               assetsToDrop: assetsToDropParam,
-              assetIdInReview: assetInReviewParam,
+              assetIdInReview: assetIdInReviewParam,
               sessionYear: sessionYearParam,
-              sessionMonth: sessionMonthParam);
+              sessionMonth: sessionMonthParam)
+            ..refineAssetsToDrop =
+                const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                    .vTableGetNullable(buffer, rootOffset, 18);
 
           return object;
         })
@@ -300,6 +333,14 @@ class Settings_ {
   /// see [Settings.hasPhotosAccess]
   static final hasPhotosAccess =
       obx.QueryBooleanProperty<Settings>(_entities[1].properties[2]);
+
+  /// see [Settings.hasInAppReview]
+  static final hasInAppReview =
+      obx.QueryBooleanProperty<Settings>(_entities[1].properties[3]);
+
+  /// see [Settings.debugDryRemoval]
+  static final debugDryRemoval =
+      obx.QueryBooleanProperty<Settings>(_entities[1].properties[4]);
 }
 
 /// [Session] entity fields to define ObjectBox queries.
@@ -312,15 +353,19 @@ class Session_ {
   static final assetsToDrop =
       obx.QueryIntegerVectorProperty<Session>(_entities[2].properties[1]);
 
-  /// see [Session.assetIdInReview]
-  static final assetInReview =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[2]);
-
   /// see [Session.sessionYear]
   static final sessionYear =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[3]);
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[2]);
 
   /// see [Session.sessionMonth]
   static final sessionMonth =
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[3]);
+
+  /// see [Session.assetIdInReview]
+  static final assetIdInReview =
       obx.QueryIntegerProperty<Session>(_entities[2].properties[4]);
+
+  /// see [Session.refineAssetsToDrop]
+  static final refineAssetsToDrop =
+      obx.QueryIntegerVectorProperty<Session>(_entities[2].properties[5]);
 }

@@ -1,4 +1,6 @@
+import 'package:app/src/commands/sessions/commit_refine_in_session_command.dart';
 import 'package:app/src/commands/sessions/start_session_command.dart';
+import 'package:app/src/commands/sessions/undo_last_operation_in_session_command.dart';
 import 'package:app/src/models/asset.dart';
 import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/models/sessions_model.dart';
@@ -35,8 +37,10 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   bool get _isLast => (_currentSelectionIndex + 1 == _assets.length);
 
   Future<void> _initState() async {
-    await StartSessionCommand(context)
-        .run(year: widget.year, month: widget.month);
+    await StartSessionCommand(context).run(
+        year: widget.year,
+        month: widget.month,
+        isWhiteListMode: (widget.mode == 'refine'));
   }
 
   @override
@@ -94,12 +98,10 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onUndo() async {
-    await KeepAssetInSessionCommand(context).run(
+    await UndoLastOperationInSessionCommand(context).run(
         year: widget.year,
         month: widget.month,
-        assetId: _assetData.id,
-        nextAssetId: _isFirst ? _assetData.id : _assets[_currentSelectionIndex - 1].id);
-    setState(() => _isFirst ? _currentSelectionIndex = 0 : _currentSelectionIndex--);
+        isWhiteListMode: (widget.mode == 'refine'));
   }
 
   Future<void> _onKeepPressed() async {
@@ -107,15 +109,16 @@ class _SortPhotosViewState extends State<SortPhotosView> {
     await KeepAssetInSessionCommand(context).run(
         year: widget.year,
         month: widget.month,
-        assetId: _assetData.id,
-        nextAssetId: _isLast ? null : _assets[_currentSelectionIndex + 1].id);
+        isWhiteListMode: (widget.mode == 'refine'));
     if (_isLast) {
+      if (widget.mode == 'refine') {
+        await CommitRefineInSessionCommand(context)
+            .run(year: widget.year, month: widget.month);
+      }
       context.goNamed('sortPhotosSummary', pathParameters: {
         'year': widget.year.toString(),
         'month': widget.month.toString()
       });
-    } else {
-      setState(() => _currentSelectionIndex++);
     }
   }
 
@@ -124,15 +127,16 @@ class _SortPhotosViewState extends State<SortPhotosView> {
     await DropAssetInSessionCommand(context).run(
         year: widget.year,
         month: widget.month,
-        assetId: _assetData.id,
-        nextAssetId: _isLast ? null : _assets[_currentSelectionIndex + 1].id);
+        isWhiteListMode: (widget.mode == 'refine'));
     if (_isLast) {
+      if (widget.mode == 'refine') {
+        await CommitRefineInSessionCommand(context)
+            .run(year: widget.year, month: widget.month);
+      }
       context.goNamed('sortPhotosSummary', pathParameters: {
         'year': widget.year.toString(),
         'month': widget.month.toString()
       });
-    } else {
-      setState(() => _currentSelectionIndex++);
     }
   }
 }

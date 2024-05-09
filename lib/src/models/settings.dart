@@ -21,5 +21,10 @@ class Settings {
 
   bool hasPhotosAccess;
 
-  Settings({this.id = 0, this.themeMode = ThemeMode.system, this.hasPhotosAccess = false});
+  bool hasInAppReview;
+
+  // Debug only.
+  bool debugDryRemoval;
+
+  Settings({this.id = 0, this.themeMode = ThemeMode.system, this.hasPhotosAccess = false, this.hasInAppReview = false, this.debugDryRemoval = true});
 }

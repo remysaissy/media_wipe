@@ -2,16 +2,20 @@ import 'dart:async';
 import 'package:app/src/models/asset.dart';
 import 'package:photo_manager/photo_manager.dart' as pm;
 import 'package:app/src/utils.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class AssetsService {
   final int _refreshBatchSize = 1000;
   final _types =
       pm.RequestType.fromTypes([pm.RequestType.image, pm.RequestType.video]);
 
-  Future<List<String>> deleteAssetsPerId(List<String> assetIds) async {
+  Future<List<String>> deleteAssetsPerId(
+      {required List<String> assetIds, required bool isDry}) async {
     if (assetIds.isNotEmpty) {
-      Utils.logger.i('Drop all IDs: ${assetIds}');
-      // await PhotoManager.editor.deleteWithIds(sessionData.assetIdsToDrop);
+      if (!isDry) {
+        print('Will really delete');
+        // await PhotoManager.editor.deleteWithIds(assetIds);
+      }
     }
     return assetIds;
   }

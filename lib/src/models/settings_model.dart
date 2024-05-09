@@ -1,4 +1,5 @@
 import 'package:app/src/models/settings.dart';
+import 'package:app/src/services/in_app_review_service.dart';
 import 'package:app/src/services/settings_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:objectbox/objectbox.dart';
@@ -15,6 +16,7 @@ class SettingsModel extends ChangeNotifier {
     await fetchSettings();
     _settings?.hasPhotosAccess =
     await SettingsService().isPhotosAuthorized();
+    _settings?.hasInAppReview = await InAppReviewsService().isInAppReviewAvailable();
     await updateSettings();
     return this;
   }

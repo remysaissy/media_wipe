@@ -20,8 +20,9 @@ class RefreshPhotosCommand extends AbstractCommand {
         final identifiedAddList = onDeviceAssets.difference(identifiedAssets).toList();
         identifiedAssets.removeAll(identifiedDropList);
         identifiedAssets.addAll(identifiedAddList);
-        await assetsModel.removeAssetsFromList(ids: identifiedDropList.map((e) => e.id).toList());
+        // Order matters: add before removing avoids flaky listing on the UI.
         await assetsModel.addAssets(assets: identifiedAddList);
+        await assetsModel.removeAssetsFromList(ids: identifiedDropList.map((e) => e.id).toList());
         if (mediaTotalCount == mediaCount) {
           break;
         }
