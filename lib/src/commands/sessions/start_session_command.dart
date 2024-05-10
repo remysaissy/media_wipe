@@ -8,7 +8,9 @@ class StartSessionCommand extends AbstractCommand {
       {required int year,
       required int month,
       required bool isWhiteListMode}) async {
-    // await sessionsModel.removeSessions(forYear: year, forMonth: month);
+    // if (!isWhiteListMode) {
+    //   await sessionsModel.removeSessions(forYear: year, forMonth: month);
+    // }
     var session = sessionsModel.getSession(year: year, month: month);
     if (session != null) {
       await _restoreSession(year, month, session, isWhiteListMode);

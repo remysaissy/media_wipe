@@ -53,12 +53,13 @@ class YearsViewState extends State<YearsView> {
             IconButton(
               onPressed: _onToggleSort,
               icon: Transform.flip(
-                  flipY: _isSortAsc, child: const Icon(Icons.filter_list_outlined)),
+                  flipY: _isSortAsc,
+                  child: const Icon(Icons.filter_list_outlined)),
             ),
             IconButton(
               onPressed: _onSettings,
               icon: const Icon(Icons.settings_outlined),
-            )
+            ),
           ],
         ),
         body: SafeArea(child: child));

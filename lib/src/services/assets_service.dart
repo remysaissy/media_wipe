@@ -15,6 +15,7 @@ class AssetsService {
     if (assetIds.isNotEmpty) {
       if (!isDry) {
         print('Will really delete');
+        await Future.delayed(const Duration(milliseconds: 100));
         // await PhotoManager.editor.deleteWithIds(assetIds);
       }
     }

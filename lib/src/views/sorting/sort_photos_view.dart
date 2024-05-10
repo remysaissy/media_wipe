@@ -56,12 +56,24 @@ class _SortPhotosViewState extends State<SortPhotosView> {
     final session = context
         .watch<SessionsModel>()
         .getSession(year: widget.year, month: widget.month);
-    final whiteList = (widget.mode == 'refine') ? session?.assetsToDrop : null;
     _assets = context.watch<AssetsModel>().listAssets(
-        forYear: widget.year, forMonth: widget.month, withAllowList: whiteList);
-    _currentSelectionIndex = (session?.assetIdInReview != null)
-        ? _assets.indexWhere((e) => e.id == session?.assetIdInReview)
-        : 0;
+        forYear: widget.year, forMonth: widget.month, withAllowList: (widget.mode == 'refine') ? session?.assetsToDrop : null);
+    print('Assets: ${_assets.length}');
+    print('Session: ${session?.assetIdInReview}');
+    for (var asset in _assets) {
+      print('Asset ${asset.id}');
+    }
+    _currentSelectionIndex = 0;
+    for (int i = 0; i < _assets.length; i++) {
+      if (_assets[i].id == session?.assetIdInReview) {
+        _currentSelectionIndex = i;
+        break;
+      }
+    }
+    print('Asset found is: ${_currentSelectionIndex}');
+    // (session?.assetIdInReview != null)
+    //     ? _assets.indexWhere((e) => e.id == session?.assetIdInReview)
+    //     : 0;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -75,7 +87,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
           ],
         ),
         body: SafeArea(
-            child: _assets.isNotEmpty
+            child: _assets.isNotEmpty && _currentSelectionIndex >= 0
                 ? _buildContent()
                 : Utils.buildLoading(context)));
   }

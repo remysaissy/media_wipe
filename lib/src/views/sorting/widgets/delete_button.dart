@@ -1,7 +1,6 @@
-import 'package:app/src/commands/assets/refresh_photos_command.dart';
 import 'package:app/src/commands/sessions/finish_session_command.dart';
+import 'package:app/src/views/sorting/overlays/deletion_in_progress.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class DeleteButton extends StatelessWidget {
   final int year;
@@ -14,10 +13,11 @@ class DeleteButton extends StatelessWidget {
     return TextButton(
         onPressed: () async {
           if (!context.mounted) return;
-          await FinishSessionCommand(context)
-              .run(year: year, month: month);
+          final entry = DeletionInProgress.getOverlayEntry();
+          Overlay.of(context).insert(entry);
+          await FinishSessionCommand(context).run(year: year, month: month);
+          entry.remove();
         },
         child: const Text('Delete'));
   }
-
 }
