@@ -13,7 +13,7 @@ class DebugDryRemoval extends StatelessWidget {
     bool debugDryRemoval =
         context.watch<SettingsModel>().settings.debugDryRemoval;
     return ListTile(
-        leading: const Icon(Icons.warning),
+        leading: const Icon(Icons.warning_outlined),
         title: const Text('[DEBUG] Dry removal of assets'),
         trailing: Switch.adaptive(value: debugDryRemoval, onChanged: (bool value) async { await UpdateDebugFlagCommand(context).run(debugDryRemoval: value); }),
     );

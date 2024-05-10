@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class MyRoundedBox extends StatelessWidget {
+class MyFormatBadge extends StatelessWidget {
   final String title;
 
-  const MyRoundedBox({super.key, required this.title});
+  const MyFormatBadge({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

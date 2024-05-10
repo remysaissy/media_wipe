@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:app/src/commands/settings/authorize_photos_command.dart';
+import 'package:app/src/commands/assets/authorize_photos_command.dart';
 
 class AuthorizeView extends StatelessWidget {
   const AuthorizeView({super.key});

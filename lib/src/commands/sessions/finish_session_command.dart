@@ -1,4 +1,5 @@
 import 'package:app/src/commands/abstract_command.dart';
+import 'package:app/src/commands/assets/delete_assets_command.dart';
 
 class FinishSessionCommand extends AbstractCommand {
   FinishSessionCommand(super.context);
@@ -10,17 +11,7 @@ class FinishSessionCommand extends AbstractCommand {
     if (cancel == false) {
       final assets = assetsModel.listAssets(
           forYear: year, forMonth: month, withAllowList: session.assetsToDrop);
-      final removedAssetIds = await assetsService.deleteAssetsPerId(
-          assetIds: assets.map((e) => e.assetId).toList(),
-          isDry: settingsModel.settings.debugDryRemoval);
-      final ids = assets
-          .where((e) => removedAssetIds.contains(e.assetId))
-          .map((e) => e.id)
-          .toList();
-      print('-> ${assetsModel.listAssets().length}');
-      print('Removal of ${ids.length} elements');
-      await assetsModel.removeAssetsFromList(ids: ids);
-      print('-> ${assetsModel.listAssets().length}');
+      await DeleteAssetsCommand(context).run(assets: assets);
     }
     await sessionsModel.removeSessions(forYear: year, forMonth: month);
   }

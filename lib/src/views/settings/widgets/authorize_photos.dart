@@ -1,4 +1,4 @@
-import 'package:app/src/commands/settings/authorize_photos_command.dart';
+import 'package:app/src/commands/assets/authorize_photos_command.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

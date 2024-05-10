@@ -1,5 +1,5 @@
 import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/views/listing/year.dart';
+import 'package:app/src/views/listing/widgets/year.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -53,11 +53,11 @@ class YearsViewState extends State<YearsView> {
             IconButton(
               onPressed: _onToggleSort,
               icon: Transform.flip(
-                  flipY: _isSortAsc, child: const Icon(Icons.filter_list)),
+                  flipY: _isSortAsc, child: const Icon(Icons.filter_list_outlined)),
             ),
             IconButton(
               onPressed: _onSettings,
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.settings_outlined),
             )
           ],
         ),

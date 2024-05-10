@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:app/src/models/asset.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart' as pm;
 import 'package:app/src/utils.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -22,27 +23,6 @@ class AssetsService {
 
   Future<int> getAssetsCount() async {
     return await pm.PhotoManager.getAssetCount(type: _types);
-  }
-
-  Future<int> getAssetsCountPerYear({required int year}) async {
-    var filter = pm.AdvancedCustomFilter()
-      ..addWhereCondition(
-          pm.DateColumnWhereCondition(
-            column: pm.CustomColumns.base.createDate,
-            operator: '>=',
-            value: DateTime(year),
-          ),
-          type: pm.LogicalType.and)
-      ..addWhereCondition(
-          pm.DateColumnWhereCondition(
-            column: pm.CustomColumns.base.createDate,
-            operator: '<',
-            value: DateTime(year + 1),
-          ),
-          type: pm.LogicalType.and)
-      ..addOrderBy(column: pm.CustomColumns.base.createDate, isAsc: false);
-    return await pm.PhotoManager.getAssetCount(
-        type: _types, filterOption: filter);
   }
 
   Future<List<Asset>> listAssets({required int year}) async {
@@ -78,5 +58,19 @@ class AssetsService {
       }
     }
     return assets;
+  }
+
+  Future<void> authorizePhotos() async {
+    final photosStatus = await Permission.photos.status;
+    if (photosStatus.isDenied) {
+      await Permission.photos.request();
+    } else if (!photosStatus.isGranted) {
+      openAppSettings();
+    }
+  }
+
+  Future<bool> isPhotosAuthorized() async {
+    final photosStatus = await Permission.photos.status;
+    return photosStatus.isGranted;
   }
 }

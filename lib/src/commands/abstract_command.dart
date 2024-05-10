@@ -3,10 +3,7 @@ import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app/src/services/app_service.dart';
 import 'package:app/src/services/assets_service.dart';
-import 'package:app/src/services/in_app_review_service.dart';
-import 'package:app/src/services/settings_service.dart';
 import 'package:app/src/services/subscriptions_service.dart';
 
 abstract class AbstractCommand {
@@ -34,12 +31,6 @@ abstract class AbstractCommand {
   SessionsModel get sessionsModel => getProvided();
 
   /// Services
-  AppService get appService => getProvided();
-
-  InAppReviewsService get inAppReviewsService => getProvided();
-
-  SettingsService get settingsService => getProvided();
-
   SubscriptionsService get subscriptionsService => getProvided();
 
   AssetsService get assetsService => getProvided();

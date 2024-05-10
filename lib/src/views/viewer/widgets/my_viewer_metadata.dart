@@ -1,7 +1,7 @@
 import 'package:app/src/models/asset.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:app/src/components/my_rounded_box.dart';
+import 'package:app/src/views/viewer/widgets/my_format_badge.dart';
 import 'package:app/src/utils.dart';
 
 class MyViewerMetadata extends StatelessWidget {
@@ -44,7 +44,7 @@ class MyViewerMetadata extends StatelessWidget {
         onReady: (data) {
           final typeName =
               data != null ? data.split('/')[1].toLowerCase() : 'other';
-          return MyRoundedBox(title: typeName);
+          return MyFormatBadge(title: typeName);
         });
   }
 }

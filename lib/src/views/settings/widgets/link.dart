@@ -14,7 +14,7 @@ class Link extends StatelessWidget {
           if (!context.mounted) return;
           await Utils.openURL(context, targetURL);
         },
-        leading: const Icon(Icons.web),
+        leading: const Icon(Icons.open_in_new),
         title: Text(title),
         trailing: const Icon(Icons.arrow_forward_ios));
   }

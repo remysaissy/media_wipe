@@ -1,4 +1,6 @@
 import 'package:app/src/commands/abstract_command.dart';
+import 'package:app/src/models/asset.dart';
+import 'package:app/src/models/session.dart';
 
 class UndoLastOperationInSessionCommand extends AbstractCommand {
   UndoLastOperationInSessionCommand(super.context);
@@ -10,21 +12,9 @@ class UndoLastOperationInSessionCommand extends AbstractCommand {
     var session = sessionsModel.getSession(year: year, month: month);
     if (session == null) return;
     final assets = assetsModel
-        .listAssets(forYear: year, forMonth: month)
-        .where((e) => (isWhiteListMode == false ||
-            session.assetsToDrop.contains(e.id)))
-        .toList();
+        .listAssets(forYear: year, forMonth: month, withAllowList: isWhiteListMode == true ? session.assetsToDrop : null);
 
-    int? prevAssetIdInReview;
-    // Find the previous asset in review to restore it.
-    for (int i = 0; i < assets.length; i++) {
-      if (assets[i].id == session.assetIdInReview) {
-        if (i > 0) {
-          prevAssetIdInReview = assets[i-1].id;
-        }
-        break;
-      }
-    }
+    int? prevAssetIdInReview = _findPrevAssetIdToReview(assets, session);
 
     // Restore the previous state.
     // Don't remove when in whiteList mode as it is expected to have it in the drop list.
@@ -35,5 +25,18 @@ class UndoLastOperationInSessionCommand extends AbstractCommand {
     }
     session.assetIdInReview = prevAssetIdInReview;
     await sessionsModel.updateSessions(sessions: [session]);
+  }
+
+  int? _findPrevAssetIdToReview(List<Asset> assets, Session session) {
+    int? prevAssetIdInReview;
+    for (int i = 0; i < assets.length; i++) {
+      if (assets[i].id == session.assetIdInReview) {
+        if (i > 0) {
+          prevAssetIdInReview = assets[i-1].id;
+        }
+        break;
+      }
+    }
+    return prevAssetIdInReview;
   }
 }

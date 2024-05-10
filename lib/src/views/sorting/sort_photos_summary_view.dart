@@ -1,8 +1,8 @@
 import 'package:app/src/models/sessions_model.dart';
-import 'package:app/src/views/sorting/delete_button.dart';
-import 'package:app/src/views/sorting/refine_button.dart';
-import 'package:app/src/views/sorting/summary_empty.dart';
-import 'package:app/src/views/sorting/summary_item.dart';
+import 'package:app/src/views/sorting/widgets/delete_button.dart';
+import 'package:app/src/views/sorting/widgets/refine_button.dart';
+import 'package:app/src/views/sorting/widgets/summary_empty.dart';
+import 'package:app/src/views/sorting/widgets/summary_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/models/assets_model.dart';

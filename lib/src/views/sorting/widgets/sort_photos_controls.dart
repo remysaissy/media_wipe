@@ -1,5 +1,5 @@
 import 'package:app/src/models/asset.dart';
-import 'package:app/src/views/viewer/my_viewer_metadata.dart';
+import 'package:app/src/views/viewer/widgets/my_viewer_metadata.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -22,7 +22,7 @@ class SortPhotosControls extends StatelessWidget {
     List<Widget> children = [];
     children.add(Flexible(
       child: ElevatedButton(
-          onPressed: onKeepPressed, child: const Icon(Icons.check)),
+          onPressed: onKeepPressed, child: const Icon(Icons.check_outlined)),
     ));
     children.add(Flexible(
       child: ElevatedButton(
@@ -32,11 +32,11 @@ class SortPhotosControls extends StatelessWidget {
                 return MyViewerMetadata(
                     assetData: assetData, assetEntity: assetEntity);
               }),
-          child: const Icon(Icons.add_card_rounded)),
+          child: const Icon(Icons.info_outline)),
     ));
     children.add(Flexible(
       child: ElevatedButton(
-          onPressed: onDropPressed, child: const Icon(Icons.close)),
+          onPressed: onDropPressed, child: const Icon(Icons.close_outlined)),
     ));
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: children);

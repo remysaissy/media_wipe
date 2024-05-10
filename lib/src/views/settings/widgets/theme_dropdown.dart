@@ -9,8 +9,15 @@ class ThemeDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeMode themeMode = context.watch<SettingsModel>().settings.themeMode;
+    final brigthness = MediaQuery.of(context).platformBrightness;
+    var icon;
+    if (themeMode == ThemeMode.dark || (themeMode == ThemeMode.system && brigthness == Brightness.dark)) {
+      icon = const Icon(Icons.dark_mode);
+    } else {
+      icon = const Icon(Icons.light_mode);
+    }
     return ListTile(
-      leading: const Icon(Icons.map),
+      leading: icon,
       title: const Text('Theme'),
       trailing: DropdownButton<ThemeMode>(
         // Read the selected themeMode from the controller

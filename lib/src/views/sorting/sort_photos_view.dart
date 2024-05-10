@@ -5,7 +5,7 @@ import 'package:app/src/models/asset.dart';
 import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/views/viewer/my_viewer.dart';
-import 'package:app/src/views/sorting/sort_photos_controls.dart';
+import 'package:app/src/views/sorting/widgets/sort_photos_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -70,7 +70,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
             Text('${_currentSelectionIndex + 1}/${_assets.length}'),
             IconButton(
               onPressed: _isFirst ? null : _onUndo,
-              icon: const Icon(Icons.undo),
+              icon: const Icon(Icons.undo_outlined),
             ),
           ],
         ),

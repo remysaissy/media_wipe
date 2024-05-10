@@ -1,5 +1,5 @@
-import 'package:app/src/components/dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,12 +60,38 @@ class Utils {
   static Future<void> openURL(BuildContext context, String targetURL) async {
     final url = Uri.tryParse(targetURL);
     if (url == null) {
-      showAlertDialog(context, 'Error', 'Could not open the link.');
+      _showAlertDialog(context, 'Error', 'Could not open the link.');
     } else {
       final success = await launchUrl(url);
       if (!success) {
-        showAlertDialog(context, 'Error', 'Could not open the link.');
+        _showAlertDialog(context, 'Error', 'Could not open the link.');
       }
     }
+  }
+
+  static void _showAlertDialog(BuildContext context, String title, String description) {
+
+    Widget okButton = TextButton(
+      child: const Text("OK"),
+      onPressed: () {
+        context.pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(description),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
