@@ -18,7 +18,7 @@ class AssetsModel extends ChangeNotifier {
 
   /// Pivotal method to fetch the up to date list of assets from storage.
   Future<void> fetchAssets() async {
-    _assets = _assetsBox.getAll();
+    _assets = await _assetsBox.getAllAsync();
     notifyListeners();
   }
 

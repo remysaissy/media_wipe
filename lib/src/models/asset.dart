@@ -17,33 +17,34 @@ class Asset extends Equatable {
 
   Asset({this.id = 0, required this.assetId, required this.creationDate});
 
-  @Transient()
-  AssetEntity? assetEntity;
+  @override
+  List<Object?> get props => [id, assetId, creationDate];
+}
 
-  @Transient()
-  typed_data.Uint8List? thumbnailData;
+class AssetData {
+  final AssetEntity? assetEntity;
 
-  @Transient()
-  String? mimeType;
+  final typed_data.Uint8List? thumbnailData;
 
-  @Transient()
-  File? file;
+  final String? mimeType;
 
-  @Transient()
-  String? mediaUrl;
+  final File? file;
 
-  Future<Asset> loadEntity() async {
-    assetEntity = await AssetEntity.fromId(assetId);
-    thumbnailData = await assetEntity?.thumbnailData;
-    mimeType = await assetEntity?.mimeTypeAsync;
+  final String? mediaUrl;
+
+  AssetData({required this.assetEntity, required this.thumbnailData, required this.mimeType, required this.file, required this.mediaUrl});
+
+  static Future<AssetData> fromAsset({required Asset asset}) async {
+    final assetEntity = await AssetEntity.fromId(asset.assetId);
+    final thumbnailData = await assetEntity?.thumbnailData;
+    final mimeType = await assetEntity?.mimeTypeAsync;
+    File? file;
+    String? mediaUrl;
     if (assetEntity?.type == AssetType.image) {
       file = await assetEntity?.file;
     } else {
       mediaUrl = await assetEntity?.getMediaUrl();
     }
-    return this;
+    return AssetData(assetEntity: assetEntity, thumbnailData: thumbnailData, mimeType: mimeType, file: file, mediaUrl: mediaUrl);
   }
-
-  @override
-  List<Object?> get props => [id, assetId, creationDate];
 }

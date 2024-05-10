@@ -1,13 +1,14 @@
 import 'package:app/src/commands/abstract_command.dart';
+import 'package:app/src/models/session.dart';
 
 class CommitRefineInSessionCommand extends AbstractCommand {
   CommitRefineInSessionCommand(super.context);
 
-  Future<void> run({required int year, required int month}) async {
-    var session = sessionsModel.getSession(year: year, month: month);
-    if (session == null) return;
+  Future<void> run({required Session session}) async {
     // The refined list becomes the new drop list.
-    session.assetsToDrop = session.refineAssetsToDrop;
+    session.assetsToDrop.clear();
+    session.assetsToDrop.addAll(session.refineAssetsToDrop);
+    session.refineAssetsToDrop.clear();
     await sessionsModel.updateSessions(sessions: [session]);
   }
 }

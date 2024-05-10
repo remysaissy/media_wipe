@@ -32,7 +32,8 @@ class StartSessionCommand extends AbstractCommand {
           .listAssets(forYear: year, forMonth: month, withAllowList: session.assetsToDrop)
           .toList();
       // use this duplicated drop list during the refining process.
-      session.refineAssetsToDrop = session.assetsToDrop;
+      session.refineAssetsToDrop.clear();
+      session.refineAssetsToDrop.addAll(session.assetsToDrop);
       session.assetInReview.target = assets.firstOrNull;
     }
     await sessionsModel.updateSessions(sessions: [session]);

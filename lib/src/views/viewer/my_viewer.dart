@@ -6,16 +6,17 @@ import 'package:app/src/views/viewer/widgets/my_video_viewer_card.dart';
 
 class MyViewer extends StatelessWidget {
   final Asset asset;
+  final AssetData assetData;
 
-  const MyViewer({super.key, required this.asset});
+  const MyViewer({super.key, required this.asset, required this.assetData});
 
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if (asset.assetEntity?.type == AssetType.image) {
-      child = ExtendedImage.file(asset.file!);
+    if (assetData.assetEntity?.type == AssetType.image) {
+      child = ExtendedImage.file(assetData.file!);
     } else {
-      child = MyVideoViewerCard(asset: asset);
+      child = MyVideoViewerCard(asset: asset, assetData: assetData);
     }
     return SizedBox(
         height: MediaQuery.of(context).size.height * 0.75, child: child);

@@ -32,11 +32,9 @@ class _SortPhotosViewState extends State<SortPhotosView> {
 
   Asset? get _currentAsset => _session?.assetInReview.target;
 
-  bool get _isFirst =>
-      _session?.assetInReview.targetId == _assets.firstOrNull?.id;
+  bool get _isFirst => _session?.assetInReview.target == _assets.firstOrNull;
 
-  bool get _isLast =>
-      _session?.assetInReview.targetId == _assets.lastOrNull?.id;
+  bool get _isLast => _session?.assetInReview.target == _assets.lastOrNull;
 
   Future<void> _initState() async {
     await StartSessionCommand(context).run(
@@ -66,15 +64,8 @@ class _SortPhotosViewState extends State<SortPhotosView> {
         forMonth: widget.month,
         withAllowList:
             (widget.mode == 'refine') ? _session?.assetsToDrop : null);
-    print('Assets: ${_assets.length}');
-    print('Session: ${_session?.assetInReview.targetId}');
-    for (var asset in _assets) {
-      print('Asset ${asset.id}');
-    }
     final currentSelectionIndex =
         _currentAsset != null ? _assets.indexOf(_currentAsset!) : 0;
-    print('Asset found is: ${currentSelectionIndex}');
-
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -95,14 +86,15 @@ class _SortPhotosViewState extends State<SortPhotosView> {
 
   Widget _buildContent() {
     return Utils.futureBuilder(
-        future: _currentAsset!.loadEntity(),
+        future: AssetData.fromAsset(asset: _currentAsset!),
         onReady: (data) {
-          final asset = data as Asset;
+          final assetData = data as AssetData;
           return SingleChildScrollView(
               child: Column(children: [
-            MyViewer(asset: asset),
+            MyViewer(asset: _currentAsset!, assetData: assetData),
             SortPhotosControls(
                 asset: _currentAsset!,
+                assetData: assetData,
                 onDropPressed: _onDropPressed,
                 onKeepPressed: _onKeepPressed)
           ]));
@@ -110,22 +102,18 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onUndo() async {
-    await UndoLastOperationInSessionCommand(context).run(
-        year: widget.year,
-        month: widget.month,
-        isWhiteListMode: (widget.mode == 'refine'));
+    await UndoLastOperationInSessionCommand(context)
+        .run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
   }
 
   Future<void> _onKeepPressed() async {
+    bool wasLast = _isLast;
     if (!mounted) return;
-    await KeepAssetInSessionCommand(context).run(
-        year: widget.year,
-        month: widget.month,
-        isWhiteListMode: (widget.mode == 'refine'));
-    if (_isLast) {
+    await KeepAssetInSessionCommand(context)
+        .run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
+    if (wasLast) {
       if (widget.mode == 'refine') {
-        await CommitRefineInSessionCommand(context)
-            .run(year: widget.year, month: widget.month);
+        await CommitRefineInSessionCommand(context).run(session: _session!);
       }
       context.goNamed('sortPhotosSummary', pathParameters: {
         'year': widget.year.toString(),
@@ -135,15 +123,13 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   }
 
   Future<void> _onDropPressed() async {
+    bool wasLast = _isLast;
     if (!mounted) return;
-    await DropAssetInSessionCommand(context).run(
-        year: widget.year,
-        month: widget.month,
-        isWhiteListMode: (widget.mode == 'refine'));
-    if (_isLast) {
+    await DropAssetInSessionCommand(context)
+        .run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
+    if (wasLast) {
       if (widget.mode == 'refine') {
-        await CommitRefineInSessionCommand(context)
-            .run(year: widget.year, month: widget.month);
+        await CommitRefineInSessionCommand(context).run(session: _session!);
       }
       context.goNamed('sortPhotosSummary', pathParameters: {
         'year': widget.year.toString(),

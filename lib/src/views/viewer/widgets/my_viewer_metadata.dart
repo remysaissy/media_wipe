@@ -5,8 +5,9 @@ import 'package:app/src/utils.dart';
 
 class MyViewerMetadata extends StatelessWidget {
   final Asset asset;
+  final AssetData assetData;
 
-  const MyViewerMetadata({super.key, required this.asset});
+  const MyViewerMetadata({super.key, required this.asset, required this.assetData});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class MyViewerMetadata extends StatelessWidget {
           title: Utils.creationDateFormat.format(asset.creationDate),
           leadingIcon: Icons.calendar_month_rounded),
       _buildMetadataEntry(
-          title: '${asset.assetEntity?.width}x${asset.assetEntity?.height}',
+          title: '${assetData.assetEntity?.width}x${assetData.assetEntity?.height}',
           leadingIcon: Icons.photo_size_select_large_rounded),
     ];
     return SizedBox(
@@ -35,8 +36,8 @@ class MyViewerMetadata extends StatelessWidget {
   }
 
   Widget _buildFormatBadge(BuildContext context) {
-    final typeName = asset.mimeType != null
-        ? asset.mimeType!.split('/')[1].toLowerCase()
+    final typeName = assetData.mimeType != null
+        ? assetData.mimeType!.split('/')[1].toLowerCase()
         : 'other';
     return MyFormatBadge(title: typeName);
   }

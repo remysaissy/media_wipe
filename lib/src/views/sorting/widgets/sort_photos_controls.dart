@@ -7,12 +7,13 @@ class SortPhotosControls extends StatelessWidget {
   final AsyncCallback? onKeepPressed;
   final AsyncCallback? onDropPressed;
   final Asset asset;
+  final AssetData assetData;
 
   const SortPhotosControls(
       {super.key,
       this.onKeepPressed,
       this.onDropPressed,
-      required this.asset});
+      required this.asset, required this.assetData});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class SortPhotosControls extends StatelessWidget {
           onPressed: () => showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return MyViewerMetadata(asset: asset);
+                return MyViewerMetadata(asset: asset, assetData: assetData);
               }),
           child: const Icon(Icons.info_outline)),
     ));

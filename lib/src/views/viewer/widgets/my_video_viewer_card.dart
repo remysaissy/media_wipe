@@ -6,8 +6,9 @@ import 'package:chewie/chewie.dart';
 
 class MyVideoViewerCard extends StatefulWidget {
   final Asset asset;
+  final AssetData assetData;
 
-  const MyVideoViewerCard({super.key, required this.asset});
+  const MyVideoViewerCard({super.key, required this.asset, required this.assetData});
 
   @override
   State<StatefulWidget> createState() => _MyVideoViewerState();
@@ -20,7 +21,7 @@ class _MyVideoViewerState extends State<MyVideoViewerCard> {
   @override
   void initState() {
     _controller =
-        VideoPlayerController.networkUrl(Uri.parse(widget.asset.mediaUrl!))
+        VideoPlayerController.networkUrl(Uri.parse(widget.assetData.mediaUrl!))
           ..initialize().then((_) {
             _chewieController =
                 ChewieController(videoPlayerController: _controller!);
