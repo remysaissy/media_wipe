@@ -11,32 +11,34 @@ class UndoLastOperationInSessionCommand extends AbstractCommand {
       required bool isWhiteListMode}) async {
     var session = sessionsModel.getSession(year: year, month: month);
     if (session == null) return;
-    final assets = assetsModel
-        .listAssets(forYear: year, forMonth: month, withAllowList: isWhiteListMode == true ? session.assetsToDrop : null);
+    final assets = assetsModel.listAssets(
+        forYear: year,
+        forMonth: month,
+        withAllowList: isWhiteListMode == true ? session.assetsToDrop : null);
 
-    int? prevAssetIdInReview = _findPrevAssetIdToReview(assets, session);
+    final prevAssetInReview = _findPrevAssetToReview(assets, session);
 
     // Restore the previous state.
     // Don't remove when in whiteList mode as it is expected to have it in the drop list.
     if (isWhiteListMode) {
-      session.refineAssetsToDrop?.remove(prevAssetIdInReview);
+      session.refineAssetsToDrop.remove(prevAssetInReview);
     } else {
-      session.assetsToDrop.remove(prevAssetIdInReview);
+      session.assetsToDrop.remove(prevAssetInReview);
     }
-    session.assetIdInReview = prevAssetIdInReview;
+    session.assetInReview.target = prevAssetInReview;
     await sessionsModel.updateSessions(sessions: [session]);
   }
 
-  int? _findPrevAssetIdToReview(List<Asset> assets, Session session) {
-    int? prevAssetIdInReview;
+  Asset? _findPrevAssetToReview(List<Asset> assets, Session session) {
+    Asset? prevAssetInReview;
     for (int i = 0; i < assets.length; i++) {
-      if (assets[i].id == session.assetIdInReview) {
+      if (assets[i] == session.assetInReview.target) {
         if (i > 0) {
-          prevAssetIdInReview = assets[i-1].id;
+          prevAssetInReview = assets[i - 1];
         }
         break;
       }
     }
-    return prevAssetIdInReview;
+    return prevAssetInReview;
   }
 }

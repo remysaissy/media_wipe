@@ -10,31 +10,34 @@ class KeepAssetInSessionCommand extends AbstractCommand {
       required int month,
       required bool isWhiteListMode}) async {
     var session = sessionsModel.getSession(year: year, month: month);
-    if (session == null || session.assetIdInReview == null) return;
-    final assets = assetsModel
-        .listAssets(forYear: year, forMonth: month, withAllowList: isWhiteListMode == true ? session.assetsToDrop : null);
+    if (session == null || session.assetInReview.target == null) return;
+    final assets = assetsModel.listAssets(
+        forYear: year,
+        forMonth: month,
+        withAllowList:
+            isWhiteListMode == true ? session.assetsToDrop : null);
 
-    int? nextAssetIdInReview = _findNextAssetIdToReview(assets, session);
+    final nextAssetInReview = _findNextAssetIdToReview(assets, session);
 
     if (isWhiteListMode) {
-      session.refineAssetsToDrop?.remove(session.assetIdInReview!);
+      session.refineAssetsToDrop.remove(session.assetInReview.target);
     } else {
-      session.assetsToDrop.remove(session.assetIdInReview!);
+      session.assetsToDrop.remove(session.assetInReview.target);
     }
-    session.assetIdInReview = nextAssetIdInReview;
+    session.assetInReview.target = nextAssetInReview;
     await sessionsModel.updateSessions(sessions: [session]);
   }
 
-  int? _findNextAssetIdToReview(List<Asset> assets, Session session) {
-    int? nextAssetIdInReview;
+  Asset? _findNextAssetIdToReview(List<Asset> assets, Session session) {
+    Asset? nextAssetInReview;
     for (int i = 0; i < assets.length; i++) {
-      if (assets[i].id == session.assetIdInReview) {
+      if (assets[i] == session.assetInReview.target) {
         if (i + 1 < assets.length) {
-          nextAssetIdInReview = assets[i + 1].id;
+          nextAssetInReview = assets[i + 1];
         }
         break;
       }
     }
-    return nextAssetIdInReview;
+    return nextAssetInReview;
   }
 }

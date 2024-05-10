@@ -1,8 +1,6 @@
-import 'package:app/src/commands/assets/refresh_photos_command.dart';
 import 'package:app/src/commands/sessions/finish_session_command.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class SummaryEmpty extends StatelessWidget {
   final int year;

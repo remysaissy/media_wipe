@@ -3,12 +3,12 @@ import 'package:app/src/commands/sessions/start_session_command.dart';
 import 'package:app/src/commands/sessions/undo_last_operation_in_session_command.dart';
 import 'package:app/src/models/asset.dart';
 import 'package:app/src/models/assets_model.dart';
+import 'package:app/src/models/session.dart';
 import 'package:app/src/models/sessions_model.dart';
 import 'package:app/src/views/viewer/my_viewer.dart';
 import 'package:app/src/views/sorting/widgets/sort_photos_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
@@ -27,14 +27,16 @@ class SortPhotosView extends StatefulWidget {
 }
 
 class _SortPhotosViewState extends State<SortPhotosView> {
-  late int _currentSelectionIndex;
   late List<Asset> _assets;
+  late Session? _session;
 
-  Asset get _assetData => _assets[_currentSelectionIndex];
+  Asset? get _currentAsset => _session?.assetInReview.target;
 
-  bool get _isFirst => _currentSelectionIndex == 0;
+  bool get _isFirst =>
+      _session?.assetInReview.targetId == _assets.firstOrNull?.id;
 
-  bool get _isLast => (_currentSelectionIndex + 1 == _assets.length);
+  bool get _isLast =>
+      _session?.assetInReview.targetId == _assets.lastOrNull?.id;
 
   Future<void> _initState() async {
     await StartSessionCommand(context).run(
@@ -46,40 +48,39 @@ class _SortPhotosViewState extends State<SortPhotosView> {
   @override
   void initState() {
     _assets = [];
-    _currentSelectionIndex = 0;
+    _session = null;
     WidgetsBinding.instance.addPostFrameCallback((_) => _initState());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final session = context
+    _session = context
         .watch<SessionsModel>()
         .getSession(year: widget.year, month: widget.month);
+    if (_session == null) {
+      return Utils.buildLoading(context);
+    }
     _assets = context.watch<AssetsModel>().listAssets(
-        forYear: widget.year, forMonth: widget.month, withAllowList: (widget.mode == 'refine') ? session?.assetsToDrop : null);
+        forYear: widget.year,
+        forMonth: widget.month,
+        withAllowList:
+            (widget.mode == 'refine') ? _session?.assetsToDrop : null);
     print('Assets: ${_assets.length}');
-    print('Session: ${session?.assetIdInReview}');
+    print('Session: ${_session?.assetInReview.targetId}');
     for (var asset in _assets) {
       print('Asset ${asset.id}');
     }
-    _currentSelectionIndex = 0;
-    for (int i = 0; i < _assets.length; i++) {
-      if (_assets[i].id == session?.assetIdInReview) {
-        _currentSelectionIndex = i;
-        break;
-      }
-    }
-    print('Asset found is: ${_currentSelectionIndex}');
-    // (session?.assetIdInReview != null)
-    //     ? _assets.indexWhere((e) => e.id == session?.assetIdInReview)
-    //     : 0;
+    final currentSelectionIndex =
+        _currentAsset != null ? _assets.indexOf(_currentAsset!) : 0;
+    print('Asset found is: ${currentSelectionIndex}');
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
               '${Utils.monthNumberToMonthName(widget.month)} ${widget.year}'),
           actions: [
-            Text('${_currentSelectionIndex + 1}/${_assets.length}'),
+            Text('${currentSelectionIndex + 1}/${_assets.length}'),
             IconButton(
               onPressed: _isFirst ? null : _onUndo,
               icon: const Icon(Icons.undo_outlined),
@@ -87,22 +88,21 @@ class _SortPhotosViewState extends State<SortPhotosView> {
           ],
         ),
         body: SafeArea(
-            child: _assets.isNotEmpty && _currentSelectionIndex >= 0
+            child: _currentAsset != null
                 ? _buildContent()
                 : Utils.buildLoading(context)));
   }
 
   Widget _buildContent() {
     return Utils.futureBuilder(
-        future: _assetData.loadEntity(),
+        future: _currentAsset!.loadEntity(),
         onReady: (data) {
-          final assetEntity = data as AssetEntity;
+          final asset = data as Asset;
           return SingleChildScrollView(
               child: Column(children: [
-            MyViewer(assetEntity: assetEntity),
+            MyViewer(asset: asset),
             SortPhotosControls(
-                assetData: _assetData,
-                assetEntity: assetEntity,
+                asset: _currentAsset!,
                 onDropPressed: _onDropPressed,
                 onKeepPressed: _onKeepPressed)
           ]));

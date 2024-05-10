@@ -2,20 +2,17 @@ import 'package:app/src/models/asset.dart';
 import 'package:app/src/views/viewer/widgets/my_viewer_metadata.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class SortPhotosControls extends StatelessWidget {
   final AsyncCallback? onKeepPressed;
   final AsyncCallback? onDropPressed;
-  final Asset assetData;
-  final AssetEntity assetEntity;
+  final Asset asset;
 
   const SortPhotosControls(
       {super.key,
       this.onKeepPressed,
       this.onDropPressed,
-      required this.assetData,
-      required this.assetEntity});
+      required this.asset});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +26,7 @@ class SortPhotosControls extends StatelessWidget {
           onPressed: () => showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return MyViewerMetadata(
-                    assetData: assetData, assetEntity: assetEntity);
+                return MyViewerMetadata(asset: asset);
               }),
           child: const Icon(Icons.info_outline)),
     ));

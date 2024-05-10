@@ -83,7 +83,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 7031307153786005898),
       name: 'Session',
-      lastPropertyId: const obx_int.IdUid(8, 8365573264182440466),
+      lastPropertyId: const obx_int.IdUid(9, 6787943451404250489),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -91,11 +91,6 @@ final _entities = <obx_int.ModelEntity>[
             name: 'id',
             type: 6,
             flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 4417437459508877249),
-            name: 'assetsToDrop',
-            type: 27,
-            flags: 0),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(4, 9048013942482498381),
             name: 'sessionYear',
@@ -107,17 +102,23 @@ final _entities = <obx_int.ModelEntity>[
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 7468757591462912690),
-            name: 'assetIdInReview',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 8365573264182440466),
-            name: 'refineAssetsToDrop',
-            type: 27,
-            flags: 0)
+            id: const obx_int.IdUid(9, 6787943451404250489),
+            name: 'assetInReviewId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(1, 5223050298962740270),
+            relationTarget: 'Asset')
       ],
-      relations: <obx_int.ModelRelation>[],
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(1, 683026278498002356),
+            name: 'assetsToDrop',
+            targetId: const obx_int.IdUid(1, 9099405721974101011)),
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(2, 3351964468242810548),
+            name: 'refineAssetsToDrop',
+            targetId: const obx_int.IdUid(1, 9099405721974101011))
+      ],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -157,8 +158,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
       lastEntityId: const obx_int.IdUid(4, 7031307153786005898),
-      lastIndexId: const obx_int.IdUid(0, 0),
-      lastRelationId: const obx_int.IdUid(0, 0),
+      lastIndexId: const obx_int.IdUid(1, 5223050298962740270),
+      lastRelationId: const obx_int.IdUid(2, 3351964468242810548),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [4772058913490209717],
       retiredIndexUids: const [],
@@ -171,7 +172,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         1033342714859717526,
         6885162524059944980,
         5649553013620512132,
-        5914910433241501280
+        5914910433241501280,
+        7468757591462912690,
+        4417437459508877249,
+        8365573264182440466
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -254,24 +258,23 @@ obx_int.ModelDefinition getObjectBoxModel() {
         }),
     Session: obx_int.EntityDefinition<Session>(
         model: _entities[2],
-        toOneRelations: (Session object) => [],
-        toManyRelations: (Session object) => {},
+        toOneRelations: (Session object) => [object.assetInReview],
+        toManyRelations: (Session object) => {
+              obx_int.RelInfo<Session>.toMany(1, object.id):
+                  object.assetsToDrop,
+              obx_int.RelInfo<Session>.toMany(2, object.id):
+                  object.refineAssetsToDrop
+            },
         getId: (Session object) => object.id,
         setId: (Session object, int id) {
           object.id = id;
         },
         objectToFB: (Session object, fb.Builder fbb) {
-          final assetsToDropOffset = fbb.writeListInt64(object.assetsToDrop);
-          final refineAssetsToDropOffset = object.refineAssetsToDrop == null
-              ? null
-              : fbb.writeListInt64(object.refineAssetsToDrop!);
-          fbb.startTable(9);
+          fbb.startTable(10);
           fbb.addInt64(0, object.id);
-          fbb.addOffset(1, assetsToDropOffset);
           fbb.addInt64(3, object.sessionYear);
           fbb.addInt64(4, object.sessionMonth);
-          fbb.addInt64(6, object.assetIdInReview);
-          fbb.addOffset(7, refineAssetsToDropOffset);
+          fbb.addInt64(8, object.assetInReview.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -280,25 +283,23 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final assetsToDropParam =
-              const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
-                  .vTableGet(buffer, rootOffset, 6, []);
-          final assetIdInReviewParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 16);
           final sessionYearParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           final sessionMonthParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           final object = Session(
               id: idParam,
-              assetsToDrop: assetsToDropParam,
-              assetIdInReview: assetIdInReviewParam,
               sessionYear: sessionYearParam,
-              sessionMonth: sessionMonthParam)
-            ..refineAssetsToDrop =
-                const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
-                    .vTableGetNullable(buffer, rootOffset, 18);
-
+              sessionMonth: sessionMonthParam);
+          object.assetInReview.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+          object.assetInReview.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<Session>(object.assetsToDrop,
+              store, obx_int.RelInfo<Session>.toMany(1, object.id));
+          obx_int.InternalToManyAccess.setRelInfo<Session>(
+              object.refineAssetsToDrop,
+              store,
+              obx_int.RelInfo<Session>.toMany(2, object.id));
           return object;
         })
   };
@@ -349,23 +350,23 @@ class Session_ {
   static final id =
       obx.QueryIntegerProperty<Session>(_entities[2].properties[0]);
 
-  /// see [Session.assetsToDrop]
-  static final assetsToDrop =
-      obx.QueryIntegerVectorProperty<Session>(_entities[2].properties[1]);
-
   /// see [Session.sessionYear]
   static final sessionYear =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[2]);
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[1]);
 
   /// see [Session.sessionMonth]
   static final sessionMonth =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[3]);
+      obx.QueryIntegerProperty<Session>(_entities[2].properties[2]);
 
-  /// see [Session.assetIdInReview]
-  static final assetIdInReview =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[4]);
+  /// see [Session.assetInReview]
+  static final assetInReview =
+      obx.QueryRelationToOne<Session, Asset>(_entities[2].properties[3]);
+
+  /// see [Session.assetsToDrop]
+  static final assetsToDrop =
+      obx.QueryRelationToMany<Session, Asset>(_entities[2].relations[0]);
 
   /// see [Session.refineAssetsToDrop]
   static final refineAssetsToDrop =
-      obx.QueryIntegerVectorProperty<Session>(_entities[2].properties[5]);
+      obx.QueryRelationToMany<Session, Asset>(_entities[2].relations[1]);
 }

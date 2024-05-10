@@ -1,3 +1,4 @@
+import 'package:app/src/commands/sessions/drop_all_sessions_command.dart';
 import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/views/listing/widgets/year.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,10 @@ class YearsViewState extends State<YearsView> {
               onPressed: _onSettings,
               icon: const Icon(Icons.settings_outlined),
             ),
+            IconButton(onPressed: () async {
+              await DropAllSessionsCommand(context).run();
+            }, icon: const Icon(Icons.lock_reset))
+
           ],
         ),
         body: SafeArea(child: child));

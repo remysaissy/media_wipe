@@ -46,12 +46,12 @@ class AssetsModel extends ChangeNotifier {
   }
 
   List<Asset> listAssets(
-      {int? forYear, int? butYear, int? forMonth, List<int>? withAllowList}) {
+      {int? forYear, int? butYear, int? forMonth, List<Asset>? withAllowList}) {
     return _assets
         .where((e) =>
             (forYear == null || e.creationDate.year == forYear) &&
             (forMonth == null || e.creationDate.month == forMonth) &&
-            (withAllowList == null || withAllowList.contains(e.id)))
+            (withAllowList == null || withAllowList.contains(e)))
         .toList();
   }
 

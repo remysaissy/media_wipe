@@ -66,4 +66,23 @@ class MockAssetsService extends _i1.Mock implements _i2.AssetsService {
         ),
         returnValue: _i3.Future<List<_i4.Asset>>.value(<_i4.Asset>[]),
       ) as _i3.Future<List<_i4.Asset>>);
+
+  @override
+  _i3.Future<void> authorizePhotos() => (super.noSuchMethod(
+        Invocation.method(
+          #authorizePhotos,
+          [],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<bool> isPhotosAuthorized() => (super.noSuchMethod(
+        Invocation.method(
+          #isPhotosAuthorized,
+          [],
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
 }

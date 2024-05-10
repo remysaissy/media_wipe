@@ -1,13 +1,13 @@
+import 'package:app/src/models/asset.dart';
 import 'package:app/src/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
 class MyVideoViewerCard extends StatefulWidget {
-  final AssetEntity assetEntity;
+  final Asset asset;
 
-  const MyVideoViewerCard({super.key, required this.assetEntity});
+  const MyVideoViewerCard({super.key, required this.asset});
 
   @override
   State<StatefulWidget> createState() => _MyVideoViewerState();
@@ -19,16 +19,13 @@ class _MyVideoViewerState extends State<MyVideoViewerCard> {
 
   @override
   void initState() {
-    widget.assetEntity.getMediaUrl().then((value) => {
-          _controller = VideoPlayerController.networkUrl(Uri.parse(value!))
-            ..initialize().then((_) {
-              _chewieController = ChewieController(
-                videoPlayerController: _controller!,
-              );
-              setState(() {});
-            })
-        });
-
+    _controller =
+        VideoPlayerController.networkUrl(Uri.parse(widget.asset.mediaUrl!))
+          ..initialize().then((_) {
+            _chewieController =
+                ChewieController(videoPlayerController: _controller!);
+            setState(() {});
+          });
     super.initState();
   }
 

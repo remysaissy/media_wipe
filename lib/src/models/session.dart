@@ -1,3 +1,5 @@
+import 'package:app/objectbox.g.dart';
+import 'package:app/src/models/asset.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -5,16 +7,16 @@ class Session {
   @Id()
   int id;
 
-  List<int> assetsToDrop;
+  ToMany<Asset> assetsToDrop = ToMany<Asset>();
 
   // Used only when dealing with the whitelist mode to avoid mutations to assetsToDrop to impact the refine process.
-  List<int>? refineAssetsToDrop;
+  ToMany<Asset> refineAssetsToDrop = ToMany<Asset>();
 
-  int? assetIdInReview;
+  ToOne<Asset> assetInReview = ToOne<Asset>();
 
   int sessionYear;
 
   int sessionMonth;
 
-  Session({this.id = 0, required this.assetsToDrop, this.assetIdInReview, required this.sessionYear, required this.sessionMonth});
+  Session({this.id = 0, required this.sessionYear, required this.sessionMonth});
 }

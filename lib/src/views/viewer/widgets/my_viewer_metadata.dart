@@ -1,24 +1,21 @@
 import 'package:app/src/models/asset.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:app/src/views/viewer/widgets/my_format_badge.dart';
 import 'package:app/src/utils.dart';
 
 class MyViewerMetadata extends StatelessWidget {
-  final Asset assetData;
-  final AssetEntity assetEntity;
+  final Asset asset;
 
-  const MyViewerMetadata(
-      {super.key, required this.assetData, required this.assetEntity});
+  const MyViewerMetadata({super.key, required this.asset});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
       _buildMetadataEntry(
-          title: Utils.creationDateFormat.format(assetData.creationDate),
+          title: Utils.creationDateFormat.format(asset.creationDate),
           leadingIcon: Icons.calendar_month_rounded),
       _buildMetadataEntry(
-          title: '${assetEntity.width}x${assetEntity.height}',
+          title: '${asset.assetEntity?.width}x${asset.assetEntity?.height}',
           leadingIcon: Icons.photo_size_select_large_rounded),
     ];
     return SizedBox(
@@ -28,8 +25,7 @@ class MyViewerMetadata extends StatelessWidget {
         child: Stack(children: [
           Column(children: children),
           Align(
-              alignment: Alignment.topRight,
-              child: _buildFormatBadge(context, assetEntity)),
+              alignment: Alignment.topRight, child: _buildFormatBadge(context)),
         ]));
   }
 
@@ -38,13 +34,10 @@ class MyViewerMetadata extends StatelessWidget {
     return ListTile(leading: Icon(leadingIcon), title: Text(title));
   }
 
-  Widget _buildFormatBadge(BuildContext context, AssetEntity assetEntity) {
-    return Utils.futureBuilder(
-        future: assetEntity.mimeTypeAsync,
-        onReady: (data) {
-          final typeName =
-              data != null ? data.split('/')[1].toLowerCase() : 'other';
-          return MyFormatBadge(title: typeName);
-        });
+  Widget _buildFormatBadge(BuildContext context) {
+    final typeName = asset.mimeType != null
+        ? asset.mimeType!.split('/')[1].toLowerCase()
+        : 'other';
+    return MyFormatBadge(title: typeName);
   }
 }
