@@ -1,8 +1,12 @@
+import 'package:app/src/views/routing_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app/src/commands/assets/authorize_photos_command.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthorizeView extends StatelessWidget {
+  static String routeName = 'authorize';
+
   const AuthorizeView({super.key});
 
   @override
@@ -14,21 +18,21 @@ class AuthorizeView extends StatelessWidget {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
           padding: const EdgeInsets.symmetric(vertical: 50),
-          child: Text('Welcome on MediaWipe!',
+          child: Text(AppLocalizations.of(context)!.authorizeWelcome,
               style: Theme.of(context).textTheme.headlineLarge)),
       Padding(
           padding: const EdgeInsets.symmetric(vertical: 50),
-          child: Text('Sort your photos in an easy and convenient way',
+          child: Text(AppLocalizations.of(context)!.authorizeDescription,
               style: Theme.of(context).textTheme.titleLarge)),
       const Spacer(),
       ElevatedButton(
         onPressed: () async {
           await AuthorizePhotosCommand(context).run();
           if (context.mounted) {
-            context.go('/');
+            context.goNamed(RoutingView.routeName);
           }
         },
-        child: const Text('Authorize'),
+        child: Text(AppLocalizations.of(context)!.authorizeCTA),
       )
     ]);
   }

@@ -60,10 +60,12 @@ class Utils {
   static Future<void> openURL(BuildContext context, String targetURL) async {
     final url = Uri.tryParse(targetURL);
     if (url == null) {
+      if (!context.mounted) return;
       _showAlertDialog(context, 'Error', 'Could not open the link.');
     } else {
       final success = await launchUrl(url);
       if (!success) {
+        if (!context.mounted) return;
         _showAlertDialog(context, 'Error', 'Could not open the link.');
       }
     }

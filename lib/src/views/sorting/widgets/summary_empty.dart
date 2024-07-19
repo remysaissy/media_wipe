@@ -1,6 +1,8 @@
 import 'package:app/src/commands/sessions/finish_session_command.dart';
+import 'package:app/src/views/routing_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SummaryEmpty extends StatelessWidget {
   final int year;
@@ -16,16 +18,18 @@ class SummaryEmpty extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-          const Center(child: Text('Nothing to delete!')),
+          Center(
+              child: Text(AppLocalizations.of(context)!.sortSummaryEmptyTitle)),
           Center(
               child: TextButton(
                   onPressed: () async {
                     await FinishSessionCommand(context)
                         .run(year: year, month: month, cancel: true);
                     if (!context.mounted) return;
-                    context.go('/');
+                    context.goNamed(RoutingView.routeName);
                   },
-                  child: const Text('Go to main screen')))
+                  child:
+                      Text(AppLocalizations.of(context)!.sortSummaryEmptyCTA)))
         ])));
   }
 }

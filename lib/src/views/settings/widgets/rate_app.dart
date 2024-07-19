@@ -2,6 +2,7 @@ import 'package:app/src/commands/settings/request_in_app_review_command.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RateApp extends StatelessWidget {
   const RateApp({super.key});
@@ -14,10 +15,9 @@ class RateApp extends StatelessWidget {
         onTap: !hasInAppReview
             ? null
             : () async {
-          await RequestInAppReviewCommand(context).run();
-        },
+                await RequestInAppReviewCommand(context).run();
+              },
         leading: const Icon(Icons.star),
-        title: const Text('Rate the app!'));
+        title: Text(AppLocalizations.of(context)!.settingsRateApp));
   }
-
 }

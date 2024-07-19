@@ -1,5 +1,7 @@
+import 'package:app/src/views/sorting/sort_photos_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RefineButton extends StatelessWidget {
   final int year;
@@ -12,12 +14,12 @@ class RefineButton extends StatelessWidget {
     return TextButton(
         onPressed: () {
           if (!context.mounted) return;
-          context.goNamed('sortPhotos', pathParameters: {
+          context.goNamed(SortPhotosView.routeName, pathParameters: {
             'year': year.toString(),
             'month': month.toString(),
             'mode': 'refine',
           });
         },
-        child: const Text('Refine'));
+        child: Text(AppLocalizations.of(context)!.sortSummaryRefineCTA));
   }
 }

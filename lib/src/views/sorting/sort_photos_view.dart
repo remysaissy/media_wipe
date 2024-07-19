@@ -5,6 +5,7 @@ import 'package:app/src/models/asset.dart';
 import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/models/session.dart';
 import 'package:app/src/models/sessions_model.dart';
+import 'package:app/src/views/sorting/sort_photos_summary_view.dart';
 import 'package:app/src/views/viewer/my_viewer.dart';
 import 'package:app/src/views/sorting/widgets/sort_photos_controls.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:app/src/commands/sessions/keep_asset_in_session_command.dart';
 import 'package:app/src/utils.dart';
 
 class SortPhotosView extends StatefulWidget {
+  static String routeName = 'sortPhotos';
   final int year;
   final int month;
   final String mode;
@@ -115,7 +117,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
       if (widget.mode == 'refine') {
         await CommitRefineInSessionCommand(context).run(session: _session!);
       }
-      context.goNamed('sortPhotosSummary', pathParameters: {
+      context.goNamed(SortPhotosSummaryView.routeName, pathParameters: {
         'year': widget.year.toString(),
         'month': widget.month.toString()
       });
@@ -131,7 +133,7 @@ class _SortPhotosViewState extends State<SortPhotosView> {
       if (widget.mode == 'refine') {
         await CommitRefineInSessionCommand(context).run(session: _session!);
       }
-      context.goNamed('sortPhotosSummary', pathParameters: {
+      context.goNamed(SortPhotosSummaryView.routeName, pathParameters: {
         'year': widget.year.toString(),
         'month': widget.month.toString()
       });

@@ -13,34 +13,36 @@ GoRouter setupRoutes() {
     routes: [
       GoRoute(
         path: '/',
+        name: RoutingView.routeName,
         builder: (context, state) => const RoutingView(),
       ),
       GoRoute(
         path: '/authorize',
+        name: AuthorizeView.routeName,
         builder: (context, state) => const AuthorizeView(),
       ),
       GoRoute(
         path: '/photos',
-        name: 'listYears',
+        name: YearsView.routeName,
         builder: (context, state) => const YearsView(),
       ),
       GoRoute(
         path: '/photos/:year',
-        name: 'listMonths',
+        name: MonthsView.routeName,
         builder: (context, state) => MonthsView(
           year: int.parse(state.pathParameters['year']!),
         ),
       ),
       GoRoute(
           path: '/sort/:year/:month/:mode',
-          name: 'sortPhotos',
+          name: SortPhotosView.routeName,
           builder: (context, state) => SortPhotosView(
               year: int.parse(state.pathParameters['year']!),
               month: int.parse(state.pathParameters['month']!),
               mode: state.pathParameters['mode']!)),
       GoRoute(
         path: '/summary/:year/:month',
-        name: 'sortPhotosSummary',
+        name: SortPhotosSummaryView.routeName,
         builder: (context, state) => SortPhotosSummaryView(
           year: int.parse(state.pathParameters['year']!),
           month: int.parse(state.pathParameters['month']!),
@@ -48,6 +50,7 @@ GoRouter setupRoutes() {
       ),
       GoRoute(
         path: '/settings',
+        name: SettingsView.routeName,
         builder: (context, state) => const SettingsView(),
       ),
     ],

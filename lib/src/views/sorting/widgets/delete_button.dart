@@ -1,6 +1,7 @@
 import 'package:app/src/commands/sessions/finish_session_command.dart';
 import 'package:app/src/views/sorting/overlays/deletion_in_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeleteButton extends StatelessWidget {
   final int year;
@@ -18,6 +19,6 @@ class DeleteButton extends StatelessWidget {
           await FinishSessionCommand(context).run(year: year, month: month);
           entry.remove();
         },
-        child: const Text('Delete'));
+        child: Text(AppLocalizations.of(context)!.sortSummaryDeleteCTA));
   }
 }

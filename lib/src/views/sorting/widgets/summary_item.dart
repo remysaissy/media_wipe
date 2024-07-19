@@ -1,7 +1,7 @@
 import 'package:app/src/models/asset.dart';
 import 'package:app/src/utils.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class SummaryItem extends StatelessWidget {
   final Asset asset;

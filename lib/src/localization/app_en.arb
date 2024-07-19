@@ -1,6 +1,30 @@
 {
-  "appTitle": "app",
-  "@appTitle": {
-    "description": "The title of the application"
-  }
+  "appTitle": "MediaWipe",
+  "authorizeWelcome": "Welcome on MediaWipe!",
+  "authorizeDescription": "Sort your photos in an easy and convenient way",
+  "authorizeCTA": "Authorize",
+  "sortSummaryTitle": "{length} photos to delete",
+  "@sortSummaryTitle": {
+    "placeholders": {
+      "length": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
+  "sortSummaryEmptyTitle": "Nothing to delete!",
+  "sortSummaryEmptyCTA": "Go to main screen",
+  "sortSummaryRefineCTA": "Refine",
+  "sortSummaryDeleteCTA": "Delete",
+  "settingsTitle": "Settings",
+  "settingsToS": "Terms of Service",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsAuthorizeAccess": "Authorize access to photos",
+  "settingsDryRemoval": "[DEBUG] Dry removal",
+  "settingsRateApp": "Rate the app!",
+  "settingsThemeTitle": "Theme",
+  "settingsThemeSystem": "System",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "listingYearsTitle": "Media Wipe"
 }

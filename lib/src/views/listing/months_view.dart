@@ -6,6 +6,7 @@ import 'package:app/src/commands/assets/refresh_photos_command.dart';
 import 'package:app/src/utils.dart';
 
 class MonthsView extends StatelessWidget {
+  static String routeName = 'listMonths';
   final int year;
 
   const MonthsView({super.key, required this.year});

@@ -2,6 +2,7 @@ import 'package:app/src/commands/assets/authorize_photos_command.dart';
 import 'package:app/src/models/settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthorizePhotos extends StatelessWidget {
   const AuthorizePhotos({super.key});
@@ -19,7 +20,7 @@ class AuthorizePhotos extends StatelessWidget {
                 }
               },
         leading: const Icon(Icons.camera),
-        title: const Text('Authorize access to photos'),
+        title: Text(AppLocalizations.of(context)!.settingsAuthorizeAccess),
         trailing: hasPhotosAccess
             ? const Icon(Icons.check)
             : const Icon(Icons.arrow_forward_ios));

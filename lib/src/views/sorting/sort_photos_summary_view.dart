@@ -1,4 +1,5 @@
 import 'package:app/src/models/sessions_model.dart';
+import 'package:app/src/models/settings_model.dart';
 import 'package:app/src/views/sorting/widgets/delete_button.dart';
 import 'package:app/src/views/sorting/widgets/refine_button.dart';
 import 'package:app/src/views/sorting/widgets/summary_empty.dart';
@@ -6,8 +7,10 @@ import 'package:app/src/views/sorting/widgets/summary_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/models/assets_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SortPhotosSummaryView extends StatelessWidget {
+  static String routeName = 'sortPhotosSummary';
   final int year;
   final int month;
 
@@ -16,6 +19,8 @@ class SortPhotosSummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final debugDryRemoval =
+        context.watch<SettingsModel>().settings.debugDryRemoval;
     final session =
         context.watch<SessionsModel>().getSession(year: year, month: month);
     if (session == null) {
@@ -29,7 +34,8 @@ class SortPhotosSummaryView extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             leading: null,
-            title: Text('${assets.length} photos to delete'),
+            title: Text((debugDryRemoval ? '[DRY]' : '') +
+                AppLocalizations.of(context)!.sortSummaryTitle(assets.length)),
             actions: [
               RefineButton(year: year, month: month),
               DeleteButton(year: year, month: month)

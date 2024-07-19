@@ -1,3 +1,4 @@
+import 'package:app/src/views/listing/months_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,7 +13,7 @@ class Year extends StatelessWidget {
         child: ListTile(
             onTap: () async {
               if (!context.mounted) return;
-              context.pushNamed('listMonths', pathParameters: {'year': year});
+              context.pushNamed(MonthsView.routeName, pathParameters: {'year': year});
             },
             title: Text(year),
             trailing: Icon(Icons.adaptive.arrow_forward)));

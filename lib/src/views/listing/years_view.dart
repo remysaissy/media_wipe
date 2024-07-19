@@ -1,13 +1,17 @@
 import 'package:app/src/commands/sessions/drop_all_sessions_command.dart';
 import 'package:app/src/models/assets_model.dart';
 import 'package:app/src/views/listing/widgets/year.dart';
+import 'package:app/src/views/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:app/src/commands/assets/refresh_photos_command.dart';
 import 'package:app/src/utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class YearsView extends StatefulWidget {
+  static String routeName = 'listYears';
+
   const YearsView({super.key});
 
   @override
@@ -39,7 +43,7 @@ class YearsViewState extends State<YearsView> {
 
   void _onSettings() {
     if (!mounted) return;
-    context.push("/settings");
+    context.pushNamed(SettingsView.routeName);
   }
 
   @override
@@ -49,7 +53,7 @@ class YearsViewState extends State<YearsView> {
         _years.isEmpty ? Utils.buildLoading(context) : _buildContent(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('MediaWipe'),
+          title: Text(AppLocalizations.of(context)!.listingYearsTitle),
           actions: [
             IconButton(
               onPressed: _onToggleSort,
@@ -61,10 +65,11 @@ class YearsViewState extends State<YearsView> {
               onPressed: _onSettings,
               icon: const Icon(Icons.settings_outlined),
             ),
-            IconButton(onPressed: () async {
-              await DropAllSessionsCommand(context).run();
-            }, icon: const Icon(Icons.lock_reset))
-
+            IconButton(
+                onPressed: () async {
+                  await DropAllSessionsCommand(context).run();
+                },
+                icon: const Icon(Icons.lock_reset))
           ],
         ),
         body: SafeArea(child: child));

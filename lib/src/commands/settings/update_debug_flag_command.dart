@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:app/src/commands/abstract_command.dart';
 
 class UpdateDebugFlagCommand extends AbstractCommand {
