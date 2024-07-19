@@ -12,8 +12,9 @@ class AssetsService {
   Future<List<String>> deleteAssetsPerId(
       {required List<String> assetIds, required bool isDry}) async {
     if (assetIds.isNotEmpty) {
-      if (!isDry) {
-        // await Future.delayed(const Duration(milliseconds: 100));
+      if (isDry) {
+        await Future.delayed(Duration(milliseconds: assetIds.length * 100));
+      } else {
         await PhotoManager.editor.deleteWithIds(assetIds);
       }
     }
