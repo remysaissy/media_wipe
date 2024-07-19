@@ -27,6 +27,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     ThemeMode themeMode = context.watch<SettingsModel>().settings.themeMode;
+    final debugDryRemoval =
+        context.watch<SettingsModel>().settings.debugDryRemoval;
     return MaterialApp.router(
       restorationScopeId: 'app',
       localizationsDelegates: const [
@@ -43,6 +45,7 @@ class _MyAppState extends State<MyApp> {
       theme: MyTheme.light(),
       darkTheme: MyTheme.dark(),
       themeMode: themeMode,
+      debugShowCheckedModeBanner: debugDryRemoval,
 
       // Define routes available in the application.
       routerConfig: _router,

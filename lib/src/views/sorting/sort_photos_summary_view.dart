@@ -19,8 +19,6 @@ class SortPhotosSummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final debugDryRemoval =
-        context.watch<SettingsModel>().settings.debugDryRemoval;
     final session =
         context.watch<SessionsModel>().getSession(year: year, month: month);
     if (session == null) {
@@ -34,7 +32,7 @@ class SortPhotosSummaryView extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             leading: null,
-            title: Text((debugDryRemoval ? '[DRY]' : '') +
+            title: Text(
                 AppLocalizations.of(context)!.sortSummaryTitle(assets.length)),
             actions: [
               RefineButton(year: year, month: month),
