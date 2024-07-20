@@ -1,0 +1,9 @@
+import 'package:app/shared/commands/abstract_command.dart';
+
+class DropAllSessionsCommand extends AbstractCommand {
+  DropAllSessionsCommand(super.context);
+
+  Future<void> run() async {
+    await sessionsModel.removeSessions();
+  }
+}

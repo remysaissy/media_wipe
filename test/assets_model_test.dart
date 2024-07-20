@@ -1,7 +1,7 @@
 import 'package:app/objectbox.g.dart';
-import 'package:app/src/models/asset.dart';
-import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/services/assets_service.dart';
+import 'package:app/assets/models/asset.dart';
+import 'package:app/assets/models/asset_model.dart';
+import 'package:app/assets/services/assets_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 

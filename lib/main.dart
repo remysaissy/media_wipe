@@ -1,15 +1,15 @@
-import 'package:app/src/models/asset.dart';
-import 'package:app/src/models/assets_model.dart';
-import 'package:app/src/models/datastore.dart';
-import 'package:app/src/models/session.dart';
-import 'package:app/src/models/sessions_model.dart';
-import 'package:app/src/models/settings.dart';
-import 'package:app/src/models/settings_model.dart';
+import 'package:app/assets/models/asset.dart';
+import 'package:app/assets/models/asset_model.dart';
+import 'package:app/shared/models/datastore.dart';
+import 'package:app/assets/models/session.dart';
+import 'package:app/assets/models/sessions_model.dart';
+import 'package:app/settings/models/settings.dart';
+import 'package:app/settings/models/settings_model.dart';
+import 'package:app/shared/services/subscriptions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app/src/app.dart';
-import 'package:app/src/services/assets_service.dart';
-import 'package:app/src/services/subscriptions_service.dart';
+import 'package:app/shared/app.dart';
+import 'package:app/assets/services/assets_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

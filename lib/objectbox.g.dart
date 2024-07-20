@@ -14,9 +14,9 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'src/models/asset.dart';
-import 'src/models/session.dart';
-import 'src/models/settings.dart';
+import 'assets/models/asset.dart';
+import 'assets/models/session.dart';
+import 'settings/models/settings.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
