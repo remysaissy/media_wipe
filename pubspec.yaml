@@ -38,6 +38,7 @@ dependencies:
   objectbox_flutter_libs: ^4.0.1
   chewie: ^1.8.1
   equatable: ^2.0.5
+  appinio_swiper: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -66,3 +67,4 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/icons/
+    - assets/images/

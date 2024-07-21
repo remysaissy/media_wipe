@@ -19,6 +19,9 @@ class Asset extends Equatable {
 
   @override
   List<Object?> get props => [id, assetId, creationDate];
+
+  @Transient()
+  AssetData? assetData;
 }
 
 class AssetData {
@@ -45,6 +48,8 @@ class AssetData {
     } else {
       mediaUrl = await assetEntity?.getMediaUrl();
     }
-    return AssetData(assetEntity: assetEntity, thumbnailData: thumbnailData, mimeType: mimeType, file: file, mediaUrl: mediaUrl);
+    final assetData = AssetData(assetEntity: assetEntity, thumbnailData: thumbnailData, mimeType: mimeType, file: file, mediaUrl: mediaUrl);
+    asset.assetData = assetData;
+    return assetData;
   }
 }
