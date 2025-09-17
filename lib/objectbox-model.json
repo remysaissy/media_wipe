@@ -85,9 +85,9 @@
         {
           "id": "9:6787943451404250489",
           "name": "assetInReviewId",
+          "indexId": "1:5223050298962740270",
           "type": 11,
           "flags": 520,
-          "indexId": "1:5223050298962740270",
           "relationTarget": "Asset"
         }
       ],

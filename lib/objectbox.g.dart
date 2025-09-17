@@ -22,103 +22,120 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 9099405721974101011),
-      name: 'Asset',
-      lastPropertyId: const obx_int.IdUid(5, 6885162524059944980),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 4837035204060427739),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 1943415042826600957),
-            name: 'assetId',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2498480815078795357),
-            name: 'creationDate',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
+    id: const obx_int.IdUid(1, 9099405721974101011),
+    name: 'Asset',
+    lastPropertyId: const obx_int.IdUid(5, 6885162524059944980),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 4837035204060427739),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 1943415042826600957),
+        name: 'assetId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 2498480815078795357),
+        name: 'creationDate',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(3, 950458572113288239),
-      name: 'Settings',
-      lastPropertyId: const obx_int.IdUid(5, 2157820798339025752),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 258435443130294376),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 5044854582469888709),
-            name: 'dbThemeMode',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5218197412612136639),
-            name: 'hasPhotosAccess',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 316555022059172133),
-            name: 'hasInAppReview',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 2157820798339025752),
-            name: 'debugDryRemoval',
-            type: 1,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
+    id: const obx_int.IdUid(3, 950458572113288239),
+    name: 'Settings',
+    lastPropertyId: const obx_int.IdUid(5, 2157820798339025752),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 258435443130294376),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 5044854582469888709),
+        name: 'dbThemeMode',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 5218197412612136639),
+        name: 'hasPhotosAccess',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 316555022059172133),
+        name: 'hasInAppReview',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 2157820798339025752),
+        name: 'debugDryRemoval',
+        type: 1,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(4, 7031307153786005898),
-      name: 'Session',
-      lastPropertyId: const obx_int.IdUid(9, 6787943451404250489),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 4859087747070741403),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 9048013942482498381),
-            name: 'sessionYear',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 8063042737748148283),
-            name: 'sessionMonth',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 6787943451404250489),
-            name: 'assetInReviewId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(1, 5223050298962740270),
-            relationTarget: 'Asset')
-      ],
-      relations: <obx_int.ModelRelation>[
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(1, 683026278498002356),
-            name: 'assetsToDrop',
-            targetId: const obx_int.IdUid(1, 9099405721974101011)),
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(2, 3351964468242810548),
-            name: 'refineAssetsToDrop',
-            targetId: const obx_int.IdUid(1, 9099405721974101011))
-      ],
-      backlinks: <obx_int.ModelBacklink>[])
+    id: const obx_int.IdUid(4, 7031307153786005898),
+    name: 'Session',
+    lastPropertyId: const obx_int.IdUid(9, 6787943451404250489),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 4859087747070741403),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 9048013942482498381),
+        name: 'sessionYear',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8063042737748148283),
+        name: 'sessionMonth',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 6787943451404250489),
+        name: 'assetInReviewId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(1, 5223050298962740270),
+        relationTarget: 'Asset',
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(1, 683026278498002356),
+        name: 'assetsToDrop',
+        targetId: const obx_int.IdUid(1, 9099405721974101011),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(2, 3351964468242810548),
+        name: 'refineAssetsToDrop',
+        targetId: const obx_int.IdUid(1, 9099405721974101011),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -132,175 +149,228 @@ final _entities = <obx_int.ModelEntity>[
 /// For Flutter apps, also calls `loadObjectBoxLibraryAndroidCompat()` from
 /// the ObjectBox Flutter library to fix loading the native ObjectBox library
 /// on Android 6 and older.
-Future<obx.Store> openStore(
-    {String? directory,
-    int? maxDBSizeInKB,
-    int? maxDataSizeInKB,
-    int? fileMode,
-    int? maxReaders,
-    bool queriesCaseSensitiveDefault = true,
-    String? macosApplicationGroup}) async {
+Future<obx.Store> openStore({
+  String? directory,
+  int? maxDBSizeInKB,
+  int? maxDataSizeInKB,
+  int? fileMode,
+  int? maxReaders,
+  bool queriesCaseSensitiveDefault = true,
+  String? macosApplicationGroup,
+}) async {
   await loadObjectBoxLibraryAndroidCompat();
-  return obx.Store(getObjectBoxModel(),
-      directory: directory ?? (await defaultStoreDirectory()).path,
-      maxDBSizeInKB: maxDBSizeInKB,
-      maxDataSizeInKB: maxDataSizeInKB,
-      fileMode: fileMode,
-      maxReaders: maxReaders,
-      queriesCaseSensitiveDefault: queriesCaseSensitiveDefault,
-      macosApplicationGroup: macosApplicationGroup);
+  return obx.Store(
+    getObjectBoxModel(),
+    directory: directory ?? (await defaultStoreDirectory()).path,
+    maxDBSizeInKB: maxDBSizeInKB,
+    maxDataSizeInKB: maxDataSizeInKB,
+    fileMode: fileMode,
+    maxReaders: maxReaders,
+    queriesCaseSensitiveDefault: queriesCaseSensitiveDefault,
+    macosApplicationGroup: macosApplicationGroup,
+  );
 }
 
 /// Returns the ObjectBox model definition for this project for use with
 /// [obx.Store.new].
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
-      entities: _entities,
-      lastEntityId: const obx_int.IdUid(4, 7031307153786005898),
-      lastIndexId: const obx_int.IdUid(1, 5223050298962740270),
-      lastRelationId: const obx_int.IdUid(2, 3351964468242810548),
-      lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [4772058913490209717],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [
-        892816802662527702,
-        7392058732712303245,
-        4600526659355473183,
-        5069912361225904768,
-        578897168852608763,
-        1033342714859717526,
-        6885162524059944980,
-        5649553013620512132,
-        5914910433241501280,
-        7468757591462912690,
-        4417437459508877249,
-        8365573264182440466
-      ],
-      retiredRelationUids: const [],
-      modelVersion: 5,
-      modelVersionParserMinimum: 5,
-      version: 1);
+    entities: _entities,
+    lastEntityId: const obx_int.IdUid(4, 7031307153786005898),
+    lastIndexId: const obx_int.IdUid(1, 5223050298962740270),
+    lastRelationId: const obx_int.IdUid(2, 3351964468242810548),
+    lastSequenceId: const obx_int.IdUid(0, 0),
+    retiredEntityUids: const [4772058913490209717],
+    retiredIndexUids: const [],
+    retiredPropertyUids: const [
+      892816802662527702,
+      7392058732712303245,
+      4600526659355473183,
+      5069912361225904768,
+      578897168852608763,
+      1033342714859717526,
+      6885162524059944980,
+      5649553013620512132,
+      5914910433241501280,
+      7468757591462912690,
+      4417437459508877249,
+      8365573264182440466,
+    ],
+    retiredRelationUids: const [],
+    modelVersion: 5,
+    modelVersionParserMinimum: 5,
+    version: 1,
+  );
 
   final bindings = <Type, obx_int.EntityDefinition>{
     Asset: obx_int.EntityDefinition<Asset>(
-        model: _entities[0],
-        toOneRelations: (Asset object) => [],
-        toManyRelations: (Asset object) => {},
-        getId: (Asset object) => object.id,
-        setId: (Asset object, int id) {
-          object.id = id;
-        },
-        objectToFB: (Asset object, fb.Builder fbb) {
-          final assetIdOffset = fbb.writeString(object.assetId);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, assetIdOffset);
-          fbb.addInt64(2, object.creationDate.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final assetIdParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final creationDateParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
-          final object = Asset(
-              id: idParam,
-              assetId: assetIdParam,
-              creationDate: creationDateParam);
+      model: _entities[0],
+      toOneRelations: (Asset object) => [],
+      toManyRelations: (Asset object) => {},
+      getId: (Asset object) => object.id,
+      setId: (Asset object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Asset object, fb.Builder fbb) {
+        final assetIdOffset = fbb.writeString(object.assetId);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, assetIdOffset);
+        fbb.addInt64(2, object.creationDate.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final assetIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final creationDateParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0),
+        );
+        final object = Asset(
+          id: idParam,
+          assetId: assetIdParam,
+          creationDate: creationDateParam,
+        );
 
-          return object;
-        }),
+        return object;
+      },
+    ),
     Settings: obx_int.EntityDefinition<Settings>(
-        model: _entities[1],
-        toOneRelations: (Settings object) => [],
-        toManyRelations: (Settings object) => {},
-        getId: (Settings object) => object.id,
-        setId: (Settings object, int id) {
-          object.id = id;
-        },
-        objectToFB: (Settings object, fb.Builder fbb) {
-          final dbThemeModeOffset = fbb.writeString(object.dbThemeMode);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, dbThemeModeOffset);
-          fbb.addBool(2, object.hasPhotosAccess);
-          fbb.addBool(3, object.hasInAppReview);
-          fbb.addBool(4, object.debugDryRemoval);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final hasPhotosAccessParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
-          final hasInAppReviewParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
-          final debugDryRemovalParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false);
-          final object = Settings(
-              id: idParam,
-              hasPhotosAccess: hasPhotosAccessParam,
-              hasInAppReview: hasInAppReviewParam,
-              debugDryRemoval: debugDryRemovalParam)
-            ..dbThemeMode = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 6, '');
+      model: _entities[1],
+      toOneRelations: (Settings object) => [],
+      toManyRelations: (Settings object) => {},
+      getId: (Settings object) => object.id,
+      setId: (Settings object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Settings object, fb.Builder fbb) {
+        final dbThemeModeOffset = fbb.writeString(object.dbThemeMode);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, dbThemeModeOffset);
+        fbb.addBool(2, object.hasPhotosAccess);
+        fbb.addBool(3, object.hasInAppReview);
+        fbb.addBool(4, object.debugDryRemoval);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final hasPhotosAccessParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          false,
+        );
+        final hasInAppReviewParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          false,
+        );
+        final debugDryRemovalParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          false,
+        );
+        final object =
+            Settings(
+                id: idParam,
+                hasPhotosAccess: hasPhotosAccessParam,
+                hasInAppReview: hasInAppReviewParam,
+                debugDryRemoval: debugDryRemovalParam,
+              )
+              ..dbThemeMode = const fb.StringReader(
+                asciiOptimization: true,
+              ).vTableGet(buffer, rootOffset, 6, '');
 
-          return object;
-        }),
+        return object;
+      },
+    ),
     Session: obx_int.EntityDefinition<Session>(
-        model: _entities[2],
-        toOneRelations: (Session object) => [object.assetInReview],
-        toManyRelations: (Session object) => {
-              obx_int.RelInfo<Session>.toMany(1, object.id):
-                  object.assetsToDrop,
-              obx_int.RelInfo<Session>.toMany(2, object.id):
-                  object.refineAssetsToDrop
-            },
-        getId: (Session object) => object.id,
-        setId: (Session object, int id) {
-          object.id = id;
-        },
-        objectToFB: (Session object, fb.Builder fbb) {
-          fbb.startTable(10);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(3, object.sessionYear);
-          fbb.addInt64(4, object.sessionMonth);
-          fbb.addInt64(8, object.assetInReview.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final sessionYearParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          final sessionMonthParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          final object = Session(
-              id: idParam,
-              sessionYear: sessionYearParam,
-              sessionMonth: sessionMonthParam);
-          object.assetInReview.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
-          object.assetInReview.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<Session>(object.assetsToDrop,
-              store, obx_int.RelInfo<Session>.toMany(1, object.id));
-          obx_int.InternalToManyAccess.setRelInfo<Session>(
-              object.refineAssetsToDrop,
-              store,
-              obx_int.RelInfo<Session>.toMany(2, object.id));
-          return object;
-        })
+      model: _entities[2],
+      toOneRelations: (Session object) => [object.assetInReview],
+      toManyRelations: (Session object) => {
+        obx_int.RelInfo<Session>.toMany(1, object.id): object.assetsToDrop,
+        obx_int.RelInfo<Session>.toMany(2, object.id):
+            object.refineAssetsToDrop,
+      },
+      getId: (Session object) => object.id,
+      setId: (Session object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Session object, fb.Builder fbb) {
+        fbb.startTable(10);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(3, object.sessionYear);
+        fbb.addInt64(4, object.sessionMonth);
+        fbb.addInt64(8, object.assetInReview.targetId);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final sessionYearParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          0,
+        );
+        final sessionMonthParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          0,
+        );
+        final object = Session(
+          id: idParam,
+          sessionYear: sessionYearParam,
+          sessionMonth: sessionMonthParam,
+        );
+        object.assetInReview.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          20,
+          0,
+        );
+        object.assetInReview.attach(store);
+        obx_int.InternalToManyAccess.setRelInfo<Session>(
+          object.assetsToDrop,
+          store,
+          obx_int.RelInfo<Session>.toMany(1, object.id),
+        );
+        obx_int.InternalToManyAccess.setRelInfo<Session>(
+          object.refineAssetsToDrop,
+          store,
+          obx_int.RelInfo<Session>.toMany(2, object.id),
+        );
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -312,60 +382,73 @@ class Asset_ {
   static final id = obx.QueryIntegerProperty<Asset>(_entities[0].properties[0]);
 
   /// See [Asset.assetId].
-  static final assetId =
-      obx.QueryStringProperty<Asset>(_entities[0].properties[1]);
+  static final assetId = obx.QueryStringProperty<Asset>(
+    _entities[0].properties[1],
+  );
 
   /// See [Asset.creationDate].
-  static final creationDate =
-      obx.QueryDateProperty<Asset>(_entities[0].properties[2]);
+  static final creationDate = obx.QueryDateProperty<Asset>(
+    _entities[0].properties[2],
+  );
 }
 
 /// [Settings] entity fields to define ObjectBox queries.
 class Settings_ {
   /// See [Settings.id].
-  static final id =
-      obx.QueryIntegerProperty<Settings>(_entities[1].properties[0]);
+  static final id = obx.QueryIntegerProperty<Settings>(
+    _entities[1].properties[0],
+  );
 
   /// See [Settings.dbThemeMode].
-  static final dbThemeMode =
-      obx.QueryStringProperty<Settings>(_entities[1].properties[1]);
+  static final dbThemeMode = obx.QueryStringProperty<Settings>(
+    _entities[1].properties[1],
+  );
 
   /// See [Settings.hasPhotosAccess].
-  static final hasPhotosAccess =
-      obx.QueryBooleanProperty<Settings>(_entities[1].properties[2]);
+  static final hasPhotosAccess = obx.QueryBooleanProperty<Settings>(
+    _entities[1].properties[2],
+  );
 
   /// See [Settings.hasInAppReview].
-  static final hasInAppReview =
-      obx.QueryBooleanProperty<Settings>(_entities[1].properties[3]);
+  static final hasInAppReview = obx.QueryBooleanProperty<Settings>(
+    _entities[1].properties[3],
+  );
 
   /// See [Settings.debugDryRemoval].
-  static final debugDryRemoval =
-      obx.QueryBooleanProperty<Settings>(_entities[1].properties[4]);
+  static final debugDryRemoval = obx.QueryBooleanProperty<Settings>(
+    _entities[1].properties[4],
+  );
 }
 
 /// [Session] entity fields to define ObjectBox queries.
 class Session_ {
   /// See [Session.id].
-  static final id =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[0]);
+  static final id = obx.QueryIntegerProperty<Session>(
+    _entities[2].properties[0],
+  );
 
   /// See [Session.sessionYear].
-  static final sessionYear =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[1]);
+  static final sessionYear = obx.QueryIntegerProperty<Session>(
+    _entities[2].properties[1],
+  );
 
   /// See [Session.sessionMonth].
-  static final sessionMonth =
-      obx.QueryIntegerProperty<Session>(_entities[2].properties[2]);
+  static final sessionMonth = obx.QueryIntegerProperty<Session>(
+    _entities[2].properties[2],
+  );
 
   /// See [Session.assetInReview].
-  static final assetInReview =
-      obx.QueryRelationToOne<Session, Asset>(_entities[2].properties[3]);
+  static final assetInReview = obx.QueryRelationToOne<Session, Asset>(
+    _entities[2].properties[3],
+  );
 
   /// see [Session.assetsToDrop]
-  static final assetsToDrop =
-      obx.QueryRelationToMany<Session, Asset>(_entities[2].relations[0]);
+  static final assetsToDrop = obx.QueryRelationToMany<Session, Asset>(
+    _entities[2].relations[0],
+  );
 
   /// see [Session.refineAssetsToDrop]
-  static final refineAssetsToDrop =
-      obx.QueryRelationToMany<Session, Asset>(_entities[2].relations[1]);
+  static final refineAssetsToDrop = obx.QueryRelationToMany<Session, Asset>(
+    _entities[2].relations[1],
+  );
 }
