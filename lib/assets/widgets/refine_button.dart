@@ -18,8 +18,7 @@ class RefineButton extends StatelessWidget {
           context.goNamed(AssetsRouter.sortSwipe, pathParameters: {
             'year': year.toString(),
             'month': month.toString()
-          },
-          queryParameters: {
+          }, queryParameters: {
             'mode': 'refine',
           });
         },

@@ -7,7 +7,8 @@ class MyViewerMetadata extends StatelessWidget {
   final Asset asset;
   final AssetData assetData;
 
-  const MyViewerMetadata({super.key, required this.asset, required this.assetData});
+  const MyViewerMetadata(
+      {super.key, required this.asset, required this.assetData});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,8 @@ class MyViewerMetadata extends StatelessWidget {
           title: Utils.creationDateFormat.format(asset.creationDate),
           leadingIcon: Icons.calendar_month_rounded),
       _buildMetadataEntry(
-          title: '${assetData.assetEntity?.width}x${assetData.assetEntity?.height}',
+          title:
+              '${assetData.assetEntity?.width}x${assetData.assetEntity?.height}',
           leadingIcon: Icons.photo_size_select_large_rounded),
     ];
     return SizedBox(

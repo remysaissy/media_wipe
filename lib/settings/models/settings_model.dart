@@ -14,9 +14,9 @@ class SettingsModel extends ChangeNotifier {
   /// Use for initial loading.
   Future<SettingsModel> load() async {
     await fetchSettings();
-    _settings?.hasPhotosAccess =
-    await AssetsService().isPhotosAuthorized();
-    _settings?.hasInAppReview = await SubscriptionsService().isInAppReviewAvailable();
+    _settings?.hasPhotosAccess = await AssetsService().isPhotosAuthorized();
+    _settings?.hasInAppReview =
+        await SubscriptionsService().isInAppReviewAvailable();
     await updateSettings();
     return this;
   }

@@ -290,16 +290,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
           12,
           false,
         );
-        final object =
-            Settings(
-                id: idParam,
-                hasPhotosAccess: hasPhotosAccessParam,
-                hasInAppReview: hasInAppReviewParam,
-                debugDryRemoval: debugDryRemovalParam,
-              )
-              ..dbThemeMode = const fb.StringReader(
-                asciiOptimization: true,
-              ).vTableGet(buffer, rootOffset, 6, '');
+        final object = Settings(
+          id: idParam,
+          hasPhotosAccess: hasPhotosAccessParam,
+          hasInAppReview: hasInAppReviewParam,
+          debugDryRemoval: debugDryRemovalParam,
+        )..dbThemeMode = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 6, '');
 
         return object;
       },

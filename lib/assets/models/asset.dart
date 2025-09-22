@@ -35,7 +35,12 @@ class AssetData {
 
   final String? mediaUrl;
 
-  AssetData({required this.assetEntity, required this.thumbnailData, required this.mimeType, required this.file, required this.mediaUrl});
+  AssetData(
+      {required this.assetEntity,
+      required this.thumbnailData,
+      required this.mimeType,
+      required this.file,
+      required this.mediaUrl});
 
   static Future<AssetData> fromAsset({required Asset asset}) async {
     final assetEntity = await AssetEntity.fromId(asset.assetId);
@@ -48,7 +53,12 @@ class AssetData {
     } else {
       mediaUrl = await assetEntity?.getMediaUrl();
     }
-    final assetData = AssetData(assetEntity: assetEntity, thumbnailData: thumbnailData, mimeType: mimeType, file: file, mediaUrl: mediaUrl);
+    final assetData = AssetData(
+        assetEntity: assetEntity,
+        thumbnailData: thumbnailData,
+        mimeType: mimeType,
+        file: file,
+        mediaUrl: mediaUrl);
     asset.assetData = assetData;
     return assetData;
   }

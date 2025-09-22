@@ -6,14 +6,12 @@ class KeepAssetInSessionCommand extends AbstractCommand {
   KeepAssetInSessionCommand(super.context);
 
   Future<void> run(
-      {required Session session,
-      required bool isWhiteListMode}) async {
+      {required Session session, required bool isWhiteListMode}) async {
     if (session.assetInReview.target == null) return;
     final assets = assetsModel.listAssets(
         forYear: session.assetInReview.target?.creationDate.year,
         forMonth: session.assetInReview.target?.creationDate.month,
-        withAllowList:
-            isWhiteListMode == true ? session.assetsToDrop : null);
+        withAllowList: isWhiteListMode == true ? session.assetsToDrop : null);
     final nextAssetInReview = _findNextAssetIdToReview(assets, session);
     if (isWhiteListMode) {
       session.refineAssetsToDrop.remove(session.assetInReview.target);

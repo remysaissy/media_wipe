@@ -10,23 +10,18 @@ class LoadingView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(child:
-              Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 56, //radius of avatar
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: ClipOval(child: Image.asset('assets/icons/icon.png')),
-                      ),
-                    ),
-                    const CircularProgressIndicator.adaptive(),
-                  ])
-              )
-            ]
-        )
-    );
+          Center(
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+            CircleAvatar(
+              radius: 56, //radius of avatar
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: ClipOval(child: Image.asset('assets/icons/icon.png')),
+              ),
+            ),
+            const CircularProgressIndicator.adaptive(),
+          ]))
+        ]));
   }
 }

@@ -14,32 +14,31 @@ class AppRouter {
 
   static GoRouter setupRoutes() {
     return GoRouter(
-      initialLocation: root,
-      navigatorKey: _rootNavigatorKey,
-      debugLogDiagnostics: kDebugMode,
-      routes: [
-        GoRoute(
-            path: AppRouter.root,
-            name: AppRouter.root,
-            redirect: (context, __) {
-              final hasPhotosAccess =
-                  context.read<SettingsModel>().settings.hasPhotosAccess;
-              if (!hasPhotosAccess) {
-                return SettingsRouter.authorize;
-              }
-              return AssetsRouter.list;
-            }),
-        StatefulShellRoute.indexedStack(
-          builder: (context, state, child) {
-            return child;
-          },
-          branches: [
-            AssetsRouter.setup(),
-            SettingsRouter.setup(),
-          ],
-        ),
-      ],
-      errorBuilder: (context, state) => const LoadingView()
-    );
+        initialLocation: root,
+        navigatorKey: _rootNavigatorKey,
+        debugLogDiagnostics: kDebugMode,
+        routes: [
+          GoRoute(
+              path: AppRouter.root,
+              name: AppRouter.root,
+              redirect: (context, __) {
+                final hasPhotosAccess =
+                    context.read<SettingsModel>().settings.hasPhotosAccess;
+                if (!hasPhotosAccess) {
+                  return SettingsRouter.authorize;
+                }
+                return AssetsRouter.list;
+              }),
+          StatefulShellRoute.indexedStack(
+            builder: (context, state, child) {
+              return child;
+            },
+            branches: [
+              AssetsRouter.setup(),
+              SettingsRouter.setup(),
+            ],
+          ),
+        ],
+        errorBuilder: (context, state) => const LoadingView());
   }
 }

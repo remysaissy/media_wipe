@@ -18,8 +18,7 @@ class StartSessionCommand extends AbstractCommand {
 
   Future<void> _createSession(int year, int month) async {
     final assets = assetsModel.listAssets(forYear: year, forMonth: month);
-    var session =
-        Session(sessionYear: year, sessionMonth: month);
+    var session = Session(sessionYear: year, sessionMonth: month);
     session.assetInReview.target = assets.firstOrNull;
     await sessionsModel.addSessions(sessions: [session]);
   }
@@ -29,7 +28,10 @@ class StartSessionCommand extends AbstractCommand {
     // If the session already exists and we are in whiteList mode, we are refining the deletion list.
     if (isWhiteListMode == true) {
       final assets = assetsModel
-          .listAssets(forYear: year, forMonth: month, withAllowList: session.assetsToDrop)
+          .listAssets(
+              forYear: year,
+              forMonth: month,
+              withAllowList: session.assetsToDrop)
           .toList();
       // use this duplicated drop list during the refining process.
       session.refineAssetsToDrop.clear();

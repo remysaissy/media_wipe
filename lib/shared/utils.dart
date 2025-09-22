@@ -8,8 +8,8 @@ typedef FutureBuilderErrorCallback = Widget Function(Object? error);
 typedef FutureBuilderReadyCallback<T> = Widget Function(T? data);
 
 class Utils {
-  static final DateFormat creationDateFormat = DateFormat(
-      "yyyy:MM:dd HH:mm:ss");
+  static final DateFormat creationDateFormat =
+      DateFormat("yyyy:MM:dd HH:mm:ss");
   static final NumberFormat monthFormatter = NumberFormat("00");
   static final NumberFormat yearFormatter = NumberFormat("0000");
   static final DateFormat _monthNumberToMonthName = DateFormat('MMMM');
@@ -19,8 +19,7 @@ class Utils {
   }
 
   static String stringifyYearMonth({required int year, required int month}) {
-    return '${year.toString().padLeft(4, '0')}${month.toString().padLeft(
-        2, '0')}';
+    return '${year.toString().padLeft(4, '0')}${month.toString().padLeft(2, '0')}';
   }
 
   static final Logger _logger = Logger();
@@ -34,10 +33,10 @@ class Utils {
         child: CircularProgressIndicator.adaptive());
   }
 
-  static Widget futureBuilder<T>({
-    required Future<T> future,
-    FutureBuilderErrorCallback? onError,
-    FutureBuilderReadyCallback<T>? onReady}) {
+  static Widget futureBuilder<T>(
+      {required Future<T> future,
+      FutureBuilderErrorCallback? onError,
+      FutureBuilderReadyCallback<T>? onReady}) {
     return FutureBuilder(
         future: future,
         builder: (context, snapshot) {
@@ -71,8 +70,8 @@ class Utils {
     }
   }
 
-  static void _showAlertDialog(BuildContext context, String title, String description) {
-
+  static void _showAlertDialog(
+      BuildContext context, String title, String description) {
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {

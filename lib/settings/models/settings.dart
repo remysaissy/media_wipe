@@ -14,7 +14,9 @@ class Settings {
   }
 
   set dbThemeMode(String? value) {
-    var mode = ThemeMode.values.where((e) => e.name.toLowerCase() == value).firstOrNull;
+    var mode = ThemeMode.values
+        .where((e) => e.name.toLowerCase() == value)
+        .firstOrNull;
     mode ??= ThemeMode.system;
     themeMode = mode;
   }
@@ -26,5 +28,10 @@ class Settings {
   // Debug only.
   bool debugDryRemoval;
 
-  Settings({this.id = 0, this.themeMode = ThemeMode.system, this.hasPhotosAccess = false, this.hasInAppReview = false, this.debugDryRemoval = true});
+  Settings(
+      {this.id = 0,
+      this.themeMode = ThemeMode.system,
+      this.hasPhotosAccess = false,
+      this.hasInAppReview = false,
+      this.debugDryRemoval = true});
 }

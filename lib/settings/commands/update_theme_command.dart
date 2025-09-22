@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:app/shared/commands/abstract_command.dart';
 
 class UpdateThemeCommand extends AbstractCommand {
-
   UpdateThemeCommand(super.context);
 
   Future<void> run({required ThemeMode newThemeMode}) async {

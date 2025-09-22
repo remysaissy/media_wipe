@@ -8,7 +8,8 @@ class MyVideoViewerCard extends StatefulWidget {
   final Asset asset;
   final AssetData assetData;
 
-  const MyVideoViewerCard({super.key, required this.asset, required this.assetData});
+  const MyVideoViewerCard(
+      {super.key, required this.asset, required this.assetData});
 
   @override
   State<StatefulWidget> createState() => _MyVideoViewerState();

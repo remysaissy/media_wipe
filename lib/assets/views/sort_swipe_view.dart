@@ -6,17 +6,12 @@ import 'package:app/assets/models/asset_model.dart';
 import 'package:app/assets/models/session.dart';
 import 'package:app/assets/models/sessions_model.dart';
 import 'package:app/assets/router.dart';
-import 'package:app/assets/views/my_viewer.dart';
 import 'package:app/assets/widgets/media_viewer.dart';
-import 'package:app/assets/widgets/my_video_viewer_card.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:collection/collection.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:app/assets/commands/sessions/drop_asset_in_session_command.dart';
 import 'package:app/assets/commands/sessions/keep_asset_in_session_command.dart';
@@ -29,7 +24,7 @@ class SortSwipe extends StatefulWidget {
 
   const SortSwipe(
       {super.key, required this.year, required this.month, String? mode})
-      : this.mode = mode ?? 'classic';
+      : mode = mode ?? 'classic';
 
   @override
   State<StatefulWidget> createState() => _SortSwipeState();
@@ -116,7 +111,7 @@ class _SortSwipeState extends State<SortSwipe> {
 
   Widget _buildContent() {
     return AppinioSwiper(
-      swipeOptions: SwipeOptions.only(left: true, right: true),
+      swipeOptions: const SwipeOptions.only(left: true, right: true),
       loop: false,
       onEnd: _onEndPressed,
       onSwipeBegin: (previousIndex, targetIndex, activity) {
@@ -124,7 +119,6 @@ class _SortSwipeState extends State<SortSwipe> {
       },
       onSwipeEnd: (previousIndex, targetIndex, __) {
         _indicator = 0;
-
       },
       initialIndex: _current,
       controller: _controller,
@@ -135,12 +129,13 @@ class _SortSwipeState extends State<SortSwipe> {
           alignment: Alignment.center,
           child: Stack(children: [
             MediaViewer(asset: asset),
-            Opacity(opacity: 0.5, child:
-            SvgPicture.asset(
-              'assets/images/red_cross.svg',
-              width: 200,
-              height: 200,
-            )),
+            Opacity(
+                opacity: 0.5,
+                child: SvgPicture.asset(
+                  'assets/images/red_cross.svg',
+                  width: 200,
+                  height: 200,
+                )),
           ]),
         );
       },

@@ -13,7 +13,8 @@ class Year extends StatelessWidget {
         child: ListTile(
             onTap: () async {
               if (!context.mounted) return;
-              context.pushNamed(AssetsRouter.listForYear, pathParameters: {'year': year});
+              context.pushNamed(AssetsRouter.listForYear,
+                  pathParameters: {'year': year});
             },
             title: Text(year),
             trailing: Icon(Icons.adaptive.arrow_forward)));

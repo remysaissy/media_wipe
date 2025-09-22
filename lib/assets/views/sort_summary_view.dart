@@ -12,8 +12,7 @@ class SortSummaryView extends StatelessWidget {
   final int year;
   final int month;
 
-  const SortSummaryView(
-      {super.key, required this.year, required this.month});
+  const SortSummaryView({super.key, required this.year, required this.month});
 
   @override
   Widget build(BuildContext context) {

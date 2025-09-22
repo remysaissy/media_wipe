@@ -6,8 +6,7 @@ class DropAssetInSessionCommand extends AbstractCommand {
   DropAssetInSessionCommand(super.context);
 
   Future<void> run(
-      {required Session session,
-      required bool isWhiteListMode}) async {
+      {required Session session, required bool isWhiteListMode}) async {
     if (session.assetInReview.target == null) return;
     final assets = assetsModel.listAssets(
         forYear: session.assetInReview.target?.creationDate.year,

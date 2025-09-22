@@ -13,7 +13,8 @@ class SortPhotosControls extends StatelessWidget {
       {super.key,
       this.onKeepPressed,
       this.onDropPressed,
-      required this.asset, required this.assetData});
+      required this.asset,
+      required this.assetData});
 
   @override
   Widget build(BuildContext context) {

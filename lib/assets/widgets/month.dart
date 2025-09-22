@@ -18,8 +18,7 @@ class Month extends StatelessWidget {
               context.pushNamed(AssetsRouter.sortSwipe, pathParameters: {
                 'year': year,
                 'month': month
-              },
-              queryParameters: {
+              }, queryParameters: {
                 'mode': 'classic',
               });
             },
