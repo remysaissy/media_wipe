@@ -12,15 +12,18 @@ class MediaViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     if (asset.assetData != null) {
       return SingleChildScrollView(
-          child: MyViewer(asset: asset, assetData: asset.assetData!));
+        child: MyViewer(asset: asset, assetData: asset.assetData!),
+      );
     } else {
       return Utils.futureBuilder(
-          future: AssetData.fromAsset(asset: asset),
-          onReady: (data) {
-            final assetData = data as AssetData;
-            return SingleChildScrollView(
-                child: MyViewer(asset: asset, assetData: assetData));
-          });
+        future: AssetData.fromAsset(asset: asset),
+        onReady: (data) {
+          final assetData = data as AssetData;
+          return SingleChildScrollView(
+            child: MyViewer(asset: asset, assetData: assetData),
+          );
+        },
+      );
     }
   }
 }

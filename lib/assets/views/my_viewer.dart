@@ -18,7 +18,11 @@ class MyViewer extends StatelessWidget {
     } else {
       child = MyVideoViewerCard(asset: asset, assetData: assetData);
     }
-    return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.75, child: child);
+    return child;
+    // return SizedBox(
+    //   // width: MediaQuery.sizeOf(context).width,
+    //   height: MediaQuery.sizeOf(context).height * 0.75,
+    //   child: child,
+    // );
   }
 }

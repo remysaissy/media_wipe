@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/assets/commands/sessions/commit_refine_in_session_command.dart';
 import 'package:app/assets/commands/sessions/start_session_command.dart';
 import 'package:app/assets/commands/sessions/undo_last_operation_in_session_command.dart';
@@ -99,57 +101,74 @@ class _SortSwipeState extends State<SortSwipe> {
     );
   }
 
-  // Future<bool> _onSwipe(
-  //   int previousIndex,
-  //   int? currentIndex,
-  //   CardSwiperDirection direction,
-  // ) async {
-  //   bool ret = false;
-  //   if (direction == CardSwiperDirection.left) {
-  //     await _onDropPressed();
-  //     ret = true;
-  //   } else if (direction == CardSwiperDirection.right) {
-  //     await _onKeepPressed();
-  //     ret = true;
-  //   }
-  //   return ret;
-  // }
-
-  int _indicator = 0;
+  Future<void> _onSwipeEnd(
+    int previousIndex,
+    int targetIndex,
+    SwiperActivity activity,
+  ) async {
+    switch (activity) {
+      case Swipe():
+        await _onKeepPressed();
+        log('The card was swiped to the : ${activity.direction}');
+        log('previous index: $previousIndex, target index: $targetIndex');
+        break;
+      case Unswipe():
+        await _onDropPressed();
+        log('A ${activity.direction.name} swipe was undone.');
+        log('previous index: $previousIndex, target index: $targetIndex');
+        break;
+      case CancelSwipe():
+        log('A swipe was cancelled');
+        break;
+      case DrivenActivity():
+        log('Driven Activity');
+        break;
+    }
+  }
 
   Widget _buildContent() {
-    return AppinioSwiper(
-      swipeOptions: const SwipeOptions.only(left: true, right: true),
-      loop: false,
-      onEnd: _onEndPressed,
-      onSwipeBegin: (previousIndex, targetIndex, activity) {
-        _indicator = targetIndex - previousIndex;
-      },
-      onSwipeEnd: (previousIndex, targetIndex, _) {
-        _indicator = 0;
-      },
-      initialIndex: _current,
-      controller: _controller,
-      cardCount: _assets.length,
-      cardBuilder: (context, index) {
-        final asset = _assets[index];
-        return Container(
-          alignment: Alignment.center,
-          child: Stack(
-            children: [
-              MediaViewer(asset: asset),
-              Opacity(
-                opacity: 0.5,
-                child: SvgPicture.asset(
-                  'assets/images/red_cross.svg',
-                  width: 200,
-                  height: 200,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+    return Stack(
+      alignment: AlignmentGeometry.bottomCenter,
+      children: [
+        AppinioSwiper(
+          swipeOptions: const SwipeOptions.only(left: true, right: true),
+          loop: false,
+          onEnd: _onEndPressed,
+          onSwipeEnd: _onSwipeEnd,
+          initialIndex: _current,
+          controller: _controller,
+          cardCount: _assets.length,
+          cardBuilder: (context, index) {
+            final asset = _assets[index];
+            return Align(
+              alignment: AlignmentGeometry.center,
+              child: MediaViewer(asset: asset),
+            );
+          },
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            MaterialButton(
+              onPressed: _controller.swipeLeft,
+              color: Colors.red,
+              textColor: Colors.white,
+              child: Icon(Icons.close, size: 24),
+              padding: EdgeInsets.all(16),
+              shape: CircleBorder(),
+            ),
+            MaterialButton(
+              onPressed: _controller.swipeRight,
+              color: Colors.green,
+              textColor: Colors.white,
+              child: Icon(Icons.check, size: 24),
+              padding: EdgeInsets.all(16),
+              shape: CircleBorder(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -174,36 +193,42 @@ class _SortSwipeState extends State<SortSwipe> {
   }
 
   Future<void> _onKeepPressed() async {
-    // bool wasLast = _isLast;
+    bool wasLast = _isLast;
     if (!mounted) return;
     await KeepAssetInSessionCommand(
       context,
     ).run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
-    // if (wasLast) {
-    //   if (widget.mode == 'refine') {
-    //     await CommitRefineInSessionCommand(context).run(session: _session!);
-    //   }
-    //   context.goNamed(AssetsRouter.sortSummary, pathParameters: {
-    //     'year': widget.year.toString(),
-    //     'month': widget.month.toString()
-    //   });
-    // }
+    if (wasLast) {
+      if (widget.mode == 'refine') {
+        await CommitRefineInSessionCommand(context).run(session: _session!);
+      }
+      context.goNamed(
+        AssetsRouter.sortSummary,
+        pathParameters: {
+          'year': widget.year.toString(),
+          'month': widget.month.toString(),
+        },
+      );
+    }
   }
 
   Future<void> _onDropPressed() async {
-    // bool wasLast = _isLast;
+    bool wasLast = _isLast;
     if (!mounted) return;
     await DropAssetInSessionCommand(
       context,
     ).run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
-    // if (wasLast) {
-    //   if (widget.mode == 'refine') {
-    //     await CommitRefineInSessionCommand(context).run(session: _session!);
-    //   }
-    // context.goNamed(AssetsRouter.sortSummary, pathParameters: {
-    //   'year': widget.year.toString(),
-    //   'month': widget.month.toString()
-    // });
-    // }
+    if (wasLast) {
+      if (widget.mode == 'refine') {
+        await CommitRefineInSessionCommand(context).run(session: _session!);
+      }
+      context.goNamed(
+        AssetsRouter.sortSummary,
+        pathParameters: {
+          'year': widget.year.toString(),
+          'month': widget.month.toString(),
+        },
+      );
+    }
   }
 }
