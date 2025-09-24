@@ -1,7 +1,7 @@
 import 'package:app/assets/commands/sessions/finish_session_command.dart';
 import 'package:app/assets/overlays/deletion_in_progress.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:app/l10n/app_localizations.dart';
 
 class DeleteButton extends StatelessWidget {
   final int year;

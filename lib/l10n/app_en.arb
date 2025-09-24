@@ -1,8 +1,8 @@
 {
   "appTitle": "MediaWipe",
   "authorizeWelcome": "Welcome on MediaWipe!",
-  "authorizeDescription": "Sort your photos in an easy and convenient way",
-  "authorizeCTA": "Authorize",
+  "authorizeDescription": "Access to your photos gallery is necessary to sort your photos and provide you with a convenient way to review and select those you want to keep.",
+  "authorizeCTA": "Grant access to my photos",
   "sortSummaryTitle": "{length} photos to delete",
   "@sortSummaryTitle": {
     "placeholders": {

@@ -1,8 +1,7 @@
 import 'package:app/assets/router.dart';
-import 'package:app/assets/views/sort_swipe_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:app/l10n/app_localizations.dart';
 
 class RefineButton extends StatelessWidget {
   final int year;
@@ -13,15 +12,15 @@ class RefineButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: () {
-          if (!context.mounted) return;
-          context.goNamed(AssetsRouter.sortSwipe, pathParameters: {
-            'year': year.toString(),
-            'month': month.toString()
-          }, queryParameters: {
-            'mode': 'refine',
-          });
-        },
-        child: Text(AppLocalizations.of(context)!.sortSummaryRefineCTA));
+      onPressed: () {
+        if (!context.mounted) return;
+        context.goNamed(
+          AssetsRouter.sortSwipe,
+          pathParameters: {'year': year.toString(), 'month': month.toString()},
+          queryParameters: {'mode': 'refine'},
+        );
+      },
+      child: Text(AppLocalizations.of(context)!.sortSummaryRefineCTA),
+    );
   }
 }

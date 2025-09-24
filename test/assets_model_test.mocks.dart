@@ -37,53 +37,44 @@ class MockAssetsService extends _i1.Mock implements _i2.AssetsService {
     required bool? isDry,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteAssetsPerId,
-          [],
-          {
-            #assetIds: assetIds,
-            #isDry: isDry,
-          },
-        ),
-        returnValue: _i3.Future<List<String>>.value(<String>[]),
-      ) as _i3.Future<List<String>>);
+            Invocation.method(#deleteAssetsPerId, [], {
+              #assetIds: assetIds,
+              #isDry: isDry,
+            }),
+            returnValue: _i3.Future<List<String>>.value(<String>[]),
+          )
+          as _i3.Future<List<String>>);
 
   @override
-  _i3.Future<int> getAssetsCount() => (super.noSuchMethod(
-        Invocation.method(
-          #getAssetsCount,
-          [],
-        ),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+  _i3.Future<int> getAssetsCount() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAssetsCount, []),
+            returnValue: _i3.Future<int>.value(0),
+          )
+          as _i3.Future<int>);
 
   @override
   _i3.Future<List<_i4.Asset>> listAssets({required int? year}) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #listAssets,
-          [],
-          {#year: year},
-        ),
-        returnValue: _i3.Future<List<_i4.Asset>>.value(<_i4.Asset>[]),
-      ) as _i3.Future<List<_i4.Asset>>);
+            Invocation.method(#listAssets, [], {#year: year}),
+            returnValue: _i3.Future<List<_i4.Asset>>.value(<_i4.Asset>[]),
+          )
+          as _i3.Future<List<_i4.Asset>>);
 
   @override
-  _i3.Future<void> authorizePhotos() => (super.noSuchMethod(
-        Invocation.method(
-          #authorizePhotos,
-          [],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> authorizePhotos() =>
+      (super.noSuchMethod(
+            Invocation.method(#authorizePhotos, []),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i3.Future<bool> isPhotosAuthorized() => (super.noSuchMethod(
-        Invocation.method(
-          #isPhotosAuthorized,
-          [],
-        ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+  _i3.Future<bool> isPhotosAuthorized() =>
+      (super.noSuchMethod(
+            Invocation.method(#isPhotosAuthorized, []),
+            returnValue: _i3.Future<bool>.value(false),
+          )
+          as _i3.Future<bool>);
 }

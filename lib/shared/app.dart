@@ -2,7 +2,7 @@ import 'package:app/settings/models/settings_model.dart';
 import 'package:app/shared/router.dart';
 import 'package:app/shared/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:app/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

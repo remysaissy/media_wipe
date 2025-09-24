@@ -4,7 +4,7 @@ import 'package:app/settings/widgets/link.dart';
 import 'package:app/settings/widgets/rate_app.dart';
 import 'package:app/settings/widgets/theme_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:app/l10n/app_localizations.dart';
 
 class ListSettingsView extends StatelessWidget {
   const ListSettingsView({super.key});

@@ -21,7 +21,7 @@ class AppRouter {
           GoRoute(
               path: AppRouter.root,
               name: AppRouter.root,
-              redirect: (context, __) {
+              redirect: (context, _) {
                 final hasPhotosAccess =
                     context.read<SettingsModel>().settings.hasPhotosAccess;
                 if (!hasPhotosAccess) {

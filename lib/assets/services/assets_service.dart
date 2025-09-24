@@ -6,11 +6,15 @@ import 'package:photo_manager/photo_manager.dart';
 
 class AssetsService {
   final int _refreshBatchSize = 1000;
-  final _types =
-      pm.RequestType.fromTypes([pm.RequestType.image, pm.RequestType.video]);
+  final _types = pm.RequestType.fromTypes([
+    pm.RequestType.image,
+    pm.RequestType.video,
+  ]);
 
-  Future<List<String>> deleteAssetsPerId(
-      {required List<String> assetIds, required bool isDry}) async {
+  Future<List<String>> deleteAssetsPerId({
+    required List<String> assetIds,
+    required bool isDry,
+  }) async {
     if (assetIds.isNotEmpty) {
       if (isDry) {
         await Future.delayed(Duration(milliseconds: assetIds.length * 100));
@@ -29,31 +33,38 @@ class AssetsService {
     List<Asset> assets = [];
     var filter = pm.AdvancedCustomFilter()
       ..addWhereCondition(
-          pm.DateColumnWhereCondition(
-            column: pm.CustomColumns.base.createDate,
-            operator: '>=',
-            value: DateTime(year),
-          ),
-          type: pm.LogicalType.and)
+        pm.DateColumnWhereCondition(
+          column: pm.CustomColumns.base.createDate,
+          operator: '>=',
+          value: DateTime(year),
+        ),
+        type: pm.LogicalType.and,
+      )
       ..addWhereCondition(
-          pm.DateColumnWhereCondition(
-            column: pm.CustomColumns.base.createDate,
-            operator: '<',
-            value: DateTime(year + 1),
-          ),
-          type: pm.LogicalType.and)
+        pm.DateColumnWhereCondition(
+          column: pm.CustomColumns.base.createDate,
+          operator: '<',
+          value: DateTime(year + 1),
+        ),
+        type: pm.LogicalType.and,
+      )
       ..addOrderBy(column: pm.CustomColumns.base.createDate, isAsc: false);
-    final count =
-        await pm.PhotoManager.getAssetCount(type: _types, filterOption: filter);
+    final count = await pm.PhotoManager.getAssetCount(
+      type: _types,
+      filterOption: filter,
+    );
     for (int index = 0; index < count; index += _refreshBatchSize) {
       final assetsEntities = await pm.PhotoManager.getAssetListRange(
-          start: index,
-          end: index + _refreshBatchSize,
-          type: _types,
-          filterOption: filter);
+        start: index,
+        end: index + _refreshBatchSize,
+        type: _types,
+        filterOption: filter,
+      );
       for (pm.AssetEntity assetEntity in assetsEntities) {
         final asset = Asset(
-            assetId: assetEntity.id, creationDate: assetEntity.createDateTime);
+          assetId: assetEntity.id,
+          creationDate: assetEntity.createDateTime,
+        );
         assets.add(asset);
       }
     }

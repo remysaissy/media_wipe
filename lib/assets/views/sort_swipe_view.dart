@@ -22,9 +22,12 @@ class SortSwipe extends StatefulWidget {
   final int month;
   final String mode;
 
-  const SortSwipe(
-      {super.key, required this.year, required this.month, String? mode})
-      : mode = mode ?? 'classic';
+  const SortSwipe({
+    super.key,
+    required this.year,
+    required this.month,
+    String? mode,
+  }) : mode = mode ?? 'classic';
 
   @override
   State<StatefulWidget> createState() => _SortSwipeState();
@@ -46,9 +49,10 @@ class _SortSwipeState extends State<SortSwipe> {
 
   Future<void> _initState() async {
     await StartSessionCommand(context).run(
-        year: widget.year,
-        month: widget.month,
-        isWhiteListMode: (widget.mode == 'refine'));
+      year: widget.year,
+      month: widget.month,
+      isWhiteListMode: (widget.mode == 'refine'),
+    );
   }
 
   @override
@@ -62,33 +66,37 @@ class _SortSwipeState extends State<SortSwipe> {
 
   @override
   Widget build(BuildContext context) {
-    _session = context
-        .watch<SessionsModel>()
-        .getSession(year: widget.year, month: widget.month);
+    _session = context.watch<SessionsModel>().getSession(
+      year: widget.year,
+      month: widget.month,
+    );
     if (_session == null) {
       return Utils.buildLoading(context);
     }
     _assets = context.watch<AssetsModel>().listAssets(
-        forYear: widget.year,
-        forMonth: widget.month,
-        withAllowList:
-            (widget.mode == 'refine') ? _session?.assetsToDrop : null);
+      forYear: widget.year,
+      forMonth: widget.month,
+      withAllowList: (widget.mode == 'refine') ? _session?.assetsToDrop : null,
+    );
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-              '${Utils.monthNumberToMonthName(widget.month)} ${widget.year}'),
-          actions: [
-            Text('${_current + 1}/${_assets.length}'),
-            IconButton(
-              onPressed: _isFirst ? null : _onUndo,
-              icon: const Icon(Icons.undo_outlined),
-            ),
-          ],
+      appBar: AppBar(
+        title: Text(
+          '${Utils.monthNumberToMonthName(widget.month)} ${widget.year}',
         ),
-        body: SafeArea(
-            child: _currentAsset != null
-                ? _buildContent()
-                : Utils.buildLoading(context)));
+        actions: [
+          Text('${_current + 1}/${_assets.length}'),
+          IconButton(
+            onPressed: _isFirst ? null : _onUndo,
+            icon: const Icon(Icons.undo_outlined),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: _currentAsset != null
+            ? _buildContent()
+            : Utils.buildLoading(context),
+      ),
+    );
   }
 
   // Future<bool> _onSwipe(
@@ -117,7 +125,7 @@ class _SortSwipeState extends State<SortSwipe> {
       onSwipeBegin: (previousIndex, targetIndex, activity) {
         _indicator = targetIndex - previousIndex;
       },
-      onSwipeEnd: (previousIndex, targetIndex, __) {
+      onSwipeEnd: (previousIndex, targetIndex, _) {
         _indicator = 0;
       },
       initialIndex: _current,
@@ -127,42 +135,50 @@ class _SortSwipeState extends State<SortSwipe> {
         final asset = _assets[index];
         return Container(
           alignment: Alignment.center,
-          child: Stack(children: [
-            MediaViewer(asset: asset),
-            Opacity(
+          child: Stack(
+            children: [
+              MediaViewer(asset: asset),
+              Opacity(
                 opacity: 0.5,
                 child: SvgPicture.asset(
                   'assets/images/red_cross.svg',
                   width: 200,
                   height: 200,
-                )),
-          ]),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
   Future<void> _onUndo() async {
-    await UndoLastOperationInSessionCommand(context)
-        .run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
-    _controller.undo();
+    await UndoLastOperationInSessionCommand(
+      context,
+    ).run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
+    await _controller.unswipe();
   }
 
   Future<void> _onEndPressed() async {
     if (widget.mode == 'refine') {
       await CommitRefineInSessionCommand(context).run(session: _session!);
     }
-    context.goNamed(AssetsRouter.sortSummary, pathParameters: {
-      'year': widget.year.toString(),
-      'month': widget.month.toString()
-    });
+    context.goNamed(
+      AssetsRouter.sortSummary,
+      pathParameters: {
+        'year': widget.year.toString(),
+        'month': widget.month.toString(),
+      },
+    );
   }
 
   Future<void> _onKeepPressed() async {
-    bool wasLast = _isLast;
+    // bool wasLast = _isLast;
     if (!mounted) return;
-    await KeepAssetInSessionCommand(context)
-        .run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
+    await KeepAssetInSessionCommand(
+      context,
+    ).run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
     // if (wasLast) {
     //   if (widget.mode == 'refine') {
     //     await CommitRefineInSessionCommand(context).run(session: _session!);
@@ -175,10 +191,11 @@ class _SortSwipeState extends State<SortSwipe> {
   }
 
   Future<void> _onDropPressed() async {
-    bool wasLast = _isLast;
+    // bool wasLast = _isLast;
     if (!mounted) return;
-    await DropAssetInSessionCommand(context)
-        .run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
+    await DropAssetInSessionCommand(
+      context,
+    ).run(session: _session!, isWhiteListMode: (widget.mode == 'refine'));
     // if (wasLast) {
     //   if (widget.mode == 'refine') {
     //     await CommitRefineInSessionCommand(context).run(session: _session!);

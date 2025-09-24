@@ -18,9 +18,15 @@ class Datastore {
       final Completer<Datastore> completer = Completer<Datastore>();
       _completer = completer;
       try {
-        final docsDir = await getApplicationDocumentsDirectory();
+        final directory = p.join(
+          (await getApplicationDocumentsDirectory()).path,
+          "db",
+        );
         // Future<Store> openStore() {...} is defined in the generated objectbox.g.dart
-        final store = await openStore(directory: p.join(docsDir.path, "db"));
+        final store = await openStore(
+          directory: directory,
+          macosApplicationGroup: "db",
+        );
         completer.complete(Datastore._(store));
       } catch (e) {
         // If there's an error, explicitly return the future with an error.
