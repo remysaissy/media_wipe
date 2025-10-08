@@ -21,35 +21,39 @@ class AssetsRouter {
         GoRoute(
           name: AssetsRouter.list,
           path: AssetsRouter.list,
-          pageBuilder: (context, state) => MaterialPage(
-            child: ListYearsView(key: state.pageKey),
-          ),
+          pageBuilder: (context, state) =>
+              MaterialPage(child: ListYearsView(key: state.pageKey)),
           routes: [
             GoRoute(
               name: AssetsRouter.listForYear,
-              path: AssetsRouter.listForYear
-                  .substring(AssetsRouter.list.length + 1),
+              path: AssetsRouter.listForYear.substring(
+                AssetsRouter.list.length + 1,
+              ),
               pageBuilder: (context, state) => MaterialPage(
                 child: ListMonthsView(
-                    key: state.pageKey,
-                    year: int.parse(state.pathParameters['year']!)),
+                  key: state.pageKey,
+                  year: int.parse(state.pathParameters['year']!),
+                ),
               ),
               routes: [
                 GoRoute(
                   name: AssetsRouter.sortSwipe,
-                  path: AssetsRouter.sortSwipe
-                      .substring(AssetsRouter.listForYear.length + 1),
+                  path: AssetsRouter.sortSwipe.substring(
+                    AssetsRouter.listForYear.length + 1,
+                  ),
                   pageBuilder: (context, state) => MaterialPage(
                     child: SortSwipe(
-                        year: int.parse(state.pathParameters['year']!),
-                        month: int.parse(state.pathParameters['month']!),
-                        mode: state.uri.queryParameters['mode']),
+                      year: int.parse(state.pathParameters['year']!),
+                      month: int.parse(state.pathParameters['month']!),
+                      mode: state.uri.queryParameters['mode'],
+                    ),
                   ),
                 ),
                 GoRoute(
                   name: AssetsRouter.sortSummary,
-                  path: AssetsRouter.sortSummary
-                      .substring(AssetsRouter.listForYear.length + 1),
+                  path: AssetsRouter.sortSummary.substring(
+                    AssetsRouter.listForYear.length + 1,
+                  ),
                   pageBuilder: (context, state) => MaterialPage(
                     child: SortSummaryView(
                       year: int.parse(state.pathParameters['year']!),

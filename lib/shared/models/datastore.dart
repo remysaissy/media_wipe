@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 import 'package:path/path.dart' as p;
 import 'package:app/objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,15 +19,9 @@ class Datastore {
       final Completer<Datastore> completer = Completer<Datastore>();
       _completer = completer;
       try {
-        final directory = p.join(
-          (await getApplicationDocumentsDirectory()).path,
-          "db",
-        );
-        // Future<Store> openStore() {...} is defined in the generated objectbox.g.dart
-        final store = await openStore(
-          directory: directory,
-          macosApplicationGroup: "db",
-        );
+        final docsDir = await getApplicationSupportDirectory();
+        final store = await openStore(directory: p.join(docsDir.path, 'MediaWipe'),
+        macosApplicationGroup: 'io.weavly.osx.MediaWipe.8D96AS3ZME');
         completer.complete(Datastore._(store));
       } catch (e) {
         // If there's an error, explicitly return the future with an error.

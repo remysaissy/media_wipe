@@ -26,6 +26,8 @@
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to photos is required to sort, review and delete unused ones.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
