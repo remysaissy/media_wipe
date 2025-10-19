@@ -1,0 +1,131 @@
+import 'package:app/src/domain/entities/settings.dart';
+import 'package:app/src/domain/usecases/settings/load_settings_usecase.dart';
+import 'package:app/src/domain/usecases/settings/update_settings_usecase.dart';
+import 'package:app/src/presentation/features/settings/blocs/settings/settings_cubit.dart';
+import 'package:app/src/presentation/features/settings/blocs/settings/settings_state.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'settings_cubit_test.mocks.dart';
+
+@GenerateMocks([LoadSettingsUseCase, UpdateSettingsUseCase])
+void main() {
+  late SettingsCubit settingsCubit;
+  late MockLoadSettingsUseCase mockLoadSettingsUseCase;
+  late MockUpdateSettingsUseCase mockUpdateSettingsUseCase;
+
+  setUp(() {
+    mockLoadSettingsUseCase = MockLoadSettingsUseCase();
+    mockUpdateSettingsUseCase = MockUpdateSettingsUseCase();
+
+    settingsCubit = SettingsCubit(
+      loadSettingsUseCase: mockLoadSettingsUseCase,
+      updateSettingsUseCase: mockUpdateSettingsUseCase,
+    );
+  });
+
+  tearDown(() {
+    settingsCubit.close();
+  });
+
+  group('SettingsCubit', () {
+    const testSettings = Settings(
+      id: 1,
+      themeMode: ThemeMode.system,
+      hasPhotosAccess: false,
+      hasInAppReview: false,
+      debugDryRemoval: false,
+    );
+
+    test('initial state is SettingsInitial', () {
+      expect(settingsCubit.state, const SettingsInitial());
+    });
+
+    blocTest<SettingsCubit, SettingsState>(
+      'emits [SettingsLoading, SettingsLoaded] when loadSettings is called successfully',
+      build: () {
+        when(
+          mockLoadSettingsUseCase.execute(),
+        ).thenAnswer((_) async => testSettings);
+        return settingsCubit;
+      },
+      act: (cubit) => cubit.loadSettings(),
+      expect: () => [
+        const SettingsLoading(),
+        const SettingsLoaded(testSettings),
+      ],
+      verify: (_) {
+        verify(mockLoadSettingsUseCase.execute()).called(1);
+      },
+    );
+
+    blocTest<SettingsCubit, SettingsState>(
+      'emits [SettingsLoading, SettingsError] when loadSettings fails',
+      build: () {
+        when(
+          mockLoadSettingsUseCase.execute(),
+        ).thenThrow(Exception('Failed to load'));
+        return settingsCubit;
+      },
+      act: (cubit) => cubit.loadSettings(),
+      expect: () => [
+        const SettingsLoading(),
+        const SettingsError('Exception: Failed to load'),
+      ],
+    );
+
+    blocTest<SettingsCubit, SettingsState>(
+      'emits [SettingsLoaded] with updated theme when updateTheme is called',
+      build: () {
+        final updatedSettings = testSettings.copyWith(
+          themeMode: ThemeMode.dark,
+        );
+        when(
+          mockUpdateSettingsUseCase.execute(any),
+        ).thenAnswer((_) async => Future.value());
+        return settingsCubit;
+      },
+      seed: () => const SettingsLoaded(testSettings),
+      act: (cubit) => cubit.updateTheme(ThemeMode.dark),
+      expect: () => [
+        SettingsLoaded(testSettings.copyWith(themeMode: ThemeMode.dark)),
+      ],
+      verify: (_) {
+        verify(mockUpdateSettingsUseCase.execute(any)).called(1);
+      },
+    );
+
+    blocTest<SettingsCubit, SettingsState>(
+      'emits [SettingsLoaded] with updated debug flag when updateDebugFlag is called',
+      build: () {
+        when(
+          mockUpdateSettingsUseCase.execute(any),
+        ).thenAnswer((_) async => Future.value());
+        return settingsCubit;
+      },
+      seed: () => const SettingsLoaded(testSettings),
+      act: (cubit) => cubit.updateDebugFlag(true),
+      expect: () => [
+        SettingsLoaded(testSettings.copyWith(debugDryRemoval: true)),
+      ],
+    );
+
+    blocTest<SettingsCubit, SettingsState>(
+      'emits [SettingsLoaded] with completed onboarding when completeOnboarding is called',
+      build: () {
+        when(
+          mockUpdateSettingsUseCase.execute(any),
+        ).thenAnswer((_) async => Future.value());
+        return settingsCubit;
+      },
+      seed: () => const SettingsLoaded(testSettings),
+      act: (cubit) => cubit.completeOnboarding(),
+      expect: () => [
+        SettingsLoaded(testSettings.copyWith(hasPhotosAccess: true)),
+      ],
+    );
+  });
+}

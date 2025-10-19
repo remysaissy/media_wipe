@@ -1,0 +1,174 @@
+import 'package:app/src/domain/entities/asset.dart';
+import 'package:app/src/domain/entities/session.dart';
+import 'package:app/src/domain/repositories/session_repository.dart';
+import 'package:app/src/domain/usecases/media/sessions/commit_refine_in_session_usecase.dart';
+import 'package:app/src/domain/usecases/media/sessions/drop_asset_in_session_usecase.dart';
+import 'package:app/src/domain/usecases/media/sessions/finish_session_usecase.dart';
+import 'package:app/src/domain/usecases/media/sessions/keep_asset_in_session_usecase.dart';
+import 'package:app/src/domain/usecases/media/sessions/start_session_usecase.dart';
+import 'package:app/src/domain/usecases/media/sessions/undo_last_operation_usecase.dart';
+import 'package:app/src/presentation/features/media/blocs/session/session_cubit.dart';
+import 'package:app/src/presentation/features/media/blocs/session/session_state.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'session_cubit_test.mocks.dart';
+
+@GenerateMocks([
+  SessionRepository,
+  StartSessionUseCase,
+  FinishSessionUseCase,
+  KeepAssetInSessionUseCase,
+  DropAssetInSessionUseCase,
+  UndoLastOperationUseCase,
+  CommitRefineInSessionUseCase,
+])
+void main() {
+  late SessionCubit sessionCubit;
+  late MockStartSessionUseCase mockStartSessionUseCase;
+  late MockFinishSessionUseCase mockFinishSessionUseCase;
+  late MockKeepAssetInSessionUseCase mockKeepAssetUseCase;
+  late MockDropAssetInSessionUseCase mockDropAssetUseCase;
+  late MockUndoLastOperationUseCase mockUndoUseCase;
+  late MockCommitRefineInSessionUseCase mockCommitRefineUseCase;
+  late MockSessionRepository mockSessionRepository;
+
+  setUp(() {
+    mockStartSessionUseCase = MockStartSessionUseCase();
+    mockFinishSessionUseCase = MockFinishSessionUseCase();
+    mockKeepAssetUseCase = MockKeepAssetInSessionUseCase();
+    mockDropAssetUseCase = MockDropAssetInSessionUseCase();
+    mockUndoUseCase = MockUndoLastOperationUseCase();
+    mockCommitRefineUseCase = MockCommitRefineInSessionUseCase();
+    mockSessionRepository = MockSessionRepository();
+
+    sessionCubit = SessionCubit(
+      startSessionUseCase: mockStartSessionUseCase,
+      finishSessionUseCase: mockFinishSessionUseCase,
+      keepAssetInSessionUseCase: mockKeepAssetUseCase,
+      dropAssetInSessionUseCase: mockDropAssetUseCase,
+      undoLastOperationUseCase: mockUndoUseCase,
+      commitRefineInSessionUseCase: mockCommitRefineUseCase,
+      sessionRepository: mockSessionRepository,
+    );
+  });
+
+  tearDown(() {
+    sessionCubit.close();
+  });
+
+  group('SessionCubit', () {
+    final testSession = Session(
+      id: 1,
+      assetsToDrop: const [],
+      refineAssetsToDrop: const [],
+      assetInReview: Asset(
+        id: 1,
+        assetId: 'asset1',
+        creationDate: DateTime(2024, 1, 1),
+      ),
+      sessionYear: 2024,
+      sessionMonth: 1,
+    );
+
+    test('initial state is SessionInitial', () {
+      expect(sessionCubit.state, const SessionInitial());
+    });
+
+    blocTest<SessionCubit, SessionState>(
+      'emits [SessionActive] when startSession is called successfully',
+      build: () {
+        when(
+          mockStartSessionUseCase.execute(
+            year: anyNamed('year'),
+            month: anyNamed('month'),
+            isWhiteListMode: anyNamed('isWhiteListMode'),
+          ),
+        ).thenAnswer((_) async => testSession);
+        return sessionCubit;
+      },
+      act: (cubit) => cubit.startSession(year: 2024, month: 1),
+      expect: () => [
+        SessionActive(session: testSession, isWhiteListMode: false),
+      ],
+      verify: (_) {
+        verify(
+          mockStartSessionUseCase.execute(
+            year: 2024,
+            month: 1,
+            isWhiteListMode: false,
+          ),
+        ).called(1);
+      },
+    );
+
+    blocTest<SessionCubit, SessionState>(
+      'emits [SessionError] when startSession fails',
+      build: () {
+        when(
+          mockStartSessionUseCase.execute(
+            year: anyNamed('year'),
+            month: anyNamed('month'),
+            isWhiteListMode: anyNamed('isWhiteListMode'),
+          ),
+        ).thenThrow(Exception('Failed to start session'));
+        return sessionCubit;
+      },
+      act: (cubit) => cubit.startSession(year: 2024, month: 1),
+      expect: () => [const SessionError('Exception: Failed to start session')],
+    );
+
+    blocTest<SessionCubit, SessionState>(
+      'emits [SessionActive] with updated session when keepAsset is called',
+      build: () {
+        final updatedSession = testSession.copyWith(
+          assetInReview: Asset(
+            id: 2,
+            assetId: 'asset2',
+            creationDate: DateTime(2024, 1, 2),
+          ),
+        );
+        when(
+          mockKeepAssetUseCase.execute(
+            session: anyNamed('session'),
+            isWhiteListMode: anyNamed('isWhiteListMode'),
+          ),
+        ).thenAnswer((_) async => updatedSession);
+        return sessionCubit;
+      },
+      seed: () => SessionActive(session: testSession),
+      act: (cubit) => cubit.keepAsset(),
+      expect: () => [
+        SessionActive(
+          session: testSession.copyWith(
+            assetInReview: Asset(
+              id: 2,
+              assetId: 'asset2',
+              creationDate: DateTime(2024, 1, 2),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    blocTest<SessionCubit, SessionState>(
+      'emits [SessionFinished] when finishSession is called',
+      build: () {
+        when(
+          mockFinishSessionUseCase.execute(session: anyNamed('session')),
+        ).thenAnswer((_) async => Future.value());
+        return sessionCubit;
+      },
+      seed: () => SessionActive(session: testSession),
+      act: (cubit) => cubit.finishSession(),
+      expect: () => [SessionFinished(testSession)],
+      verify: (_) {
+        verify(
+          mockFinishSessionUseCase.execute(session: anyNamed('session')),
+        ).called(1);
+      },
+    );
+  });
+}

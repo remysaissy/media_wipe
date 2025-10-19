@@ -17,8 +17,8 @@ It is designed to be a high-quality, performant application using the latest tec
 ### Technologies
 
 * **Framework:** Flutter
-* **UI Toolkit:** Material 3
-* **Local Storage:** ObjectBox
+* **UI Toolkit:** Material 3 and Flutter guidelines
+* **Local Storage:** Isar
 * **State Management:** BLoC
 * **Other aspects**: Follows the recommendations on https://docs.flutter.dev/platform-integration/ios/apple-frameworks
 * **Target OS Version**: The application must target the oldest possible OS version that supports all required APIs for its features, conventions, and tech stack. If a specific feature requires a newer API, the minimum deployment target will be set to that OS version, but not higher, to maximize device compatibility.
@@ -37,9 +37,104 @@ Platform-specific code should be minimized. When necessary, it should be placed 
 
 ### Design Principles & UI/UX
 
-*   **Design Philosophy**: Clarity, Focus, and Insight. The design remains minimalist for the list-making function but introduces a clean, data-driven dashboard for the analytics feature. Visualizations will be simple and easy to understand.
-*   **Color Palette**: A consistent palette will be used. The new analytics section might introduce a secondary accent color for charts and graphs to distinguish it from the primary screen.
-*   **Typography**: A clean, sans-serif font remains standard for legibility.
+#### Design Philosophy
+
+The application adheres to a design philosophy of **Clarity, Focus, and Insight**:
+
+*   **Clarity**: The interface prioritizes content visibility with minimal chrome and clear hierarchy. Every screen makes the primary user action immediately obvious and accessible.
+*   **Focus**: The design remains minimalist for core functionality, avoiding unnecessary visual elements that distract from the user's task.
+*   **Insight**: When presenting analytics or insights, visualizations are simple, easy to understand, and never obscure the underlying data.
+
+#### Color Palette
+
+The application uses a consistent, well-defined color palette that supports both light and dark themes and maintains accessibility standards (WCAG 2.1 AA minimum).
+
+*   **Primary Colors**: Derived from Material 3 ColorScheme with **indigo** as the seed color. Used for main actions, active states, and brand elements.
+*   **Secondary Accent Colors**: A secondary accent color distinguishes data visualizations and analytics from primary UI elements. This color maintains sufficient contrast in both light and dark themes.
+*   **Semantic Colors**: Consistent usage across the application:
+    *   **Success**: Green tones from Material 3 palette
+    *   **Error**: Red tones from Material 3 palette
+    *   **Warning**: Orange/amber tones from Material 3 palette
+    *   **Info**: Blue tones from Material 3 palette
+*   **Dark Theme**: All colors automatically adapt using Material 3 dark theme ColorScheme. Color contrast meets WCAG 2.1 AA standards for all text and interactive elements.
+*   **Accessibility**: All color combinations meet minimum contrast ratios:
+    *   Normal text: 4.5:1
+    *   Large text (18pt+): 3:1
+    *   Interactive elements: 3:1
+
+#### Typography
+
+The application uses a clean, legible typography system based on Material 3 type scale:
+
+*   **Font Family**: Default sans-serif font as specified by Material 3 guidelines, leveraging system fonts for optimal performance and native feel.
+*   **Type Scale**: Text follows Material 3 type scale hierarchy:
+    *   **Display** Large/Medium/Small: Hero content and major headings
+    *   **Headline** Large/Medium/Small: Section headers
+    *   **Title** Large/Medium/Small: Card titles and list headers
+    *   **Body** Large/Medium/Small: Content text
+    *   **Label** Large/Medium/Small: Buttons and labels
+*   **Font Weights**: Consistent usage across the application:
+    *   **Regular (400)**: Body text
+    *   **Medium (500)**: Emphasized text and labels
+    *   **Bold (700)**: Headlines and important information
+    *   Avoid using more than three different weights in a single view
+*   **Accessibility**:
+    *   Minimum font size: 12sp for non-critical text
+    *   Body text: at least 14sp
+    *   Line height: 1.4-1.6x font size for optimal readability
+    *   Text scales gracefully up to 200% for accessibility
+
+#### Responsive and Adaptive Design
+
+The application implements responsive layouts that adapt to different screen sizes and orientations, following Material 3 Guidelines (https://m3.material.io) and Flutter's Responsive and Adaptive guidelines (https://docs.flutter.dev/ui/adaptive-responsive).
+
+##### Breakpoints
+
+Layouts align with Material 3 window size classes:
+
+*   **Compact**: width < 600dp (phones in portrait)
+*   **Medium**: 600dp ≤ width < 840dp (tablets in portrait, phones in landscape)
+*   **Expanded**: width ≥ 840dp (tablets in landscape, desktops)
+
+##### Platform-Specific Adaptations
+
+**iOS (iPhone and iPad)**:
+*   **iPhone**: Compact width breakpoints with bottom navigation bar or tab bar patterns. Single-column layouts optimized for one-handed use.
+*   **iPad**: Expanded width breakpoints with split-view or sidebar patterns. Multi-column layouts leveraging the larger screen.
+*   **Platform Conventions**: Follows iOS Human Interface Guidelines for navigation (back button behavior, swipe gestures), modal presentations, action sheets, and safe area insets.
+
+**Android (Phones and Tablets)**:
+*   **Phones**: Material 3 compact window size class with bottom navigation or navigation drawer. Interface respects system navigation (gesture or button-based).
+*   **Tablets**: Material 3 medium/expanded window size classes with navigation rail or persistent drawer. Content adapts with appropriate gutters and max-widths.
+*   **Platform Conventions**: Follows Material 3 guidelines for navigation patterns, bottom sheets, dialogs, floating action buttons, and snackbars.
+
+**macOS (Desktop)**:
+*   **Layouts**: Expanded window size classes with sidebar patterns and hierarchical content organization.
+*   **Interactions**: Full support for mouse/trackpad (hover states, right-click menus). Windows are resizable with minimum size constraints.
+*   **Platform Conventions**: Follows macOS design conventions for window management, menu bar integration, keyboard shortcuts, and context menus.
+
+##### Orientation Handling
+
+*   Layouts gracefully reflow content without losing user context when orientation changes
+*   State is preserved across orientation changes
+*   Media content adapts to maximize viewport usage
+
+#### Accessibility
+
+The application is accessible to users with disabilities, meeting WCAG 2.1 Level AA standards at minimum:
+
+*   **Screen Readers**: All interactive elements have meaningful semantic labels. Navigation order is logical and predictable. Dynamic content changes are announced appropriately.
+*   **Touch Targets**: Minimum touch target size of 44x44 points on iOS and 48x48dp on Android, with adequate spacing between adjacent interactive elements.
+*   **Text Scaling**: The application respects accessibility text scaling up to 200%. Layouts remain functional and text is not truncated or overlapped at larger sizes.
+*   **Color Independence**: Information is never conveyed by color alone. Icons, labels, or patterns supplement color-coded information.
+
+#### Material 3 Compliance
+
+The application uses Material 3 (Material You) design system components and patterns:
+
+*   **Components**: Material 3 widgets are used preferentially (e.g., NavigationBar, NavigationRail, Card with filled/elevated variants). Custom components visually align with Material 3 design tokens.
+*   **Dynamic Color**: On Android 12+ devices, the app supports Material You dynamic colors, allowing users to opt into system-generated color schemes.
+*   **Motion**: Animations and transitions follow Material 3 motion guidelines, using emphasize easing for important transitions. Animation durations are appropriate (200-400ms for most transitions), with motion reduction options for accessibility.
 
 ### Code Style
 
@@ -65,18 +160,18 @@ The overall structure is also influenced by Clean Architecture principles, divid
 
 *   **Presentation Layer (View + ViewModel):** Contains the UI (Widgets) and the BLoCs/Cubits that manage the state and presentation logic.
 *   **Domain Layer:** Contains the core business logic, use cases, and entity definitions. This layer is completely independent of the UI and data sources.
-*   **Data Layer:** Contains the implementation of the repositories and data sources. It is responsible for fetching data from local (ObjectBox) or remote sources.
+*   **Data Layer:** Contains the implementation of the repositories and data sources. It is responsible for fetching data from local (Isar) or remote sources.
 
 #### Repository Pattern
 
 The Data Layer must use the **Repository Pattern**. Repositories are responsible for abstracting the data sources. They provide a clean API for the Domain Layer to access data, without needing to know where the data comes from (e.g., a local database or a remote API).
 
-##### Data Persistence with ObjectBox
+##### Data Persistence
 
-All application data is stored locally using ObjectBox.
+All application data is stored locally using Isar.
 
-*   **Schema Definition:** ObjectBox entities are defined in the `lib/src/data/local/models` directory.
-*   **Database Initialization:** The ObjectBox store is initialized at application startup.
+*   **Schema Definition:** Isar entities are defined in the `lib/src/data/local/models` directory.
+*   **Database Initialization:** Isar is initialized at application startup.
 *   **Data Access:** Data access should be encapsulated within `DataSource` classes in the data layer. Repositories will use these data sources to interact with the database.
 
 #### State Management

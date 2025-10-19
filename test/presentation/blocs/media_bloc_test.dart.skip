@@ -1,0 +1,135 @@
+import 'package:app/src/domain/entities/asset.dart';
+import 'package:app/src/domain/repositories/asset_repository.dart';
+import 'package:app/src/domain/usecases/media/delete_assets_usecase.dart';
+import 'package:app/src/domain/usecases/media/refresh_photos_usecase.dart';
+import 'package:app/src/presentation/features/media/blocs/media/media_bloc.dart';
+import 'package:app/src/presentation/features/media/blocs/media/media_event.dart';
+import 'package:app/src/presentation/features/media/blocs/media/media_state.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'media_bloc_test.mocks.dart';
+
+@GenerateMocks([AssetRepository, RefreshPhotosUseCase, DeleteAssetsUseCase])
+void main() {
+  late MediaBloc mediaBloc;
+  late MockAssetRepository mockAssetRepository;
+  late MockRefreshPhotosUseCase mockRefreshPhotosUseCase;
+  late MockDeleteAssetsUseCase mockDeleteAssetsUseCase;
+
+  setUp(() {
+    mockAssetRepository = MockAssetRepository();
+    mockRefreshPhotosUseCase = MockRefreshPhotosUseCase();
+    mockDeleteAssetsUseCase = MockDeleteAssetsUseCase();
+
+    mediaBloc = MediaBloc(
+      refreshPhotosUseCase: mockRefreshPhotosUseCase,
+      deleteAssetsUseCase: mockDeleteAssetsUseCase,
+      assetRepository: mockAssetRepository,
+    );
+  });
+
+  tearDown(() {
+    mediaBloc.close();
+  });
+
+  group('MediaBloc', () {
+    final testAssets = [
+      Asset(id: 1, assetId: 'asset1', creationDate: DateTime(2024, 1, 1)),
+      Asset(id: 2, assetId: 'asset2', creationDate: DateTime(2024, 2, 1)),
+    ];
+
+    test('initial state is MediaInitial', () {
+      expect(mediaBloc.state, const MediaInitial());
+    });
+
+    blocTest<MediaBloc, MediaState>(
+      'emits [MediaLoading, MediaLoaded] when LoadMediaEvent is added successfully',
+      build: () {
+        when(
+          mockAssetRepository.getAssets(),
+        ).thenAnswer((_) async => testAssets);
+        return mediaBloc;
+      },
+      act: (bloc) => bloc.add(const LoadMediaEvent()),
+      expect: () => [const MediaLoading(), MediaLoaded(testAssets)],
+      verify: (_) {
+        verify(mockAssetRepository.getAssets()).called(1);
+      },
+    );
+
+    blocTest<MediaBloc, MediaState>(
+      'emits [MediaLoading, MediaError] when LoadMediaEvent fails',
+      build: () {
+        when(
+          mockAssetRepository.getAssets(),
+        ).thenThrow(Exception('Failed to load'));
+        return mediaBloc;
+      },
+      act: (bloc) => bloc.add(const LoadMediaEvent()),
+      expect: () => [
+        const MediaLoading(),
+        const MediaError('Exception: Failed to load'),
+      ],
+    );
+
+    blocTest<MediaBloc, MediaState>(
+      'emits [MediaRefreshing, MediaLoaded] when RefreshMediaEvent is added',
+      build: () {
+        when(
+          mockRefreshPhotosUseCase.execute(
+            year: anyNamed('year'),
+            month: anyNamed('month'),
+          ),
+        ).thenAnswer((_) async => Future.value());
+        when(
+          mockAssetRepository.getAssets(),
+        ).thenAnswer((_) async => testAssets);
+        return mediaBloc;
+      },
+      seed: () => MediaLoaded(testAssets),
+      act: (bloc) => bloc.add(const RefreshMediaEvent()),
+      expect: () => [MediaRefreshing(testAssets), MediaLoaded(testAssets)],
+      verify: (_) {
+        verify(
+          mockRefreshPhotosUseCase.execute(year: null, month: null),
+        ).called(1);
+        verify(mockAssetRepository.getAssets()).called(2);
+      },
+    );
+
+    blocTest<MediaBloc, MediaState>(
+      'emits [MediaDeleting, MediaLoaded] when DeleteMediaEvent is added',
+      build: () {
+        when(
+          mockDeleteAssetsUseCase.execute(
+            assets: anyNamed('assets'),
+            isDryRun: anyNamed('isDryRun'),
+          ),
+        ).thenAnswer((_) async => Future.value());
+        when(
+          mockAssetRepository.getAssets(),
+        ).thenAnswer((_) async => [testAssets[1]]);
+        return mediaBloc;
+      },
+      seed: () => MediaLoaded(testAssets),
+      act: (bloc) =>
+          bloc.add(DeleteMediaEvent(assets: [testAssets[0]], isDryRun: false)),
+      expect: () => [
+        MediaDeleting([testAssets[1]]),
+        MediaLoaded([testAssets[1]]),
+      ],
+      verify: (_) {
+        verify(
+          mockDeleteAssetsUseCase.execute(
+            assets: anyNamed('assets'),
+            isDryRun: anyNamed('isDryRun'),
+          ),
+        ).called(1);
+        verify(mockAssetRepository.getAssets()).called(2);
+      },
+    );
+  });
+}

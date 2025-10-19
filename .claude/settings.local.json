@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(openspec list:*)",
+      "SlashCommand(/openspec:proposal)",
+      "Bash(mkdir:*)",
+      "Bash(openspec validate:*)",
+      "Bash(flutter pub:*)",
+      "Bash(dart run build_runner build:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter build:*)",
+      "SlashCommand(/openspec:apply:*)",
+      "Bash(openspec show:*)",
+      "Bash(flutter test:*)",
+      "Bash(dart format:*)",
+      "Bash(chmod:*)",
+      "Bash(awk:*)",
+      "Bash(grep:*)",
+      "Bash(python3 -c \"import yaml; yaml.safe_load(open(''.github/workflows/test.yml''))\")",
+      "Bash(ruby -ryaml -e \"YAML.load_file(''.github/workflows/test.yml'')\")",
+      "Bash(openspec diff update-design-principles-ui-ux)",
+      "Bash(openspec archive remove-legacy-provider-architecture --yes)",
+      "Bash(openspec archive remove-legacy-provider-architecture --yes --skip-specs)",
+      "Bash(openspec archive update-design-principles-ui-ux --yes)",
+      "Bash(curl -L https://github.com/isar/isar/releases/download/3.1.0%2B1/libisar_macos_x64.dylib -o libisar.dylib)",
+      "Bash(curl -L https://github.com/isar/isar/releases/download/3.1.0+1/libisar_macos_x64.dylib -o libisar.dylib)",
+      "Read(//Users/remy.saissy/.pub-cache/**)",
+      "Bash(openspec archive migrate-objectbox-to-isar --yes)",
+      "Bash(openspec archive refactor-architecture-to-clean-mvvm --yes)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "disabledMcpjsonServers": [
+    "claude-flow@alpha",
+    "ruv-swarm",
+    "flow-nexus",
+    "agentic-payments"
+  ]
+}
